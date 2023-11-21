@@ -53,3 +53,76 @@ Due to UNESCO website being fucked up I cannot select the 2000 time period when 
 - Might be good to quickly turn Start and End of Year data sets into one so we can acquire the info we want out of it, namely the duration of a school year.
 
 CAREFUL The data is sometimes way too massive compared to what we want to study, so some of the treatment will need to be done separately for each variables.
+
+
+### Data treatment 
+--> All the UNESCO data are structured the same way, as such we can create a function to treat them efficiently
+We need to :
+- Rid ourselves of the Flag and Flag ID and NATMON var as they are empty and/or uninformative
+- filter the 2018 and 2009 obs into two separate ones?
+- Get rid of one of the Time variable to reduce redundancy
+- We should keep the Country_Tag and put the country name associated into a separate file. This however, needs not to be done all the time. Only once.
+
+
+--> The Pop_Density could be treated to only keep the Y2009 and the Y2018
+
+--> For birth rate we could decide to keep only an average value over some time
+
+
+```{r}
+UNESCO_Treatment <- function(Data){
+  Data <- Data |> select(-`Flag Codes`, - Flags, - NATMON_IND, -TIME)
+}
+```
+
+```{r}
+Country_Code <- MeanSchooling |> distinct(LOCATION, Country) |> rename(Country_Code = LOCATION, Country = Country)
+```
+Good thing is that it allows to see how many countries are available with the Meanschooling data 
+I will check if we get different nb with other datasets
+
+
+```{r First look at Gov_Exp}
+Gov_ExpT <- UNESCO_Treatment(Gov_Exp)
+Gov_ExpT <- Gov_ExpT |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)")
+
+Country_Code_test <- Gov_ExpT |> distinct(LOCATION)
+
+## Gov_Exp2009 <- GovExpT |> filter (Time == 2009)
+## Gov_Exp2018 <- GovExpT |> filter (Time == 2018)
+
+EnrolmentT <- UNESCO_Treatment(Enrolment)
+EnrolmentT <- EnrolmentT |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")
+
+MeanSchoolingT <- UNESCO_Treatment(MeanSchooling)
+MeanSchoolingT <- MeanSchoolingT |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")
+
+Share_Studs_PrivT <- UNESCO_Treatment(Share_Studs_Priv)
+Share_Studs_PrivT <- Share_Studs_PrivT |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")
+
+Survival_RateT <- UNESCO_Treatment(Survival_Rate)
+Survival_RateT <- Survival_RateT |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")
+
+EntranceAgeT <- UNESCO_Treatment(EntranceAge)
+EntranceAgeTearly <- EntranceAgeT |> filter(Indicator == "Official entrance age to early childhood education (years)")
+
+EntranceAgeT_Dev <- EntranceAgeT |> filter(Indicator == "Official entrance age to early childhood educational development (years)")
+
+EntranceAgeTmanda <- EntranceAgeT |> filter(Indicator == "Official entrance age to compulsory education (years)")
+
+
+```
+
+I am uncertain as to what to do about the entrance age. In fact there two interesting variables. 
+-> one on the age of compulsory education 
+-> one on the age where schooling starts (like when you are 3 in France for instance)
+
+There is one more country when testing between nb of tags in Mean Schooling and Gov Exp WE MIGHT NEED TO SEE ABOUT THAT. PERHAPS ADD THE MISSING COUNTRIES AS WE ANALYZE MORE VARS
+
+
+Template to get 2009 and 2018 data 
+## DATA_NAME2009 <- DATA |> filter (Time == 2009)
+## DATA_NAME2018 <- DATA |> filter (Time == 2018)
+
+Template to get the Country_Codes : Country_Code_test <- DATA |> distinct(LOCATION)
+
