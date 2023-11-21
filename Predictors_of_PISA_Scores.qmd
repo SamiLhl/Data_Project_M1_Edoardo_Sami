@@ -4,3 +4,29 @@ author: "Edoardo Ruvolo and Sami Louahlia"
 format: html
 ---
 
+```{r}
+here::i_am("Data_Project_M1_Edoardo_Sami.Rproj")
+library(here)
+library(ggplot2)
+library(dplyr)
+library(vroom)
+library(tidyr)
+```
+
+### Data Loading 
+Data files are small yet numerous, fortunately, there are only so many ways organizations can name countries so joining the files is not too challenging.
+```{r}
+Survival_Rate <- vroom(here("Data_UNESCO_21_11/Survival_Rate.csv"))
+Share_Studs_Priv <- vroom(here("Data_UNESCO_21_11/Share_Priv_lowsec.csv"))
+Pop_Density <- vroom(here("Data_UNESCO_21_11/Reworked_Density.csv"))
+Enrolment <- vroom(here("Data_UNESCO_21_11/Tot_Enrol_Rate_Lowsec.csv"))
+
+Start_Yr <- vroom(here("Data_UNESCO_21_11/Start_Month_Acad.csv"))
+End_Yr <- vroom(here("Data_UNESCO_21_11/End_Month_Acad.csv"))
+
+Gov_Exp <- vroom(here("Data_UNESCO_21_11/Gov_Exp_GDP.csv"))
+
+MeanSchooling <- vroom(here("Data_UNESCO_21_11/Mean_Yrs_Schooling.csv"))
+EntranceAge <- vroom(here("Data_UNESCO_21_11/Entrance_Age.csv"))
+
+```
