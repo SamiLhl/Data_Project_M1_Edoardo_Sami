@@ -144,7 +144,7 @@ I am uncertain as to what to do about the entrance age. In fact there two intere
 There is one more country when testing between nb of tags in Mean Schooling and Gov Exp WE MIGHT NEED TO SEE ABOUT THAT. PERHAPS ADD THE MISSING COUNTRIES AS WE ANALYZE MORE VARS
 
 ```{r}
-inner_join()
+##inner_join()
 ```
 
 
@@ -167,4 +167,26 @@ The WB data are now ready for a first join.
 ```{r}
 
 ```
+
+
+## OECD (PISA) Data
+
+getting rid of the ? in the datasets
+```{r}
+
+```
+
+
+```{r}
+Pisa_score_Mathscale <- Pisa_score_Mathscale |> rename("Math_Score"="Average(all_students)") |> fill(`Year/Study`)
+Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender |> rename("Math_Score_F" = `Average(Female)`, "Math_Score_M" = `Average(Male)`) |> fill(`Year/Study`)
+Pisa_score_readingscale <- Pisa_score_readingscale |> rename("Reading_Score"="Average(all_students)") |> fill(`Year/Study`)
+Pisa_score_readingscale_gender <- Pisa_score_readingscale_gender |> rename("Reading_Score_F" = `Average(Female)`,"Reading_Score_M" = `Average(Male)`) |> fill(`Year/Study`)
+Pisa_score_Sciencescale <- Pisa_score_Sciencescale |> rename("Science_Score"="Average(all_students)") |> fill(`Year/Study`)
+Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender |> rename("Science_Score_F" = `Average(Female)`, "Science_Score_M" = `Average(Male)`) |> fill(`Year/Study`)
+
+
+```
+PISA data mostly need to have small changes as to how the score for each nations are named, so we can distinguish between Reading, Science and Math scores in the Final Dataset. Another thing that is necessary is to assign the proper year to each observations rather than just the first one for each year and have a look at the cases where the OECD suggested to keep the past data because they had non for that time of observation. 
+Once all this is done we just need to join by country.
 
