@@ -1,0 +1,355 @@
+﻿;;Female;;Male;
+Year/Study;Jurisdiction;Average;Standard Error;Average;Standard Error
+2018;Australia;502;-2;504;-2.4
+;Austria;489;-3.6;491;-3.8
+;Belgium;496;-2.7;501;-2.6
+;Canada;520;-2.5;516;-2.7
+;Chile;442;-2.6;445;-3.2
+;Colombia;407;-2.9;420;-3.8
+;Czech Republic;498;-3.1;496;-3.2
+;Denmark;494;-2.2;492;-2.5
+;Estonia;533;-2.3;528;-2.3
+;Finland;534;-2.9;510;-2.9
+;France;493;-2.8;493;-2.7
+;Germany;504;-3.3;502;-3.2
+;Greece;457;-3.2;446;-3.8
+;Hungary;478;-3.1;484;-3.1
+;Iceland;479;-2.8;471;-2.3
+;Ireland;497;-2.6;495;-3
+;Israel;471;-3.5;452;-5.3
+;Italy;466;-2.6;470;-3
+;Japan;528;-3;531;-3.5
+;Korea;517;-3.6;521;-3.9
+;Latvia;491;-2.4;483;-2.2
+;Lithuania;485;-2.1;479;-2.3
+;Luxembourg;479;-1.7;475;-1.7
+;Mexico;415;-2.9;424;-2.8
+;Netherlands;508;-3.1;499;-3.6
+;New Zealand;508;-2.8;509;-2.9
+;Norway;496;-2.8;485;-2.6
+;Poland;511;-3.1;511;-2.8
+;Portugal;489;-3.3;494;-3
+;Slovak Republic;467;-3;461;-2.8
+;Slovenia;512;-2;502;-1.6
+;Spain;482;-1.8;484;-1.9
+;Sweden;503;-3.7;496;-3.2
+;Switzerland;495;-3.3;495;-3.3
+;Turkey;472;-2.5;465;-2.9
+;United Kingdom;503;-3.2;506;-3.1
+;United States;502;-3.5;503;-3.9
+;Albania;425;-2;409;-2.5
+;Albania (2015);—;†;—;†
+;Algeria;—;†;—;†
+;Argentina;399;-3.3;409;-3.3
+;Argentina (2015);—;†;—;†
+;Baku (Azerbaijan);400;-2.6;395;-2.7
+;Belarus;470;-2.8;473;-3
+;Bosnia and Herzegovina;399;-3.2;398;-3.1
+;Brazil;404;-2.1;403;-2.5
+;Brunei Darussalam;435;-1.6;427;-1.6
+;B-S-J-G (China);—;†;—;†
+;B-S-J-Z (China);584;-2.9;596;-2.9
+;Bulgaria;432;-3.8;417;-4.5
+;Chinese Taipei;515;-4.1;516;-4.1
+;Costa Rica;411;-4.3;420;-3
+;Croatia;474;-3.4;470;-3.5
+;Cyprus;450;-1.9;429;-2.1
+;Dominican Republic;340;-2.7;331;-2.8
+;Georgia;390;-2.6;376;-2.9
+;Hong Kong (China);521;-2.8;512;-3.4
+;Indonesia;399;-2.5;393;-2.9
+;Jordan;444;-3;414;-4.9
+;Kazakhstan;401;-2.1;394;-2
+;Kazakhstan (2015);—;†;—;†
+;Kosovo;368;-1.4;362;-1.8
+;Lebanon;386;-3.6;381;-4.2
+;Macao (China);545;-2;543;-2.1
+;Malaysia;441;-3.2;434;-3
+;Malaysia (2015);—;†;—;†
+;Malta;468;-2.5;447;-2.4
+;Moldova;434;-2.8;423;-2.6
+;Montenegro;418;-1.6;413;-1.9
+;Morocco;381;-3.3;372;-3.1
+;North Macedonia;423;-2;404;-2.2
+;Panama;364;-3.2;365;-3.2
+;Peru;397;-2.7;411;-3.2
+;Philippines;359;-3.7;355;-3.4
+;Qatar;439;-1.5;400;-1.4
+;Romania;426;-5.2;425;-4.6
+;Russia;478;-3.2;477;-3
+;Saudi Arabia;401;-3.4;372;-3.9
+;Serbia;442;-3.4;437;-3.8
+;Singapore;549;-1.9;553;-2
+;Thailand;435;-3.6;415;-4.3
+;Trinidad and Tobago;—;†;—;†
+;Tunisia;—;†;—;†
+;Ukraine;468;-3.6;470;-3.9
+;United Arab Emirates;447;-2.8;420;-2.1
+;Uruguay;424;-2.7;428;-3.2
+;Viet Nam;—;†;—;†
+2015;Australia;509;-1.7;511;-2.1
+;Austria;486;-3.1;504;-3.6
+;Belgium;496;-2.7;508;-3.1
+;Canada;527;-2.3;528;-2.5
+;Chile;440;-2.7;454;-3.1
+;Colombia;411;-2.4;421;-3.1
+;Czech Republic;488;-2.5;497;-3.3
+;Denmark;499;-3.2;505;-2.6
+;Estonia;533;-2.3;536;-2.7
+;Finland;541;-2.6;521;-2.7
+;France;494;-2.7;496;-2.7
+;Germany;504;-2.8;514;-3.2
+;Greece;459;-3.9;451;-4.6
+;Hungary;475;-2.9;478;-3.4
+;Iceland;475;-2.1;472;-2.6
+;Ireland;497;-2.6;508;-3.2
+;Israel;464;-4.1;469;-4.7
+;Italy;472;-3.6;489;-3.1
+;Japan;532;-2.9;545;-4.1
+;Korea;521;-3.3;511;-4.6
+;Latvia;496;-2.2;485;-2
+;Lithuania;479;-2.8;472;-3.3
+;Luxembourg;479;-1.5;487;-1.7
+;Mexico;412;-2.3;420;-2.6
+;Netherlands;507;-2.5;511;-2.9
+;New Zealand;511;-2.7;516;-3.2
+;Norway;497;-2.7;500;-2.7
+;Poland;498;-2.8;504;-2.9
+;Portugal;496;-2.6;506;-2.9
+;Slovak Republic;461;-3.3;460;-3
+;Slovenia;516;-1.9;510;-1.9
+;Spain;489;-2.5;496;-2.5
+;Sweden;496;-3.7;491;-4.1
+;Switzerland;502;-3.5;508;-3.1
+;Turkey;429;-4.4;422;-4.5
+;United Kingdom;509;-3.3;510;-2.9
+;United States;493;-3.4;500;-3.7
+;Albania;—;†;—;†
+;Albania (2015);439;-3;415;-4
+;Algeria;383;-3.1;369;-3
+;Argentina;—;†;—;†
+;Argentina (2015);425;-3.2;440;-3.2
+;Baku (Azerbaijan);—;†;—;†
+;Belarus;—;†;—;†
+;Bosnia and Herzegovina;—;†;—;†
+;Brazil;399;-2.4;403;-2.5
+;Brunei Darussalam;—;†;—;†
+;B-S-J-G (China);513;-5.3;522;-4.5
+;B-S-J-Z (China);—;†;—;†
+;Bulgaria;454;-4.4;438;-5.3
+;Chinese Taipei;530;-3.8;535;-4.1
+;Costa Rica;411;-2.2;429;-2.5
+;Croatia;473;-2.8;478;-3.2
+;Cyprus;441;-1.9;424;-1.7
+;Dominican Republic;331;-2.6;332;-3.2
+;Georgia;420;-2.3;403;-3.3
+;Hong Kong (China);524;-3.4;523;-3.1
+;Indonesia;405;-2.8;401;-3
+;Jordan;428;-3.6;389;-3.9
+;Kazakhstan;—;†;—;†
+;Kazakhstan (2015);458;-3.8;455;-4.1
+;Kosovo;383;-2.1;374;-2
+;Lebanon;386;-3.7;388;-4
+;Macao (China);532;-1.5;525;-1.5
+;Malaysia;—;†;—;†
+;Malaysia (2015);445;-3.1;441;-3.3
+;Malta;470;-2.2;460;-2.5
+;Moldova;431;-2.4;425;-2.4
+;Montenegro;414;-1.3;409;-1.7
+;Morocco;—;†;—;†
+;North Macedonia;394;-1.8;374;-1.6
+;Panama;—;†;—;†
+;Peru;392;-2.9;402;-2.8
+;Philippines;—;†;—;†
+;Qatar;429;-1.3;406;-1.4
+;Romania;438;-3.4;432;-3.7
+;Russia;485;-3.1;489;-3.6
+;Saudi Arabia;—;†;—;†
+;Serbia;—;†;—;†
+;Singapore;552;-1.7;559;-1.8
+;Thailand;425;-2.9;416;-3.6
+;Trinidad and Tobago;435;-1.9;414;-2.1
+;Tunisia;385;-2.2;388;-2.4
+;Ukraine;—;†;—;†
+;United Arab Emirates;449;-3;424;-3.4
+;Uruguay;431;-2.2;440;-3.1
+;Viet Nam;526;-4.2;523;-4
+2012;Australia;519;-2.1;524;-2.5
+;Austria;501;-3.4;510;-3.9
+;Belgium;503;-2.6;507;-3
+;Canada;524;-2;527;-2.4
+;Chile;442;-2.9;448;-3.7
+;Colombia;390;-3.6;408;-3.4
+;Czech Republic;508;-3.5;509;-3.7
+;Denmark;493;-2.5;504;-3.5
+;Estonia;543;-2.3;540;-2.5
+;Finland;554;-2.3;537;-3
+;France;500;-2.4;498;-3.8
+;Germany;524;-3.5;524;-3.1
+;Greece;473;-3;460;-3.8
+;Hungary;493;-3.3;496;-3.4
+;Iceland;480;-2.9;477;-2.7
+;Ireland;520;-3.1;524;-3.4
+;Israel;470;-4;470;-7.9
+;Italy;492;-2.4;495;-2.2
+;Japan;541;-3.5;552;-4.7
+;Korea;536;-4.2;539;-4.7
+;Latvia;510;-2.8;495;-3.6
+;Lithuania;503;-2.6;488;-3
+;Luxembourg;483;-1.7;499;-1.7
+;Mexico;412;-1.3;418;-1.5
+;Netherlands;520;-3.9;524;-3.7
+;New Zealand;513;-3.3;518;-3.2
+;Norway;496;-3.7;493;-3.2
+;Poland;527;-3.2;524;-3.7
+;Portugal;490;-3.8;488;-4.1
+;Slovak Republic;467;-4.2;475;-4.3
+;Slovenia;519;-1.9;510;-1.9
+;Spain;493;-1.9;500;-2.3
+;Sweden;489;-2.8;481;-3.9
+;Switzerland;512;-2.7;518;-3.3
+;Turkey;469;-4.3;458;-4.5
+;United Kingdom;508;-3.7;521;-4.5
+;United States;498;-4;497;-4.1
+;Albania;401;-2.9;394;-3
+;Albania (2015);—;†;—;†
+;Algeria;—;†;—;†
+;Argentina;409;-4;402;-4.5
+;Argentina (2015);—;†;—;†
+;Baku (Azerbaijan);—;†;—;†
+;Belarus;—;†;—;†
+;Bosnia and Herzegovina;—;†;—;†
+;Brazil;401;-2.2;402;-2.3
+;Brunei Darussalam;—;†;—;†
+;B-S-J-G (China);—;†;—;†
+;B-S-J-Z (China);—;†;—;†
+;Bulgaria;457;-4.6;437;-5.6
+;Chinese Taipei;523;-4;524;-3.9
+;Costa Rica;424;-3.2;436;-3.5
+;Croatia;493;-3.3;490;-3.9
+;Cyprus;444;-1.7;431;-1.8
+;Dominican Republic;—;†;—;†
+;Georgia;—;†;—;†
+;Hong Kong (China);551;-3.1;558;-3.6
+;Indonesia;383;-4.1;380;-4.1
+;Jordan;430;-2.9;388;-5.4
+;Kazakhstan;429;-3.2;420;-3.4
+;Kazakhstan (2015);—;†;—;†
+;Kosovo;—;†;—;†
+;Lebanon;—;†;—;†
+;Macao (China);521;-1.2;520;-1.3
+;Malaysia;425;-3.1;414;-3.8
+;Malaysia (2015);—;†;—;†
+;Malta;—;†;—;†
+;Moldova;—;†;—;†
+;Montenegro;419;-1.6;402;-1.6
+;Morocco;—;†;—;†
+;North Macedonia;—;†;—;†
+;Panama;—;†;—;†
+;Peru;370;-4.6;376;-3.5
+;Philippines;—;†;—;†
+;Qatar;402;-1.1;367;-1.2
+;Romania;441;-3.5;436;-3.7
+;Russia;489;-2.9;484;-3.5
+;Saudi Arabia;—;†;—;†
+;Serbia;—;†;—;†
+;Singapore;552;-1.9;551;-2.1
+;Thailand;452;-3.4;433;-3.3
+;Trinidad and Tobago;—;†;—;†
+;Tunisia;398;-3.6;399;-3.9
+;Ukraine;—;†;—;†
+;United Arab Emirates;462;-3.7;434;-4.1
+;Uruguay;416;-3.1;415;-3.4
+;Viet Nam;528;-4.1;529;-5
+2009;Australia;528;-2.8;527;-3.1
+;Austria;490;-4.4;498;-4.2
+;Belgium;503;-3.2;510;-3.6
+;Canada;526;-1.9;531;-1.9
+;Chile;443;-3.5;452;-3.5
+;Colombia;392;-3.7;413;-4.3
+;Czech Republic;503;-3.2;498;-4
+;Denmark;494;-2.9;505;-3
+;Estonia;528;-3.1;527;-3.1
+;Finland;562;-2.6;546;-2.7
+;France;497;-3.5;500;-4.6
+;Germany;518;-3.3;523;-3.7
+;Greece;475;-3.7;465;-5.1
+;Hungary;503;-3.5;503;-3.8
+;Iceland;495;-2;496;-2.1
+;Ireland;509;-3.8;507;-4.3
+;Israel;456;-3.2;453;-4.4
+;Italy;490;-2;488;-2.5
+;Japan;545;-3.9;534;-5.5
+;Korea;539;-4.2;537;-5
+;Latvia;497;-3.2;490;-3.7
+;Lithuania;500;-2.9;483;-3.5
+;Luxembourg;480;-1.6;487;-2
+;Mexico;413;-1.9;419;-2
+;Netherlands;520;-5.9;524;-5.3
+;New Zealand;535;-2.9;529;-4
+;Norway;502;-2.8;498;-3
+;Poland;511;-2.8;505;-2.7
+;Portugal;495;-3;491;-3.4
+;Slovak Republic;491;-3.2;490;-4
+;Slovenia;519;-1.6;505;-1.7
+;Spain;485;-2.3;492;-2.5
+;Sweden;497;-3.2;493;-3
+;Switzerland;512;-3;520;-3.2
+;Turkey;460;-4.5;448;-3.8
+;United Kingdom;509;-3.2;519;-3.6
+;United States;495;-3.7;509;-4.2
+;Albania;406;-4;377;-4.8
+;Albania (2015);—;†;—;†
+;Algeria;—;†;—;†
+;Argentina;404;-4.8;397;-5.1
+;Argentina (2015);—;†;—;†
+;Baku (Azerbaijan);—;†;—;†
+;Belarus;—;†;—;†
+;Bosnia and Herzegovina;—;†;—;†
+;Brazil;404;-2.6;407;-2.6
+;Brunei Darussalam;—;†;—;†
+;B-S-J-G (China);—;†;—;†
+;B-S-J-Z (China);—;†;—;†
+;Bulgaria;450;-5.3;430;-6.8
+;Chinese Taipei;521;-4;520;-3.7
+;Costa Rica;—;†;—;†
+;Croatia;491;-3.9;482;-3.5
+;Cyprus;—;†;—;†
+;Dominican Republic;—;†;—;†
+;Georgia;—;†;—;†
+;Hong Kong (China);548;-3.4;550;-3.8
+;Indonesia;387;-4;378;-4.2
+;Jordan;433;-4.2;398;-5.5
+;Kazakhstan;405;-3.5;396;-3.4
+;Kazakhstan (2015);—;†;—;†
+;Kosovo;—;†;—;†
+;Lebanon;—;†;—;†
+;Macao (China);512;-1.2;510;-1.3
+;Malaysia;—;†;—;†
+;Malaysia (2015);—;†;—;†
+;Malta;—;†;—;†
+;Moldova;—;†;—;†
+;Montenegro;408;-2.6;395;-2.4
+;Morocco;—;†;—;†
+;North Macedonia;—;†;—;†
+;Panama;‡;†;‡;†
+;Peru;367;-4.4;372;-3.7
+;Philippines;—;†;—;†
+;Qatar;393;-1;366;-1.4
+;Romania;433;-3.7;423;-3.9
+;Russia;480;-3.5;477;-3.7
+;Saudi Arabia;—;†;—;†
+;Serbia;‡;†;‡;†
+;Singapore;542;-1.8;541;-1.8
+;Thailand;431;-3.4;418;-3.8
+;Trinidad and Tobago;419;-1.4;401;-2.1
+;Tunisia;400;-2.8;401;-2.9
+;Ukraine;—;†;—;†
+;United Arab Emirates;—;†;—;†
+;Uruguay;428;-2.6;427;-3.2
+;Viet Nam;—;†;—;†
+;;;;;
+† Not applicable.;;;;;
+— Not available.;;;;;
+NOTE: B-S-J-G (China) refers to the four PISA participating China provinces: Beijing, Shanghai, Jiangsu, and Guangdong. | B-S-J-Z (China) refers to the four PISA participating China provinces: Beijing, Shanghai, Jiangsu, and Zhejiang. | CABA (Argentina) refers to Ciudad Autónoma de Buenos Aires (Argentina). | North Macedonia refers to the Republic of Macedonia. | Russia refers to the Russian Federation. | The statistical data for Israel are supplied by and under the responsibility of the relevant Israeli authorities. The use of such data by the OECD is without prejudice to the status of the Golan Heights, East Jerusalem and Israeli settlements in the West Bank under the terms of international law. | Information on data for Cyprus: https://oe.cd/cyprus-disclaimer | Argentina, Kazakhstan and Malaysia in 2015: Coverage is too small to ensure comparability (see PISA 2015 Results [Volume I]: Excellence and Equity in Education [OECD, 2016], Annex A4). The Reading, Mathematics and Science scale ranges from 0 to 1000. Some apparent differences between estimates may not be statistically significant.;;;;;
+SOURCE: Organization for Economic Cooperation and Development (OECD), Program for International Student Assessment (PISA), 2009, 2012, 2015, and 2018 Reading, Mathematics and Science Assessments.;;;;;

@@ -45,6 +45,19 @@ Household income
 Household_income<- vroom(here("HI_Data/HH_DASH_22112023163138566.csv"))
 ```
 
+### Pisa score Data
+Pisa Score in the different domain, two kind of data, given also gender distribution
+
+```{r}
+Pisa_score_readingscale <- vroom(here("Pisa_Score/Readingscale.csv"))
+Pisa_score_readingscale_gender <- vroom(here("Pisa_Score/Readingscale_gender.csv"))
+Pisa_score_Mathscale <- vroom(here("Pisa_Score/Mathscale.csv"))
+Pisa_score_Mathscale_gender <- vroom(here("Pisa_Score/Mathscale_gender.csv"))
+Pisa_score_Sciencescale <- vroom(here("Pisa_Score/Sciencescale.csv"))
+Pisa_score_Sciencescale_gender <- vroom(here("Pisa_Score/Sciencescale_gender.csv"))
+```
+
+
 The method is not great I admit but R was unable to understand the variables on its own.I commited a crime but this was the only way out. I will find a solution later on.
 
 
