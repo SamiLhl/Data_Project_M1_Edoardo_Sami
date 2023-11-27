@@ -45,6 +45,7 @@ Some small changes in the csv file were needed again for the Fertility Rate data
 ### OECD Data
 Household income
 ```{r}
+Household_income_2 <- vroom(here("HI_Data/NAAG_27112023180449110.csv"))
 Household_income<- vroom(here("HI_Data/HH_DASH_22112023163138566.csv"))
 ```
 
@@ -245,4 +246,6 @@ Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender %>%
               values_from = c(Science_Score_F, Science_Score_M),
               names_sep = "_")
 ```
+
+Hou
 
