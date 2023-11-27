@@ -210,6 +210,13 @@ PISA_treatment <- function(data) {
 }
 ```
 
-
-
+Since all the data have a similar structure, we created a function that remove the last four observation and make the year as a numeric variable, this is to make further aggregation of the data easier. 
+```{r}
+Pisa_score_Mathscale <- PISA_treatment(Pisa_score_Mathscale)
+Pisa_score_Mathscale_gender <-PISA_treatment(Pisa_score_Mathscale_gender)
+Pisa_score_readingscale <- PISA_treatment(Pisa_score_readingscale)
+Pisa_score_readingscale_gender <- PISA_treatment(Pisa_score_readingscale_gender)
+Pisa_score_Sciencescale <- PISA_treatment(Pisa_score_Sciencescale)
+Pisa_score_Sciencescale_gender <- PISA_treatment(Pisa_score_Sciencescale_gender)
+```
 
