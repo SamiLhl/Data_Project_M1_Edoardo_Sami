@@ -230,3 +230,19 @@ Pisa_score_Sciencescale <- Pisa_score_Sciencescale %>%
   pivot_wider(names_from = `Year/Study`, values_from = Science_Score)
 ```
 
+there is still some cleaning to do, as some of the data (malasya 2015) are to be counted
+```{r}
+Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender %>%
+  pivot_wider(names_from = `Year/Study`, 
+              values_from = c(Math_Score_F, Math_Score_M),
+              names_sep = "_")
+Pisa_score_readingscale_gender <- Pisa_score_readingscale_gender %>%
+  pivot_wider(names_from = `Year/Study`, 
+              values_from = c(Reading_Score_F,Reading_Score_M),
+              names_sep = "_")
+Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender %>%
+  pivot_wider(names_from = `Year/Study`, 
+              values_from = c(Science_Score_F, Science_Score_M),
+              names_sep = "_")
+```
+
