@@ -247,15 +247,23 @@ Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender %>%
 ```
 
 Household income cleaning
-we first remove some observation we are not interested in. we create a function that verifies that the column we want to remove are effectively all of NA values. 
+we first remove some observation we are not interested in. we create a function that verifies that the column we want to remove are effectively all of NA values. eventually we removed the others cause not related to our analysis.
+
+
 ```{r}
 is_na <- function(my_var) {
   my_var |> is.na() |> all()
 }
-Household_income2 <- Household_income |> select(!where(is_na))
-Household_income3 <- Household_income2 |> select(-`PowerCode Code`, -PowerCode, -`Flag Codes`,-Flags, -Time) 
-Household_income3 <- Household_income3 |> pivot_wider(names_from = TIME, 
+Household_income2 <- Household_income |> select(!where(is_na)) 
+Household_income3 <- Household_income2 |>
+  select(-`PowerCode Code`, -PowerCode, -`Flag Codes`, -Flags, -Time)
+Household_income3 <- Household_income3 |> pivot_wider(names_from = Indicator, 
               values_from = Value,
-              names_sep = "_")
+              names_sep = "_") |> rename(
+    Real_Household_Disp_Income_adj = "Real household net adjusted disposable income, deflated by actual individual consumption, millions of national currency",
+    Real_Household_Disp_Income = "Real household net disposable income, deflated by household Final consumption, millions of national currency"
+  ) 
+#Household_income3 <- Household_income3 |> select(-'2000':-'2008')
+
 ```
 
