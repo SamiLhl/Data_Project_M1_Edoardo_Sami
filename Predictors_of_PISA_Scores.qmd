@@ -45,8 +45,7 @@ Some small changes in the csv file were needed again for the Fertility Rate data
 ### OECD Data
 Household income
 ```{r}
-Household_income_2 <- vroom(here("HI_Data/NAAG_27112023180449110.csv"))
-Household_income<- vroom(here("HI_Data/HH_DASH_22112023163138566.csv"))
+Household_income <- vroom(here("HI_Data/NAAG_27112023180449110.csv"))
 ```
 
 ### Pisa score Data
@@ -247,5 +246,13 @@ Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender %>%
               names_sep = "_")
 ```
 
-Hou
+Household income cleaning
+we first remove some observation we are not interested in. we create a function that verifies that the column we want to remove are effectively all of NA values. 
+```{r}
+is_na <- function(my_var) {
+  my_var |> is.na() |> all()
+}
+Household_income2 <- Household_income |> select(!where(is_na))
+Household_income3 <- Household_income2 |> select(-`PowerCode Code`, -PowerCode, -`Flag Codes`,-Flags, -Time)
+```
 
