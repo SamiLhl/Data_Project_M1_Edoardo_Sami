@@ -195,4 +195,21 @@ Pisa_score_Sciencescale_gender$Science_Score_M <- iconv(Pisa_score_Sciencescale_
 Pisa_score_Sciencescale_gender$Science_Score_F <- iconv(Pisa_score_Sciencescale_gender$Science_Score_F, to="UTF-8", sub = NA)
 ```
 
+Since all the data have a similar structure, we created a function that remove the last four observation and make the year as a numeric variable, this is to make further aggregation of the data easier. 
+```{r}
+PISA_treatment <- function(data) {
+  if (nrow(data) <= 4) {
+    warning("Number of observations to remove exceeds the total number of observations.")
+    return(NULL)
+  }
+  modified_data <- head(data, -4)
+  
+  modified_data$`Year/Study` <- as.numeric(modified_data$`Year/Study`)
+  
+  return(modified_data)
+}
+```
+
+
+
 
