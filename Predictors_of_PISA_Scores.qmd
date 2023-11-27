@@ -18,6 +18,7 @@ Data files are small yet numerous, fortunately, there are only so many ways orga
 
 ## UNESCO Data
 ```{r}
+
 Survival_Rate <- vroom(here("Data_UNESCO_21_11/Survival_Rate.csv"))
 Share_Studs_Priv <- vroom(here("Data_UNESCO_21_11/Share_Priv_lowsec.csv"))
 Enrolment <- vroom(here("Data_UNESCO_21_11/Tot_Enrol_Rate_Lowsec.csv"))
@@ -33,15 +34,13 @@ EntranceAge <- vroom(here("Data_UNESCO_21_11/Entrance_Age.csv"))
 ```
 
 ## World Bank Data
-```{r}
-Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
-Fertility_Rate <- read.csv(here("WB_Data/Population Fertility.csv"), col.names =c("Country Code","Indicator Name","Indicator Code", "1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970","1971","1972","1973","1974","1975","1976","1977","1978","1979","1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","Country_Name"),skip = 4)
 
-```
 ```{r}
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
 Fertility_Rate <- read.csv(here("WB_Data/Population Fertility - Copie.csv"))
 ```
+Some small changes in the csv file were needed again for the Fertility Rate data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change. Once rid of these the file works. Otherwise we are doomed to commit some sort of felony.
+
 
 ### OECD Data
 Household income
@@ -51,41 +50,42 @@ Household_income<- vroom(here("HI_Data/HH_DASH_22112023163138566.csv"))
 
 ### Pisa score Data
 Pisa Score in the different domain, two kind of data, given also gender distribution
+Small modifications in the csv files were necessary for R to identify variables properly. Gender specification or all students conditions were added to their average variables rather than being put separately.
 
 ```{r}
-Pisa_score_readingscale <- vroom(here("Pisa_Score/Readingscale.csv"))
-Pisa_score_readingscale_gender <- vroom(here("Pisa_Score/Readingscale_gender.csv"))
-Pisa_score_Mathscale <- vroom(here("Pisa_Score/Mathscale.csv"))
-Pisa_score_Mathscale_gender <- vroom(here("Pisa_Score/Mathscale_gender.csv"))
-Pisa_score_Sciencescale <- vroom(here("Pisa_Score/Sciencescale.csv"))
-Pisa_score_Sciencescale_gender <- vroom(here("Pisa_Score/Sciencescale_gender.csv"))
 
+Pisa_score_readingscale <- vroom(here("Pisa_Score/Readingscale - Copie.csv"))
+Pisa_score_readingscale_gender <- vroom(here("Pisa_Score/Readingscale_gender - Copie.csv"))
+Pisa_score_Mathscale <- vroom(here("Pisa_Score/Mathscale - Copie.csv"))
+Pisa_score_Mathscale_gender <- vroom(here("Pisa_Score/Mathscale_gender - Copie.csv"))
+Pisa_score_Sciencescale <- vroom(here("Pisa_Score/Sciencescale - Copie.csv"))
+Pisa_score_Sciencescale_gender <- vroom(here("Pisa_Score/Sciencescale_gender - Copie.csv"))
 ```
 
-
-The method is not great I admit but R was unable to understand the variables on its own.I commited a crime but this was the only way out. I will find a solution later on.
-
+Right now R recognizes none of the variables a number but all as chr. Modifications are necessary. Good thing however is that all the vars are useful. We need to assign the years to each of the data set but as they are of the exact same length we only need to know how many obs there is for each year in one data to know for the rest.
 
 Notes for later :
 - When UNESCO data are aggregated in regional form they don't have a name in character but a number, so it should be easy to rid or separate with a is.number or something of that kind
 - Some of the data, notably Illiteracy seem to have different indicators name so we need to ensure that it is the same thing or else separate them in different parts
-
-Due to UNESCO website being fucked up I cannot select the 2000 time period when I select only a few years. So for now I provide the 2009 and 2018 data, with for some data a 3 year range that we could mean, in case there are no data for 2009 or 2018 but some data before or after
-
 - Most of the data has a 'value' to show the value, problem is we would end up with a whole lot of 'values' so need to rename all this probably at the end of each datasets treatment, right before joining everything
 - Some variable are duplicated(Share_Studs_Priv has twice Time as well as ALL the UNESCO data), we will need to rid of them
 - Might be good to quickly turn Start and End of Year data sets into one so we can acquire the info we want out of it, namely the duration of a school year.
+
+For now I provide the 2009 and 2018 data, with for some data a 3 year range that we could mean, in case there are no data for 2009 or 2018 but some data before or after
+
 
 CAREFUL The data is sometimes way too massive compared to what we want to study, so some of the treatment will need to be done separately for each variables.
 
 
 ### Data treatment 
+
+## UNESCO DATA
 --> All the UNESCO data are structured the same way, as such we can create a function to treat them efficiently
 We need to :
 - Rid ourselves of the Flag and Flag ID and NATMON var as they are empty and/or uninformative
 - filter the 2018 and 2009 obs into two separate ones?
 - Get rid of one of the Time variable to reduce redundancy
-- We should keep the Country_Tag and put the country name associated into a separate file. This however, needs not to be done all the time. Only once.
+- We should only keep the country name as it is what is put in PISA so we can join easily afterwards
 
 
 --> The Pop_Density could be treated to only keep the Y2009 and the Y2018
@@ -112,8 +112,8 @@ Gov_ExpT <- Gov_ExpT |> filter(Indicator == "Government expenditure on lower sec
 
 Country_Code_test <- Gov_ExpT |> distinct(LOCATION)
 
-## Gov_Exp2009 <- GovExpT |> filter (Time == 2009)
-## Gov_Exp2018 <- GovExpT |> filter (Time == 2018)
+#Gov_Exp2009 <- Gov_ExpT |> filter (Time == 2009)
+#Gov_Exp2018 <- Gov_ExpT |> filter (Time == 2018)
 
 EnrolmentT <- UNESCO_Treatment(Enrolment)
 EnrolmentT <- EnrolmentT |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")
@@ -143,10 +143,56 @@ I am uncertain as to what to do about the entrance age. In fact there two intere
 
 There is one more country when testing between nb of tags in Mean Schooling and Gov Exp WE MIGHT NEED TO SEE ABOUT THAT. PERHAPS ADD THE MISSING COUNTRIES AS WE ANALYZE MORE VARS
 
+```{r}
+##inner_join()
+```
+
 
 Template to get 2009 and 2018 data 
 ## DATA_NAME2009 <- DATA |> filter (Time == 2009)
 ## DATA_NAME2018 <- DATA |> filter (Time == 2018)
 
 Template to get the Country_Codes : Country_Code_test <- DATA |> distinct(LOCATION)
+
+## World Bank Data
+
+There are only a few datasets from the WB treating them is quicker
+
+```{r}
+FertiliT <- Fertility_Rate |> select(Country_Name, Country_Code, Indicator_Name, X2009, X2012, X2015, X2018) |> rename( "2009" = "X2009", "2012"="X2012", "2015"="X2015", "2018"="X2018")
+DensiT <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")
+```
+The WB data are now ready for a first join.
+
+
+
+## OECD (PISA) Data
+
+getting rid of the ? in the datasets
+
+```{r}
+Pisa_score_Mathscale <- Pisa_score_Mathscale |> rename("Math_Score"="Average(all_students)") |> fill(`Year/Study`)|> select(-`Standard Error`)
+Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender |> rename("Math_Score_F" = `Average(Female)`, "Math_Score_M" = `Average(Male)`) |> fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
+Pisa_score_readingscale <- Pisa_score_readingscale |> rename("Reading_Score"="Average(all_students)") |> fill(`Year/Study`) |>select(-`Standard Error`)
+Pisa_score_readingscale_gender <- Pisa_score_readingscale_gender |> rename("Reading_Score_F" = `Average(Female)`,"Reading_Score_M" = `Average(Male)`) |> fill(`Year/Study`) |>select(-`Standard Error M`, -`Standard Error F`)
+Pisa_score_Sciencescale <- Pisa_score_Sciencescale |> rename("Science_Score"="Average(all_students)") |> fill(`Year/Study`) |>select(-`Standard Error`)
+Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender |> rename("Science_Score_F" = `Average(Female)`, "Science_Score_M" = `Average(Male)`) |> fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
+
+
+```
+PISA data mostly need to have small changes as to how the score for each nations are named, so we can distinguish between Reading, Science and Math scores in the Final Dataset. Another thing that is necessary is to assign the proper year to each observations rather than just the first one for each year and have a look at the cases where the OECD suggested to keep the past data because they had non for that time of observation. 
+Once all this is done we just need to join by country.
+
+```{r}
+Pisa_score_Mathscale$Math_Score <- iconv(Pisa_score_Mathscale$Math_Score, to="UTF-8", sub = NA)
+Pisa_score_Mathscale_gender$Math_Score_M <- iconv(Pisa_score_Mathscale_gender$Math_Score_M, to="UTF-8", sub = NA)
+Pisa_score_Mathscale_gender$Math_Score_F <- iconv(Pisa_score_Mathscale_gender$Math_Score_F, to="UTF-8", sub = NA)
+Pisa_score_readingscale$Reading_Score <- iconv(Pisa_score_readingscale$Reading_Score, to="UTF-8", sub = NA)
+Pisa_score_readingscale_gender$Reading_Score_M <- iconv(Pisa_score_readingscale_gender$Reading_Score_M, to="UTF-8", sub = NA)
+Pisa_score_readingscale_gender$Reading_Score_F <- iconv(Pisa_score_readingscale_gender$Reading_Score_F, to="UTF-8", sub = NA)
+Pisa_score_Sciencescale$Science_Score <- iconv(Pisa_score_Sciencescale$Science_Score, to="UTF-8", sub = NA)
+Pisa_score_Sciencescale_gender$Science_Score_M <- iconv(Pisa_score_Sciencescale_gender$Science_Score_M, to="UTF-8", sub = NA)
+Pisa_score_Sciencescale_gender$Science_Score_F <- iconv(Pisa_score_Sciencescale_gender$Science_Score_F, to="UTF-8", sub = NA)
+```
+
 
