@@ -253,6 +253,9 @@ is_na <- function(my_var) {
   my_var |> is.na() |> all()
 }
 Household_income2 <- Household_income |> select(!where(is_na))
-Household_income3 <- Household_income2 |> select(-`PowerCode Code`, -PowerCode, -`Flag Codes`,-Flags, -Time)
+Household_income3 <- Household_income2 |> select(-`PowerCode Code`, -PowerCode, -`Flag Codes`,-Flags, -Time) 
+Household_income3 <- Household_income3 |> pivot_wider(names_from = TIME, 
+              values_from = Value,
+              names_sep = "_")
 ```
 
