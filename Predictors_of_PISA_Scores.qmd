@@ -220,3 +220,13 @@ Pisa_score_Sciencescale <- PISA_treatment(Pisa_score_Sciencescale)
 Pisa_score_Sciencescale_gender <- PISA_treatment(Pisa_score_Sciencescale_gender)
 ```
 
+Now we display the data properly and ready for the aggregation. 
+```{r}
+Pisa_score_Mathscale <- Pisa_score_Mathscale %>%
+  pivot_wider(names_from = `Year/Study`, values_from = Math_Score)
+Pisa_score_readingscale <- Pisa_score_readingscale %>%
+  pivot_wider(names_from = `Year/Study`, values_from = Reading_Score)
+Pisa_score_Sciencescale <- Pisa_score_Sciencescale %>%
+  pivot_wider(names_from = `Year/Study`, values_from = Science_Score)
+```
+
