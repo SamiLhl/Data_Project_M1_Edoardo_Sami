@@ -19,17 +19,32 @@ Data files are small yet numerous, fortunately, there are only so many ways orga
 ## UNESCO Data
 ```{r}
 
-Survival_Rate <- vroom(here("Data_UNESCO_21_11/Survival_Rate.csv"))
-Share_Studs_Priv <- vroom(here("Data_UNESCO_21_11/Share_Priv_lowsec.csv"))
-Enrolment <- vroom(here("Data_UNESCO_21_11/Tot_Enrol_Rate_Lowsec.csv"))
+#Survival_Rate <- vroom(here("Data_UNESCO_21_11/Survival_Rate.csv"))
+#Share_Studs_Priv <- vroom(here("Data_UNESCO_21_11/Share_Priv_lowsec.csv"))
+#Enrolment <- vroom(here("Data_UNESCO_21_11/Tot_Enrol_Rate_Lowsec.csv"))
 
-Start_Yr <- vroom(here("Data_UNESCO_21_11/Start_Month_Acad.csv"))
-End_Yr <- vroom(here("Data_UNESCO_21_11/End_Month_Acad.csv"))
+#Start_Yr <- vroom(here("Data_UNESCO_21_11/Start_Month_Acad.csv"))
+#End_Yr <- vroom(here("Data_UNESCO_21_11/End_Month_Acad.csv"))
 
-Gov_Exp <- vroom(here("Data_UNESCO_21_11/Gov_Exp_GDP.csv"))
+#Gov_Exp <- vroom(here("Data_UNESCO_21_11/Gov_Exp_GDP.csv"))
 
-MeanSchooling <- vroom(here("Data_UNESCO_21_11/Mean_Yrs_Schooling.csv"))
-EntranceAge <- vroom(here("Data_UNESCO_21_11/Entrance_Age.csv"))
+#MeanSchooling <- vroom(here("Data_UNESCO_21_11/Mean_Yrs_Schooling.csv"))
+#EntranceAge <- vroom(here("Data_UNESCO_21_11/Entrance_Age.csv"))
+
+```
+
+```{r}
+
+Survival_Rate <- vroom(here("Data_UNESCO_28_11/Survival_Rate.csv"))
+Share_Studs_Priv <- vroom(here("Data_UNESCO_28_11/Share_Private.csv"))
+Enrolment <- vroom(here("Data_UNESCO_28_11/Enrolment_Rate.csv"))
+
+Start_End_Yr <- vroom(here("Data_UNESCO_28_11/Start_End_Yr.csv"))
+
+Gov_Exp <- vroom(here("Data_UNESCO_28_11/Gov_Exp.csv"))
+
+MeanSchooling <- vroom(here("Data_UNESCO_28_11/Mean_Yr_Schooling.csv"))
+EntranceAge <- vroom(here("Data_UNESCO_28_11/Entrance_Age.csv"))
 
 ```
 
@@ -37,7 +52,7 @@ EntranceAge <- vroom(here("Data_UNESCO_21_11/Entrance_Age.csv"))
 
 ```{r}
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
-Fertility_Rate <- read.csv(here("WB_Data/Population Fertility - Copie.csv"))
+Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
 ```
 Some small changes in the csv file were needed again for the Fertility Rate data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change. Once rid of these the file works. Otherwise we are doomed to commit some sort of felony.
 
@@ -70,8 +85,6 @@ Notes for later :
 - Most of the data has a 'value' to show the value, problem is we would end up with a whole lot of 'values' so need to rename all this probably at the end of each datasets treatment, right before joining everything
 - Some variable are duplicated(Share_Studs_Priv has twice Time as well as ALL the UNESCO data), we will need to rid of them
 - Might be good to quickly turn Start and End of Year data sets into one so we can acquire the info we want out of it, namely the duration of a school year.
-
-For now I provide the 2009 and 2018 data, with for some data a 3 year range that we could mean, in case there are no data for 2009 or 2018 but some data before or after
 
 
 CAREFUL The data is sometimes way too massive compared to what we want to study, so some of the treatment will need to be done separately for each variables.
@@ -106,42 +119,33 @@ Good thing is that it allows to see how many countries are available with the Me
 I will check if we get different nb with other datasets
 
 
-```{r First look at Gov_Exp}
-Gov_ExpT <- UNESCO_Treatment(Gov_Exp)
-Gov_ExpT <- Gov_ExpT |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)")
+```{r Treating UNESCO Data}
+Gov_Exp <- UNESCO_Treatment(Gov_Exp)
+Gov_Exp <- Gov_Exp |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)")
 
-Country_Code_test <- Gov_ExpT |> distinct(LOCATION)
+Enrolment <- UNESCO_Treatment(Enrolment)
+Enrolment <- Enrolment |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")
 
-#Gov_Exp2009 <- Gov_ExpT |> filter (Time == 2009)
-#Gov_Exp2018 <- Gov_ExpT |> filter (Time == 2018)
+MeanSchooling <- UNESCO_Treatment(MeanSchooling)
+MeanSchooling <- MeanSchooling |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")
 
-EnrolmentT <- UNESCO_Treatment(Enrolment)
-EnrolmentT <- EnrolmentT |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")
+Share_Studs_Priv <- UNESCO_Treatment(Share_Studs_Priv)
+Share_Studs_Priv <- Share_Studs_Priv |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")
 
-MeanSchoolingT <- UNESCO_Treatment(MeanSchooling)
-MeanSchoolingT <- MeanSchoolingT |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")
+Survival_Rate <- UNESCO_Treatment(Survival_Rate)
+Survival_Rate <- Survival_Rate |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")
 
-Share_Studs_PrivT <- UNESCO_Treatment(Share_Studs_Priv)
-Share_Studs_PrivT <- Share_Studs_PrivT |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")
+EntranceAge <- UNESCO_Treatment(EntranceAge)
+EntranceAgeEarly <- EntranceAge |> filter(Indicator == "Official entrance age to early childhood education (years)")
+EntranceAgeManda <- EntranceAge |> filter(Indicator == "Official entrance age to compulsory education (years)")
 
-Survival_RateT <- UNESCO_Treatment(Survival_Rate)
-Survival_RateT <- Survival_RateT |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")
-
-EntranceAgeT <- UNESCO_Treatment(EntranceAge)
-EntranceAgeTearly <- EntranceAgeT |> filter(Indicator == "Official entrance age to early childhood education (years)")
-
-EntranceAgeT_Dev <- EntranceAgeT |> filter(Indicator == "Official entrance age to early childhood educational development (years)")
-
-EntranceAgeTmanda <- EntranceAgeT |> filter(Indicator == "Official entrance age to compulsory education (years)")
+Start_End_Yr <- UNESCO_Treatment(Start_End_Yr)
+End_Yr <- Start_End_Yr |> filter(Indicator == "End month of the academic school year (pre-primary to post-secondary non-tertiary education)")
+Start_Yr <- Start_End_Yr |> filter(Indicator == "Start month of the academic school year (pre-primary to post-secondary non-tertiary education)")
 
 
 ```
 
-I am uncertain as to what to do about the entrance age. In fact there two interesting variables. 
--> one on the age of compulsory education 
--> one on the age where schooling starts (like when you are 3 in France for instance)
-
-There is one more country when testing between nb of tags in Mean Schooling and Gov Exp WE MIGHT NEED TO SEE ABOUT THAT. PERHAPS ADD THE MISSING COUNTRIES AS WE ANALYZE MORE VARS
 
 ```{r}
 ##inner_join()
