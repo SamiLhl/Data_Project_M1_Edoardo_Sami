@@ -211,7 +211,7 @@ PISA_treatment <- function(data) {
 ```
 
 Since all the data have a similar structure, we created a function that remove the last four observation and make the year as a numeric variable, this is to make further aggregation of the data easier. 
-Run this code only once
+Run this code only once, 
 ```{r}
 Pisa_score_Mathscale <- PISA_treatment(Pisa_score_Mathscale)
 Pisa_score_Mathscale_gender <-PISA_treatment(Pisa_score_Mathscale_gender)
@@ -267,5 +267,14 @@ Household_income3 <- Household_income3 %>%
 Household_income3 <- Household_income3 |>
   pivot_wider(names_from = TIME,
               values_from = Real_Household_Disp_Income) 
-            
+data(mtcars)
+
+```
+
+Small example on how to present the dataset for the project.
+```{r}
+variable_names <- names(Household_income3)
+observations_count <- sapply(Household_income3, function(x) length(x))
+variable_table <- data.frame(Variable = variable_names, Observations = observations_count)
+knitr::kable(variable_table, caption = "Number of Observations for Each Variable")
 ```
