@@ -5,6 +5,8 @@ format: html
 ---
 
 ```{r}
+#| message: false
+#| echo: false
 here::i_am("Data_Project_M1_Edoardo_Sami.Rproj")
 library(here)
 library(ggplot2)
@@ -16,9 +18,10 @@ library(tidyr)
 ### Data Loading 
 Data files are small yet numerous, fortunately, there are only so many ways organizations can name countries so joining the files is not too challenging.
 
-## UNESCO Data
+## Data on Educational Attainments
+Source: UNESCO
+Avalaible at the link [here](http://data.uis.unesco.org)
 ```{r}
-
 Survival_Rate <- vroom(here("Data_UNESCO_21_11/Survival_Rate.csv"))
 Share_Studs_Priv <- vroom(here("Data_UNESCO_21_11/Share_Priv_lowsec.csv"))
 Enrolment <- vroom(here("Data_UNESCO_21_11/Tot_Enrol_Rate_Lowsec.csv"))
@@ -30,29 +33,26 @@ Gov_Exp <- vroom(here("Data_UNESCO_21_11/Gov_Exp_GDP.csv"))
 
 MeanSchooling <- vroom(here("Data_UNESCO_21_11/Mean_Yrs_Schooling.csv"))
 EntranceAge <- vroom(here("Data_UNESCO_21_11/Entrance_Age.csv"))
-
 ```
 
-## World Bank Data
-
+## Data on Population Density and Fertility rate
+Source : WORLD BANK
+Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=EN.POP.DNST&country=) and [here](https://databank.worldbank.org/reports.aspx?source=2&series=SP.DYN.TFRT.IN&country=)
 ```{r}
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
 Fertility_Rate <- read.csv(here("WB_Data/Population Fertility - Copie.csv"))
 ```
-Some small changes in the csv file were needed again for the Fertility Rate data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change. Once rid of these the file works. Otherwise we are doomed to commit some sort of felony.
-
-
-### WorldBank Data 
+## Data on GNI per capita 
+Source : WORLD BANK
 GNI per capita, PPP (current international $)
-Avalaible at the link here[here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=)
+Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=)
 ```{r}
 GNI_percapita <- vroom(here("HI_Data/data1.csv"))
 ```
 
-### Pisa score Data
-Pisa Score in the different domain, two kind of data, given also gender distribution
-Small modifications in the csv files were necessary for R to identify variables properly. Gender specification or all students conditions were added to their average variables rather than being put separately.
-
+### Data on Pisa score 
+Source : OECD 
+Avalaible at the link [here](https://www.oecd.org/pisa/data/2018database/#d.en.516012)
 ```{r}
 
 Pisa_score_readingscale <- vroom(here("Pisa_Score/Readingscale - Copie.csv"))
@@ -156,6 +156,7 @@ Template to get 2009 and 2018 data
 Template to get the Country_Codes : Country_Code_test <- DATA |> distinct(LOCATION)
 
 ## World Bank Data
+Some small changes in the csv file were needed again for the Fertility Rate data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change. Once rid of these the file works. Otherwise we are doomed to commit some sort of felony.
 
 There are only a few datasets from the WB treating them is quicker
 ```{r}
@@ -166,9 +167,9 @@ The WB data are now ready for a first join.
 
 
 ## OECD (PISA) Data
-
+Pisa Score in the different domain, two kind of data, given also gender distribution
+Small modifications in the csv files were necessary for R to identify variables properly. Gender specification or all students conditions were added to their average variables rather than being put separately.
 getting rid of the ? in the datasets
-
 ```{r}
 Pisa_score_Mathscale <- Pisa_score_Mathscale |> rename("Math_Score"="Average(all_students)") |> fill(`Year/Study`)|> select(-`Standard Error`)
 Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender |> rename("Math_Score_F" = `Average(Female)`, "Math_Score_M" = `Average(Male)`) |> fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
@@ -253,6 +254,7 @@ The indicator columns is eliminated, as it is unnecessary for our analysis.
 GNI_percapita <- GNI_percapita |>
   select(-`Indicator Code`)
 ```
+
 ### Presentation of the dataset and variable explainantion
 
 ```{r}
