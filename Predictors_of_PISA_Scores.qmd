@@ -109,7 +109,6 @@ I will check if we get different nb with other datasets
 Gov_Exp <- UNESCO_Treatment(Gov_Exp)
 Gov_Exp <- Gov_Exp |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)")
 
-Country_Code_test <- Gov_Exp |> distinct(LOCATION)
 
 Enrolment <- UNESCO_Treatment(Enrolment)
 Enrolment <- Enrolment |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")
