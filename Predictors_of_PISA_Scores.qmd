@@ -26,6 +26,12 @@ All we had to do was to download the CSV which was an option on the first page w
 
 - [Fertility Rates](https://data.worldbank.org/indicator/SP.DYN.TFRT.IN): Measure of the number of births per woman. A fertility rate of 2 indicates natural replacement of the population. 
 
+- [GDP](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=):
+Measure of the total monetary value of all final goods and services produced within a country in a specific time period.
+
+- [GNI per capita](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=): 
+Measure of the total income earned by a country's residents, plus, the net inflow of primary income (comprising compensation received by employees and income from property) from abroad.
+
 ### PISA: 
 All the variables were acquired in one go, using the [PISA Data Explorer](https://pisadataexplorer.oecd.org/ide/idepisa/) 
 
@@ -83,6 +89,7 @@ Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
 Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
 ```
+
 ### Data on GNI per capita 
 Source : WORLD BANK
 GNI per capita, PPP (current international $)
@@ -104,8 +111,10 @@ Pisa_score_Sciencescale_gender <- vroom(here("Pisa_Score/Sciencescale_gender.csv
 ```
 
 ### Data on GDP 
+Source: WORLD BANK
+Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
 ```{r}
-GDP_growth <- vroom(here("GDP_data/GDP-data.csv"))
+GDP_growth <- vroom(here("GDP_data/data2.csv"))
 ```
 
 Right now R recognizes none of the variables a number but all as chr. Modifications are necessary. Good thing however is that all the vars are useful. We need to assign the years to each of the data set but as they are of the exact same length we only need to know how many obs there is for each year in one data to know for the rest.
