@@ -2,6 +2,11 @@
 title: "Predictors_of_PISA_Scores"
 author: "Edoardo Ruvolo and Sami Louahlia"
 format: html
+execute:
+  message: false
+  warning: false
+code-fold: true
+
 ---
 
 ```{r}
@@ -118,19 +123,12 @@ Notes for later :
 - The data is sometimes way too massive compared to what we want to study, so some of the treatment will need to be done separately for each variables.
 
 
-## Data treatment 
+## Data treatment + variable description
+In this section, we format our datasets and proceed with some intermediate merging. We then describe the variables of these intermediate datasets.
 
 ### UNESCO DATA
---> All the UNESCO data are structured the same way, as such we can create a function to treat them efficiently
-We need to :
-- Rid ourselves of the Flag and Flag ID and NATMON var as they are empty and/or uninformative
-- Get rid of one of the Time variable to reduce redundancy
-- We should only keep the country name as it is what is put in PISA so we can join easily afterwards
-
-
---> The Pop_Density could be treated to only keep the Y2009 and the Y2018
-
---> For birth rate we could decide to keep only an average value over some time
+  All the UNESCO data are structured the same way, as such we can create a function to treat them efficiently
+We rid ourselves of the Flag, Flag ID and NATMON var as they are empty and/or uninformative. We also get rid of one of the Time variable to reduce redundancy. After treatment to only keep the data associated to our group of interest (generally students at the lower secondary level) and after assigning the "value" variables a more recognizable name we get rid of the LOCATION, and Value variables. We then join all the data sets into one big UNESCO dataset using as common variable both time and country name.
 
 
 ```{r}
@@ -139,14 +137,8 @@ UNESCO_Treatment <- function(Data){
 }
 ```
 
-```{r}
-Country_Code <- MeanSchooling |> distinct(LOCATION, Country) |> rename(Country_Code = LOCATION, Country = Country)
-```
-Good thing is that it allows to see how many countries are available with the Meanschooling data 
-I will check if we get different nb with other datasets
 
-
-```{r First look at Gov_Exp}
+```{r Treating the Data}
 Gov_Exp <- UNESCO_Treatment(Gov_Exp)
 Gov_Exp <- Gov_Exp |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)") |> mutate(Gov_Expenditure = Value) |> select(-Value, -Indicator)
 
@@ -171,7 +163,6 @@ Start_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "Start month o
 End_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "End month of the academic school year (pre-primary to post-secondary non-tertiary education)")|> mutate(End_Month = Value) |> select(-Value, -Indicator)
 
 ```
-All the UNESCO Variables are treated so that all that remains is the value of interest for each data as well as the year of observation and the country so we can join them.
 
 ```{r Joining UNESCO}
 UNESCO <- Gov_Exp |>
@@ -184,16 +175,21 @@ UNESCO <- Gov_Exp |>
   left_join(MeanSchooling, by = c("Country","Time")) |>
   left_join(Survival_Rate, by = c("Country","Time")) 
 ```
-Government Expenditure:
-Enrolment :
+
+Government Expenditure: Government expenditure in lower secondary education as a share of GDP (%)
+
+Enrolment : Share of the population at the corresponding age effectively attending lower secondary education (%) 
 Entrance Age:
-- Early:
-- Mandatory:
-Start and End year:
-Share of Students in Private:
-Mean Schooling:
-Survival Rate: 
-Template to get 2009 and 2018 data 
+- Early: Age at which it is possible to put children into schooling.
+- Mandatory: Age at which it is mandated to put children into schooling.
+
+Start and End year: Start and End month of the school year. Allows to measure length of the academic year.
+
+Share of Students in Private: Share of students attending a private institution.
+
+Mean Schooling: Mean number of years attended by the national adult population
+
+Survival Rate: Share of primary school pupils, within a cohort, who successfully pass to the next grade (a proxy for school retention)
 
 
 ### World Bank Data
