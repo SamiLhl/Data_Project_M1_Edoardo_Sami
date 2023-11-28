@@ -294,7 +294,6 @@ PISA_gender <- PISA_gender |>
 ```
 
 
-
 ### GNI_percapita cleaning. 
 No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
 The indicator columns is eliminated, as it is unnecessary for our analysis.
@@ -347,7 +346,7 @@ knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the V
 ```
 
 ```{r}
-result <- get_dataset_info(UNE)
+result <- get_dataset_info(PISA)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
 ```
