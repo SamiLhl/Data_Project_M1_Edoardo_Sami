@@ -108,6 +108,12 @@ Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=
 ```{r}
 GNI_percapita <- vroom(here("HI_Data/data1.csv"))
 ```
+### Data on GDP 
+Source: WORLD BANK
+Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
+```{r}
+GDP_growth <- vroom(here("GDP_data/data2.csv"))
+```
 
 ### Data on Pisa score 
 Source : OECD 
@@ -121,12 +127,6 @@ Pisa_score_Sciencescale <- vroom(here("Pisa_Score/Sciencescale.csv"))
 Pisa_score_Sciencescale_gender <- vroom(here("Pisa_Score/Sciencescale_gender.csv"))
 ```
 
-### Data on GDP 
-Source: WORLD BANK
-Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
-```{r}
-GDP_growth <- vroom(here("GDP_data/data2.csv"))
-```
 
 In the PISA data, R recognizes none of the variables as numbers but all as chr. Modifications are necessary. We also need to assign the years to each of the data set.
 
@@ -209,16 +209,67 @@ Some small changes in the csv file were needed again for the Fertility Rate data
 There are only a few datasets from the WB treating them is quicker
 ```{r}
 Fertility_Rate <- Fertility_Rate |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
-Pop_Density <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")
+Pop_Density <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")|> rename( "Country Name" ="Country_Name", "Country Code"="Country_Code") 
+```
+
+### GNI_percapita cleaning. 
+No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
+The indicator columns is eliminated, as it is unnecessary for our analysis.
+```{r}
+GNI_percapita <- GNI_percapita |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
+```
+
+### GDP_growth cleaning.
+No particular cleaning done in the GDP dataset, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
+Few years are eliminated, as they are unnecessary for our analysis.
+```{r}
+GDP_growth <- GDP_growth |>
+  select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
+```
+
+We then join all the data sets into one big WB dataset using as common variable both Country Name and Country Code
+```{r}
+WB <- Fertility_Rate |>
+  left_join(Pop_Density, by = c("Country Name", "Country Code")) |>
+  left_join(GNI_percapita, by = c("Country Name", "Country Code")) |>
+  left_join(GDP_growth, by = c("Country Name", "Country Code"))
+```
+
+I also tried to do it by pivoting the data so they could merge by year, i leave a small example, we can get of rid of it. 
+```{r}
+GDP_growth_long <- GDP_growth %>%
+  pivot_longer(cols = starts_with("20"),  
+               names_to = "Year",
+               values_to = "Value")
 ```
 
 ```{r}
-WB <- Fertility_Rate |>
-  left_join(Pisa_score_readingscale, by = c("Jurisdiction", "Year/Study")) |>
-  left_join(Pisa_score_Sciencescale, by = c("Jurisdiction", "Year/Study"))
+Fertility_Rate_long <- Fertility_Rate %>%
+  pivot_longer(cols = starts_with("20"),  
+               names_to = "Year",
+               values_to = "Value")
+Pop_Density_long <- Pop_Density %>%
+  pivot_longer(cols = starts_with("20"),  
+               names_to = "Year",
+               values_to = "Value")
 ```
 
+```{r}
+GNI_long <- GNI_percapita %>%
+  pivot_longer(cols = starts_with("20"),  
+               names_to = "Year",
+               values_to = "Value")
 
+```
+
+```{r}
+WB_long <- Fertility_Rate_long |>
+  left_join(Pop_Density_long, by = c("Country Name", "Country Code", "Year")) |>
+  left_join(GNI_long, by = c("Country Name", "Country Code", "Year")) |>
+  left_join(GDP_growth_long, by = c("Country Name", "Country Code", "Year"))
+```
+
+I tried both versions, idk which one we prefer, personally i prefer the WB and not the WB_long
 ### OECD (PISA) Data
 The PISA score were formatted in similar ways, where possible, we used functions to modify the data, however, due to the different variables, in some cases we performed the operations at the dataset level. We started our data cleaning by simplifing the names in the different datasets, and removing the STANDARD ERROR column, as it is outside the scope of our analysis. 
 ```{r}
@@ -300,22 +351,6 @@ PISA_gender <- PISA_gender |>
               values_from = c("Math_Score_M","Reading_Score_M", "Science_Score_M", "Math_Score_F","Reading_Score_F", "Science_Score_F"))
 ```
 
-
-### GNI_percapita cleaning. 
-No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
-The indicator columns is eliminated, as it is unnecessary for our analysis.
-```{r}
-GNI_percapita <- GNI_percapita |>
-  select(-`Indicator Code`)
-```
-
-### GDP_growth cleaning.
-No particular cleaning done in the GDP dataset, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
-Few years are eliminated, as they are unnecessary for our analysis.
-```{r}
-GDP_growth <- GDP_growth |>
-  select(-`1998`:-`2008`)
-```
 
 
 ## Presentation of the dataset and variable explainantion
