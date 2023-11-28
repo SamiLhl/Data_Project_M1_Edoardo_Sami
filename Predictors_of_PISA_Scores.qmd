@@ -133,7 +133,15 @@ End_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "End month of th
 All the UNESCO Variables are treated so that all that remains is the value of interest for each data as well as the year of observation and the country so we can join them.
 
 ```{r Joining UNESCO}
-
+UNESCO <- Gov_Exp |>
+  left_join(Enrolment, by = c("Country","Time")) |>
+  left_join(EntranceAgeEarly, by = c("Country","Time")) |>
+  left_join(EntranceAgeManda, by = c("Country","Time")) |>
+  left_join(End_Yr, by = c("Country","Time")) |>
+  left_join(Start_Yr, by = c("Country","Time")) |>
+  left_join(Share_Studs_Priv, by = c("Country","Time")) |>
+  left_join(MeanSchooling, by = c("Country","Time")) |>
+  left_join(Survival_Rate, by = c("Country","Time")) 
 ```
 
 I am uncertain as to what to do about the entrance age. In fact there two interesting variables. 
