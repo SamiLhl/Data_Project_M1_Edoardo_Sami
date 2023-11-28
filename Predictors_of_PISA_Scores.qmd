@@ -222,41 +222,32 @@ No particular cleaning done in the GDP dataset, just a minor adjustment in the c
 Few years are eliminated, as they are unnecessary for our analysis.
 ```{r}
 GDP_growth <- GDP_growth |>
-  select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
+  select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018") |> rename("GDP" ="Indicator Name")
 ```
 
-We then join all the data sets into one big WB dataset using as common variable both Country Name and Country Code
-```{r}
-WB <- Fertility_Rate |>
-  left_join(Pop_Density, by = c("Country Name", "Country Code")) |>
-  left_join(GNI_percapita, by = c("Country Name", "Country Code")) |>
-  left_join(GDP_growth, by = c("Country Name", "Country Code"))
-```
-
-I also tried to do it by pivoting the data so they could merge by year, i leave a small example, we can get of rid of it. 
 ```{r}
 GDP_growth_long <- GDP_growth %>%
   pivot_longer(cols = starts_with("20"),  
                names_to = "Year",
-               values_to = "Value")
+               values_to = "Indicator Names")
 ```
 
 ```{r}
 Fertility_Rate_long <- Fertility_Rate %>%
   pivot_longer(cols = starts_with("20"),  
                names_to = "Year",
-               values_to = "Value")
+               values_to = "Indicator Names")
 Pop_Density_long <- Pop_Density %>%
   pivot_longer(cols = starts_with("20"),  
                names_to = "Year",
-               values_to = "Value")
+               values_to = "Indicator Names")
 ```
 
 ```{r}
 GNI_long <- GNI_percapita %>%
   pivot_longer(cols = starts_with("20"),  
                names_to = "Year",
-               values_to = "Value")
+               values_to = "Indicator Names")
 
 ```
 
@@ -267,7 +258,10 @@ WB_long <- Fertility_Rate_long |>
   left_join(GDP_growth_long, by = c("Country Name", "Country Code", "Year"))
 ```
 
-I tried both versions, idk which one we prefer, personally i prefer the WB and not the WB_long
+```{r}
+WB_long <- WB_long |>
+  rename("Fertility Rate"="Indicator Names.x", "Poulation density"="Indicator Names.y", "Fertility Rate"="Indicator Names.x", "GNI per capita"="Indicator Names.x.x", "GDP rate"="Indicator Names.y.y") |> select(-"Indicator Name.x", -"Indicator_Name", -"Indicator Name.y", -"GDP" )
+```
 
 ### OECD (PISA) Data
 The PISA score were formatted in similar ways, where possible, we used functions to modify the data, however, due to the different variables, in some cases we performed the operations at the dataset level. We started our data cleaning by simplifing the names in the different datasets, and removing the STANDARD ERROR column, as it is outside the scope of our analysis. 
@@ -389,7 +383,7 @@ knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the V
 ```
 
 ```{r}
-result <- get_dataset_info(WB)
+result <- get_dataset_info(WB_long)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
 ```
