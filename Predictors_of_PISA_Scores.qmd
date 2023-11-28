@@ -213,10 +213,7 @@ The WB data are now ready for a first join.
 
 
 ### OECD (PISA) Data
-
-Pisa Score in the different domain, two kind of data, given also gender distribution
-Small modifications in the csv files were necessary for R to identify variables properly. Gender specification or all students conditions were added to their average variables rather than being put separately.
-getting rid of the ? in the datasets
+The PISA score were formatted in similar ways, where possible, we used functions to modify the data, however, due to the different variables, in some cases we performed the operations at the dataset level. We started our data cleaning by simplifing the names in the different datasets, and removing the STANDARD ERROR column, as it is outside the scope of our analysis. 
 ```{r}
 Pisa_score_Mathscale <- Pisa_score_Mathscale |> rename("Math_Score"="Average(all_students)") |> fill(`Year/Study`)|> select(-`Standard Error`)
 Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender |>  fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
@@ -227,10 +224,8 @@ Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender |>  fill(`Year/
 
 
 ```
-PISA data mostly need to have small changes as to how the score for each nations are named, so we can distinguish between Reading, Science and Math scores in the Final Dataset. Another thing that is necessary is to assign the proper year to each observations rather than just the first one for each year and have a look at the cases where the OECD suggested to keep the past data because they had non for that time of observation. 
-Once all this is done we just need to join by country.
 
-Here, we try getting rid of the '?' in the datasets, turning them into 'NA'
+Once solved the issues, we worked clean the dataset that would make sure that the scores were numeric variable and where this was not the case to substitute it with NA. 
 
 ```{r}
 
@@ -245,7 +240,8 @@ Pisa_score_Sciencescale_gender$Science_Score_M <- iconv(Pisa_score_Sciencescale_
 Pisa_score_Sciencescale_gender$Science_Score_F <- iconv(Pisa_score_Sciencescale_gender$Science_Score_F, to="UTF-8", sub = NA)
 ```
 
-Since all the data have a similar structure, we created a function that remove the last four observation and make the year as a numeric variable, this is to make further aggregation of the data easier. 
+Since all the data have a similar structure, we created a function that remove the last four observation which contained the source of the dataset (OECD) and some notes about the aggregation of the datasent. We used the same function to make the year as a numeric variable, to make aggregation easier.
+
 ```{r}
 
 PISA_treatment <- function(data) {
