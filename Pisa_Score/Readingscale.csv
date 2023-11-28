@@ -1,4 +1,4 @@
-ï»¿Year/Study;Jurisdiction;Average;Standard Error
+Year/Study;Jurisdiction;Average(all_students);Standard Error
 2018;Australia;503;-1.6
 ;Austria;484;-2.7
 ;Belgium;493;-2.3
@@ -30,23 +30,21 @@
 ;Portugal;492;-2.4
 ;Slovak Republic;458;-2.2
 ;Slovenia;495;-1.2
-;Spain;â€”;â€ 
+;Spain;—;†
 ;Sweden;506;-3
 ;Switzerland;484;-3.1
 ;Turkey;466;-2.2
 ;United Kingdom;504;-2.6
 ;United States;505;-3.6
 ;Albania;405;-1.9
-;Albania (2015);â€”;â€ 
-;Algeria;â€”;â€ 
+;Algeria;—;†
 ;Argentina;402;-3
-;Argentina (2015);â€”;â€ 
 ;Baku (Azerbaijan);389;-2.5
 ;Belarus;474;-2.4
 ;Bosnia and Herzegovina;403;-2.9
 ;Brazil;413;-2.1
 ;Brunei Darussalam;408;-0.9
-;B-S-J-G (China);â€”;â€ 
+;B-S-J-G (China);—;†
 ;B-S-J-Z (China);555;-2.7
 ;Bulgaria;420;-3.9
 ;Chinese Taipei;503;-2.8
@@ -59,12 +57,10 @@
 ;Indonesia;371;-2.6
 ;Jordan;419;-2.9
 ;Kazakhstan;387;-1.5
-;Kazakhstan (2015);â€”;â€ 
 ;Kosovo;353;-1.1
 ;Lebanon;353;-4.3
 ;Macao (China);525;-1.2
 ;Malaysia;415;-2.9
-;Malaysia (2015);â€”;â€ 
 ;Malta;448;-1.7
 ;Moldova;424;-2.4
 ;Montenegro;421;-1.1
@@ -80,12 +76,12 @@
 ;Serbia;439;-3.3
 ;Singapore;549;-1.6
 ;Thailand;393;-3.2
-;Trinidad and Tobago;â€”;â€ 
-;Tunisia;â€”;â€ 
+;Trinidad and Tobago;—;†
+;Tunisia;—;†
 ;Ukraine;466;-3.5
 ;United Arab Emirates;432;-2.3
 ;Uruguay;427;-2.8
-;Viet Nam;â€”;â€ 
+;Viet Nam;—;†
 2015;Australia;503;-1.7
 ;Austria;485;-2.8
 ;Belgium;499;-2.4
@@ -123,18 +119,16 @@
 ;Turkey;428;-4
 ;United Kingdom;498;-2.8
 ;United States;497;-3.4
-;Albania;â€”;â€ 
-;Albania (2015);405;-4.1
+;Albania;405;-4.1
 ;Algeria;350;-3
-;Argentina;â€”;â€ 
-;Argentina (2015);425;-3.2
-;Baku (Azerbaijan);â€”;â€ 
-;Belarus;â€”;â€ 
-;Bosnia and Herzegovina;â€”;â€ 
+;Argentina;425;-3.2
+;Baku (Azerbaijan);—;†
+;Belarus;—;†
+;Bosnia and Herzegovina;—;†
 ;Brazil;407;-2.8
-;Brunei Darussalam;â€”;â€ 
+;Brunei Darussalam;—;†
 ;B-S-J-G (China);494;-5.1
-;B-S-J-Z (China);â€”;â€ 
+;B-S-J-Z (China);—;†
 ;Bulgaria;432;-5
 ;Chinese Taipei;497;-2.5
 ;Costa Rica;427;-2.6
@@ -145,31 +139,29 @@
 ;Hong Kong (China);527;-2.7
 ;Indonesia;397;-2.9
 ;Jordan;408;-2.9
-;Kazakhstan;â€”;â€ 
-;Kazakhstan (2015);427;-3.4
+;Kazakhstan;427;-3.4
 ;Kosovo;347;-1.6
 ;Lebanon;347;-4.4
 ;Macao (China);509;-1.3
-;Malaysia;â€”;â€ 
-;Malaysia (2015);431;-3.5
+;Malaysia;431;-3.5
 ;Malta;447;-1.8
 ;Moldova;416;-2.5
 ;Montenegro;427;-1.6
-;Morocco;â€”;â€ 
+;Morocco;—;†
 ;North Macedonia;352;-1.4
-;Panama;â€”;â€ 
+;Panama;—;†
 ;Peru;398;-2.9
-;Philippines;â€”;â€ 
+;Philippines;—;†
 ;Qatar;402;-1
 ;Romania;434;-4.1
 ;Russia;495;-3.1
-;Saudi Arabia;â€”;â€ 
-;Serbia;â€”;â€ 
+;Saudi Arabia;—;†
+;Serbia;—;†
 ;Singapore;535;-1.6
 ;Thailand;409;-3.3
 ;Trinidad and Tobago;427;-1.5
 ;Tunisia;361;-3.1
-;Ukraine;â€”;â€ 
+;Ukraine;—;†
 ;United Arab Emirates;434;-2.9
 ;Uruguay;437;-2.5
 ;Viet Nam;487;-3.7
@@ -211,52 +203,48 @@
 ;United Kingdom;499;-3.5
 ;United States;498;-3.7
 ;Albania;394;-3.2
-;Albania (2015);â€”;â€ 
-;Algeria;â€”;â€ 
+;Algeria;—;†
 ;Argentina;396;-3.7
-;Argentina (2015);â€”;â€ 
-;Baku (Azerbaijan);â€”;â€ 
-;Belarus;â€”;â€ 
-;Bosnia and Herzegovina;â€”;â€ 
+;Baku (Azerbaijan);—;†
+;Belarus;—;†
+;Bosnia and Herzegovina;—;†
 ;Brazil;407;-2
-;Brunei Darussalam;â€”;â€ 
-;B-S-J-G (China);â€”;â€ 
-;B-S-J-Z (China);â€”;â€ 
+;Brunei Darussalam;—;†
+;B-S-J-G (China);—;†
+;B-S-J-Z (China);—;†
 ;Bulgaria;436;-6
 ;Chinese Taipei;523;-3
 ;Costa Rica;441;-3.5
 ;Croatia;485;-3.3
 ;Cyprus;449;-1.2
-;Dominican Republic;â€”;â€ 
-;Georgia;â€”;â€ 
+;Dominican Republic;—;†
+;Georgia;—;†
 ;Hong Kong (China);545;-2.8
 ;Indonesia;396;-4.2
 ;Jordan;399;-3.6
 ;Kazakhstan;393;-2.7
-;Kazakhstan (2015);â€”;â€ 
-;Kosovo;â€”;â€ 
-;Lebanon;â€”;â€ 
+;Kosovo;—;†
+;Lebanon;—;†
 ;Macao (China);509;-0.9
 ;Malaysia;398;-3.3
-;Malaysia (2015);â€”;â€ 
-;Malta;â€”;â€ 
-;Moldova;â€”;â€ 
+;Malta;—;†
+;Moldova;—;†
 ;Montenegro;422;-1.2
-;Morocco;â€”;â€ 
-;North Macedonia;â€”;â€ 
-;Panama;â€”;â€ 
+;Morocco;—;†
+;North Macedonia;—;†
+;Panama;—;†
 ;Peru;384;-4.3
-;Philippines;â€”;â€ 
+;Philippines;—;†
 ;Qatar;388;-0.8
 ;Romania;438;-4
 ;Russia;475;-3
-;Saudi Arabia;â€”;â€ 
-;Serbia;â€”;â€ 
+;Saudi Arabia;—;†
+;Serbia;—;†
 ;Singapore;542;-1.4
 ;Thailand;441;-3.1
-;Trinidad and Tobago;â€”;â€ 
+;Trinidad and Tobago;—;†
 ;Tunisia;404;-4.5
-;Ukraine;â€”;â€ 
+;Ukraine;—;†
 ;United Arab Emirates;442;-2.5
 ;Uruguay;411;-3.2
 ;Viet Nam;508;-4.4
@@ -298,57 +286,53 @@
 ;United Kingdom;494;-2.3
 ;United States;500;-3.7
 ;Albania;385;-4
-;Albania (2015);â€”;â€ 
-;Algeria;â€”;â€ 
+;Algeria;—;†
 ;Argentina;398;-4.6
-;Argentina (2015);â€”;â€ 
-;Baku (Azerbaijan);â€”;â€ 
-;Belarus;â€”;â€ 
-;Bosnia and Herzegovina;â€”;â€ 
+;Baku (Azerbaijan);—;†
+;Belarus;—;†
+;Bosnia and Herzegovina;—;†
 ;Brazil;412;-2.7
-;Brunei Darussalam;â€”;â€ 
-;B-S-J-G (China);â€”;â€ 
-;B-S-J-Z (China);â€”;â€ 
+;Brunei Darussalam;—;†
+;B-S-J-G (China);—;†
+;B-S-J-Z (China);—;†
 ;Bulgaria;429;-6.7
 ;Chinese Taipei;495;-2.6
-;Costa Rica;â€”;â€ 
+;Costa Rica;—;†
 ;Croatia;476;-2.9
-;Cyprus;â€”;â€ 
-;Dominican Republic;â€”;â€ 
-;Georgia;â€”;â€ 
+;Cyprus;—;†
+;Dominican Republic;—;†
+;Georgia;—;†
 ;Hong Kong (China);533;-2.1
 ;Indonesia;402;-3.7
 ;Jordan;405;-3.3
 ;Kazakhstan;390;-3.1
-;Kazakhstan (2015);â€”;â€ 
-;Kosovo;â€”;â€ 
-;Lebanon;â€”;â€ 
+;Kosovo;—;†
+;Lebanon;—;†
 ;Macao (China);487;-0.9
-;Malaysia;â€”;â€ 
-;Malaysia (2015);â€”;â€ 
-;Malta;â€”;â€ 
-;Moldova;â€”;â€ 
+;Malaysia;—;†
+;Malta;—;†
+;Moldova;—;†
 ;Montenegro;408;-1.7
-;Morocco;â€”;â€ 
-;North Macedonia;â€”;â€ 
-;Panama;â€¡;â€ 
+;Morocco;—;†
+;North Macedonia;—;†
+;Panama;‡;†
 ;Peru;370;-4
-;Philippines;â€”;â€ 
+;Philippines;—;†
 ;Qatar;372;-0.8
 ;Romania;424;-4.1
 ;Russia;459;-3.3
-;Saudi Arabia;â€”;â€ 
-;Serbia;â€¡;â€ 
+;Saudi Arabia;—;†
+;Serbia;‡;†
 ;Singapore;526;-1.1
 ;Thailand;421;-2.6
 ;Trinidad and Tobago;416;-1.2
 ;Tunisia;404;-2.9
-;Ukraine;â€”;â€ 
-;United Arab Emirates;â€”;â€ 
+;Ukraine;—;†
+;United Arab Emirates;—;†
 ;Uruguay;426;-2.6
-;Viet Nam;â€”;â€ 
+;Viet Nam;—;†
 ;;;
-â€  Not applicable.;;;
-â€” Not available.;;;
-NOTE: B-S-J-G (China) refers to the four PISA participating China provinces: Beijing, Shanghai, Jiangsu, and Guangdong. | B-S-J-Z (China) refers to the four PISA participating China provinces: Beijing, Shanghai, Jiangsu, and Zhejiang. | CABA (Argentina) refers to Ciudad AutÃ³noma de Buenos Aires (Argentina). | North Macedonia refers to the Republic of Macedonia. | Russia refers to the Russian Federation. | The statistical data for Israel are supplied by and under the responsibility of the relevant Israeli authorities. The use of such data by the OECD is without prejudice to the status of the Golan Heights, East Jerusalem and Israeli settlements in the West Bank under the terms of international law. | Information on data for Cyprus: https://oe.cd/cyprus-disclaimer | Argentina, Kazakhstan and Malaysia in 2015: Coverage is too small to ensure comparability (see PISA 2015 Results [Volume I]: Excellence and Equity in Education [OECD, 2016], Annex A4). The Reading, Mathematics and Science scale ranges from 0 to 1000. Some apparent differences between estimates may not be statistically significant.;;;
+† Not applicable.;;;
+— Not available.;;;
+NOTE: B-S-J-G (China) refers to the four PISA participating China provinces: Beijing, Shanghai, Jiangsu, and Guangdong. | B-S-J-Z (China) refers to the four PISA participating China provinces: Beijing, Shanghai, Jiangsu, and Zhejiang. | CABA (Argentina) refers to Ciudad Autónoma de Buenos Aires (Argentina). | North Macedonia refers to the Republic of Macedonia. | Russia refers to the Russian Federation. | The statistical data for Israel are supplied by and under the responsibility of the relevant Israeli authorities. The use of such data by the OECD is without prejudice to the status of the Golan Heights, East Jerusalem and Israeli settlements in the West Bank under the terms of international law. | Information on data for Cyprus: https://oe.cd/cyprus-disclaimer | Argentina, Kazakhstan and Malaysia in 2015: Coverage is too small to ensure comparability (see PISA 2015 Results [Volume I]: Excellence and Equity in Education [OECD, 2016], Annex A4). The Reading, Mathematics and Science scale ranges from 0 to 1000. Some apparent differences between estimates may not be statistically significant.;;;
 SOURCE: Organization for Economic Cooperation and Development (OECD), Program for International Student Assessment (PISA), 2009, 2012, 2015, and 2018 Reading, Mathematics and Science Assessments.;;;
