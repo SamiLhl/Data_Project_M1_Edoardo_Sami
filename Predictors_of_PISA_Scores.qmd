@@ -143,25 +143,17 @@ UNESCO <- Gov_Exp |>
   left_join(MeanSchooling, by = c("Country","Time")) |>
   left_join(Survival_Rate, by = c("Country","Time")) 
 ```
-
-I am uncertain as to what to do about the entrance age. In fact there two interesting variables. 
--> one on the age of compulsory education 
--> one on the age where schooling starts (like when you are 3 in France for instance)
-
-There is one more country when testing between nb of tags in Mean Schooling and Gov Exp WE MIGHT NEED TO SEE ABOUT THAT. PERHAPS ADD THE MISSING COUNTRIES AS WE ANALYZE MORE VARS
-
-
-
-```{r}
-##inner_join()
-```
-
-
+Government Expenditure:
+Enrolment :
+Entrance Age:
+- Early:
+- Mandatory:
+Start and End year:
+Share of Students in Private:
+Mean Schooling:
+Survival Rate: 
 Template to get 2009 and 2018 data 
-## DATA_NAME2009 <- DATA |> filter (Time == 2009)
-## DATA_NAME2018 <- DATA |> filter (Time == 2018)
 
-Template to get the Country_Codes : Country_Code_test <- DATA |> distinct(LOCATION)
 
 ## World Bank Data
 Some small changes in the csv file were needed again for the Fertility Rate data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change. Once rid of these the file works. Otherwise we are doomed to commit some sort of felony.
