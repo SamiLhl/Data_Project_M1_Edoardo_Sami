@@ -94,7 +94,7 @@ We need to :
 
 ```{r}
 UNESCO_Treatment <- function(Data){
-  Data <- Data |> select(-`Flag Codes`, - Flags, - NATMON_IND, -TIME)
+  Data <- Data |> select(-`Flag Codes`, - Flags, - NATMON_IND, -TIME, -LOCATION)
 }
 ```
 
@@ -107,28 +107,41 @@ I will check if we get different nb with other datasets
 
 ```{r First look at Gov_Exp}
 Gov_Exp <- UNESCO_Treatment(Gov_Exp)
-Gov_Exp <- Gov_Exp |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)")
+Gov_Exp <- Gov_Exp |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)") |> mutate(Gov_Expenditure = Value) |> select(-Value, -Indicator)
 
 
 Enrolment <- UNESCO_Treatment(Enrolment)
-Enrolment <- Enrolment |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")
+Enrolment <- Enrolment |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")|> mutate(Enrolment_Rate = Value) |> select(-Value, -Indicator)
 
 MeanSchooling <- UNESCO_Treatment(MeanSchooling)
-MeanSchooling <- MeanSchooling |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")
+MeanSchooling <- MeanSchooling |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")|> mutate(Mean_Yrs_Schooling = Value) |> select(-Value, -Indicator)
 
 Share_Studs_Priv <- UNESCO_Treatment(Share_Studs_Priv)
-Share_Studs_Priv <- Share_Studs_Priv |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")
+Share_Studs_Priv <- Share_Studs_Priv |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")|> mutate(Share_Private = Value) |> select(-Value, -Indicator)
 
 Survival_Rate <- UNESCO_Treatment(Survival_Rate)
-Survival_Rate <- Survival_Rate |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")
+Survival_Rate <- Survival_Rate |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")|> mutate(Survival_Rate_Primary = Value) |> select(-Value, -Indicator)
 
 EntranceAge <- UNESCO_Treatment(EntranceAge)
-EntranceAgeEarly <- EntranceAge |> filter(Indicator == "Official entrance age to early childhood education (years)")
-EntranceAgeManda <- EntranceAge |> filter(Indicator == "Official entrance age to compulsory education (years)")
+EntranceAgeEarly <- EntranceAge |> filter(Indicator == "Official entrance age to early childhood education (years)")|> mutate(EntranceEarly = Value) |> select(-Value, -Indicator)
+EntranceAgeManda <- EntranceAge |> filter(Indicator == "Official entrance age to compulsory education (years)")|> mutate(Entrance_Mandatory = Value) |> select(-Value, -Indicator)
 
-Start_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "Start month of the academic school year (pre-primary to post-secondary non-tertiary education)")
-End_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "End month of the academic school year (pre-primary to post-secondary non-tertiary education)")
+Start_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "Start month of the academic school year (pre-primary to post-secondary non-tertiary education)")|> mutate(Start_Month = Value) |> select(-Value, -Indicator)
+End_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "End month of the academic school year (pre-primary to post-secondary non-tertiary education)")|> mutate(End_Month = Value) |> select(-Value, -Indicator)
 
+```
+All the UNESCO Variables are treated so that all that remains is the value of interest for each data as well as the year of observation and the country so we can join them.
+
+```{r Joining UNESCO}
+UNESCO <- Gov_Exp |>
+  left_join(Enrolment, by = c("Country","Time")) |>
+  left_join(EntranceAgeEarly, by = c("Country","Time")) |>
+  left_join(EntranceAgeManda, by = c("Country","Time")) |>
+  left_join(End_Yr, by = c("Country","Time")) |>
+  left_join(Start_Yr, by = c("Country","Time")) |>
+  left_join(Share_Studs_Priv, by = c("Country","Time")) |>
+  left_join(MeanSchooling, by = c("Country","Time")) |>
+  left_join(Survival_Rate, by = c("Country","Time")) 
 ```
 
 I am uncertain as to what to do about the entrance age. In fact there two interesting variables. 
@@ -136,6 +149,8 @@ I am uncertain as to what to do about the entrance age. In fact there two intere
 -> one on the age where schooling starts (like when you are 3 in France for instance)
 
 There is one more country when testing between nb of tags in Mean Schooling and Gov Exp WE MIGHT NEED TO SEE ABOUT THAT. PERHAPS ADD THE MISSING COUNTRIES AS WE ANALYZE MORE VARS
+
+
 
 ```{r}
 ##inner_join()
