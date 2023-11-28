@@ -25,17 +25,16 @@ Data files are small yet numerous, fortunately, there are only so many ways orga
 Source: UNESCO
 Avalaible at the link [here](http://data.uis.unesco.org)
 ```{r}
-Survival_Rate <- vroom(here("Data_UNESCO_21_11/Survival_Rate.csv"))
-Share_Studs_Priv <- vroom(here("Data_UNESCO_21_11/Share_Priv_lowsec.csv"))
-Enrolment <- vroom(here("Data_UNESCO_21_11/Tot_Enrol_Rate_Lowsec.csv"))
+Survival_Rate <- vroom(here("Data_UNESCO_28_11/Survival_Rate.csv"))
+Share_Studs_Priv <- vroom(here("Data_UNESCO_28_11/Share_Private.csv"))
+Enrolment <- vroom(here("Data_UNESCO_28_11/Enrolment_Rate.csv"))
 
-Start_Yr <- vroom(here("Data_UNESCO_21_11/Start_Month_Acad.csv"))
-End_Yr <- vroom(here("Data_UNESCO_21_11/End_Month_Acad.csv"))
+Start_End_Yr <- vroom(here("Data_UNESCO_28_11/Start_End_Yr.csv"))
 
-Gov_Exp <- vroom(here("Data_UNESCO_21_11/Gov_Exp_GDP.csv"))
+Gov_Exp <- vroom(here("Data_UNESCO_28_11/Gov_Exp.csv"))
 
-MeanSchooling <- vroom(here("Data_UNESCO_21_11/Mean_Yrs_Schooling.csv"))
-EntranceAge <- vroom(here("Data_UNESCO_21_11/Entrance_Age.csv"))
+MeanSchooling <- vroom(here("Data_UNESCO_28_11/Mean_Yr_Schooling.csv"))
+EntranceAge <- vroom(here("Data_UNESCO_28_11/Entrance_Age.csv"))
 ```
 
 
@@ -44,7 +43,7 @@ Source : WORLD BANK
 Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=EN.POP.DNST&country=) and [here](https://databank.worldbank.org/reports.aspx?source=2&series=SP.DYN.TFRT.IN&country=)
 ```{r}
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
-Fertility_Rate <- read.csv(here("WB_Data/Population Fertility - Copie.csv"))
+Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
 ```
 ## Data on GNI per capita 
 Source : WORLD BANK
@@ -70,15 +69,10 @@ Right now R recognizes none of the variables a number but all as chr. Modificati
 
 Notes for later :
 - When UNESCO data are aggregated in regional form they don't have a name in character but a number, so it should be easy to rid or separate with a is.number or something of that kind
-- Some of the data, notably Illiteracy seem to have different indicators name so we need to ensure that it is the same thing or else separate them in different parts
 - Most of the data has a 'value' to show the value, problem is we would end up with a whole lot of 'values' so need to rename all this probably at the end of each datasets treatment, right before joining everything
 - Some variable are duplicated(Share_Studs_Priv has twice Time as well as ALL the UNESCO data), we will need to rid of them
 - Might be good to quickly turn Start and End of Year data sets into one so we can acquire the info we want out of it, namely the duration of a school year.
-
-For now I provide the 2009 and 2018 data, with for some data a 3 year range that we could mean, in case there are no data for 2009 or 2018 but some data before or after
-
-
-CAREFUL The data is sometimes way too massive compared to what we want to study, so some of the treatment will need to be done separately for each variables.
+- The data is sometimes way too massive compared to what we want to study, so some of the treatment will need to be done separately for each variables.
 
 
 ### Data treatment 
@@ -87,7 +81,6 @@ CAREFUL The data is sometimes way too massive compared to what we want to study,
 --> All the UNESCO data are structured the same way, as such we can create a function to treat them efficiently
 We need to :
 - Rid ourselves of the Flag and Flag ID and NATMON var as they are empty and/or uninformative
-- filter the 2018 and 2009 obs into two separate ones?
 - Get rid of one of the Time variable to reduce redundancy
 - We should only keep the country name as it is what is put in PISA so we can join easily afterwards
 
@@ -111,33 +104,29 @@ I will check if we get different nb with other datasets
 
 
 ```{r First look at Gov_Exp}
-Gov_ExpT <- UNESCO_Treatment(Gov_Exp)
-Gov_ExpT <- Gov_ExpT |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)")
+Gov_Exp <- UNESCO_Treatment(Gov_Exp)
+Gov_Exp <- Gov_Exp |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)")
 
-Country_Code_test <- Gov_ExpT |> distinct(LOCATION)
+Country_Code_test <- Gov_Exp |> distinct(LOCATION)
 
-#Gov_Exp2009 <- Gov_ExpT |> filter (Time == 2009)
-#Gov_Exp2018 <- Gov_ExpT |> filter (Time == 2018)
+Enrolment <- UNESCO_Treatment(Enrolment)
+Enrolment <- Enrolment |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")
 
-EnrolmentT <- UNESCO_Treatment(Enrolment)
-EnrolmentT <- EnrolmentT |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")
+MeanSchooling <- UNESCO_Treatment(MeanSchooling)
+MeanSchooling <- MeanSchooling |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")
 
-MeanSchoolingT <- UNESCO_Treatment(MeanSchooling)
-MeanSchoolingT <- MeanSchoolingT |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")
+Share_Studs_Priv <- UNESCO_Treatment(Share_Studs_Priv)
+Share_Studs_Priv <- Share_Studs_Priv |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")
 
-Share_Studs_PrivT <- UNESCO_Treatment(Share_Studs_Priv)
-Share_Studs_PrivT <- Share_Studs_PrivT |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")
+Survival_Rate <- UNESCO_Treatment(Survival_Rate)
+Survival_Rate <- Survival_Rate |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")
 
-Survival_RateT <- UNESCO_Treatment(Survival_Rate)
-Survival_RateT <- Survival_RateT |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")
+EntranceAge <- UNESCO_Treatment(EntranceAge)
+EntranceAgeEarly <- EntranceAge |> filter(Indicator == "Official entrance age to early childhood education (years)")
+EntranceAgeManda <- EntranceAge |> filter(Indicator == "Official entrance age to compulsory education (years)")
 
-EntranceAgeT <- UNESCO_Treatment(EntranceAge)
-EntranceAgeTearly <- EntranceAgeT |> filter(Indicator == "Official entrance age to early childhood education (years)")
-
-EntranceAgeT_Dev <- EntranceAgeT |> filter(Indicator == "Official entrance age to early childhood educational development (years)")
-
-EntranceAgeTmanda <- EntranceAgeT |> filter(Indicator == "Official entrance age to compulsory education (years)")
-
+Start_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "Start month of the academic school year (pre-primary to post-secondary non-tertiary education)")
+End_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "End month of the academic school year (pre-primary to post-secondary non-tertiary education)")
 
 ```
 
@@ -170,13 +159,10 @@ The WB data are now ready for a first join.
 
 
 ## OECD (PISA) Data
-<<<<<<< HEAD
 
-=======
 Pisa Score in the different domain, two kind of data, given also gender distribution
 Small modifications in the csv files were necessary for R to identify variables properly. Gender specification or all students conditions were added to their average variables rather than being put separately.
 getting rid of the ? in the datasets
->>>>>>> fa017f70e8442918af852a1f5271fdf5b4f5e477
 ```{r}
 Pisa_score_Mathscale <- Pisa_score_Mathscale |> rename("Math_Score"="Average(all_students)") |> fill(`Year/Study`)|> select(-`Standard Error`)
 Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender |>  fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
@@ -193,6 +179,7 @@ Once all this is done we just need to join by country.
 Here, we try getting rid of the '?' in the datasets, turning them into 'NA'
 
 ```{r}
+
 Pisa_score_Mathscale$Math_Score <- iconv(Pisa_score_Mathscale$Math_Score, to="UTF-8", sub = NA)
 Pisa_score_Mathscale_gender$Math_Score_M <- iconv(Pisa_score_Mathscale_gender$Math_Score_M, to="UTF-8", sub = NA)
 Pisa_score_Mathscale_gender$Math_Score_F <- iconv(Pisa_score_Mathscale_gender$Math_Score_F, to="UTF-8", sub = NA)
@@ -206,6 +193,7 @@ Pisa_score_Sciencescale_gender$Science_Score_F <- iconv(Pisa_score_Sciencescale_
 
 Since all the data have a similar structure, we created a function that remove the last four observation and make the year as a numeric variable, this is to make further aggregation of the data easier. 
 ```{r}
+
 PISA_treatment <- function(data) {
   if (nrow(data) <= 4) {
     warning("Number of observations to remove exceeds the total number of observations.")
@@ -221,6 +209,7 @@ PISA_treatment <- function(data) {
 
 Run this code only once, 
 ```{r}
+
 Pisa_score_Mathscale <- PISA_treatment(Pisa_score_Mathscale)
 Pisa_score_Mathscale_gender <-PISA_treatment(Pisa_score_Mathscale_gender)
 Pisa_score_readingscale <- PISA_treatment(Pisa_score_readingscale)
@@ -231,6 +220,7 @@ Pisa_score_Sciencescale_gender <- PISA_treatment(Pisa_score_Sciencescale_gender)
 
 Now we display the data properly and ready for the aggregation. 
 ```{r}
+
 Pisa_score_Mathscale <- Pisa_score_Mathscale %>%
   pivot_wider(names_from = `Year/Study`, values_from = Math_Score)
 
@@ -242,6 +232,7 @@ Pisa_score_Sciencescale <- Pisa_score_Sciencescale %>%
 ```
 
 ```{r}
+
 Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender %>%
   pivot_wider(names_from = `Year/Study`, 
               values_from = c(Math_Score_F, Math_Score_M),
@@ -258,26 +249,27 @@ Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender %>%
               names_sep = "_")
 ```
 
-<<<<<<< HEAD
 there is still some cleaning to do, as some of the data take the form "name of country" (2015) and are to be accounted for as they are missing from the "normal" row of the countries. Good thing is that it is consistently the same issue with the same countries in all the datasets, namely (Albania, Argentina, Kazakhstan and Malaysia). In the end we commited another felony and got back each data csv and manually moved the (2015) data to the proper place) It will be important to account for this as they seem systematically above general averages for these countries. Which might explain why they were separated in the first place.
 
 
 
 ## Household income cleaning
 we first remove some observation we are not interested in. we create a function that verifies that the column we want to remove are effectively all of NA values. eventually we removed the others cause not related to our analysis.
-=======
+
 ## GNI_percapita cleaning. 
 No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
 The indicator columns is eliminated, as it is unnecessary for our analysis. 
 ```{r}
+
 GNI_percapita <- GNI_percapita |>
   select(-`Indicator Code`)
 ```
 
 ### Presentation of the dataset and variable explainantion
->>>>>>> fa017f70e8442918af852a1f5271fdf5b4f5e477
+
 
 ```{r}
+
 get_dataset_info <- function(dataset) {
   num_rows <- nrow(dataset)
   num_cols <- ncol(dataset)
@@ -292,6 +284,7 @@ get_dataset_info <- function(dataset) {
 ```
 
 ```{r}
+
 result <- get_dataset_info(GNI_percapita)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
