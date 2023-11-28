@@ -269,44 +269,37 @@ Pisa_score_Sciencescale <- PISA_treatment(Pisa_score_Sciencescale)
 Pisa_score_Sciencescale_gender <- PISA_treatment(Pisa_score_Sciencescale_gender)
 ```
 
-Now we display the data properly and ready for the aggregation. 
-```{r}
-
-Pisa_score_Mathscale <- Pisa_score_Mathscale %>%
-  pivot_wider(names_from = `Year/Study`, values_from = Math_Score)
-
-Pisa_score_readingscale <- Pisa_score_readingscale %>%
-  pivot_wider(names_from = `Year/Study`, values_from = Reading_Score)
-
-Pisa_score_Sciencescale <- Pisa_score_Sciencescale %>%
-  pivot_wider(names_from = `Year/Study`, values_from = Science_Score)
-```
-
-```{r}
-
-Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender %>%
-  pivot_wider(names_from = `Year/Study`, 
-              values_from = c(Math_Score_F, Math_Score_M),
-              names_sep = "_")
-
-Pisa_score_readingscale_gender <- Pisa_score_readingscale_gender %>%
-  pivot_wider(names_from = `Year/Study`, 
-              values_from = c(Reading_Score_F,Reading_Score_M),
-              names_sep = "_")
-
-Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender %>%
-  pivot_wider(names_from = `Year/Study`, 
-              values_from = c(Science_Score_F, Science_Score_M),
-              names_sep = "_")
-```
-
 Important note: Some countries, namely (Albania, Argentina, Kazakhstan and Malaysia), experience unusual scores in 2015 and for this reason were reported separately from the rest of the observation. Considering the situation, we decided to validate the score of 2015 and and so placing it back in its original position, we have done so by a modification in the cvs file. 
 
-there is still some cleaning to do, as some of the data take the form "name of country" (2015) and are to be accounted for as they are missing from the "normal" row of the countries. Good thing is that it is consistently the same issue with the same countries in all the datasets, namely (Albania, Argentina, Kazakhstan and Malaysia). In the end we commited another felony and got back each data csv and manually moved the (2015) data to the proper place) It will be important to account for this as they seem systematically above general averages for these countries. Which might explain why they were separated in the first place.
+For the aggregation of the dataset, we opted for two differentiated one, the first one is a comparison of the three categories (Science, Math and Reading) over the years. While the second one, is the same comparison taking in consideration gender distribution. 
+
+```{r}
+PISA <- Pisa_score_Mathscale |>
+  left_join(Pisa_score_readingscale, by = c("Jurisdiction", "Year/Study")) |>
+  left_join(Pisa_score_Sciencescale, by = c("Jurisdiction", "Year/Study"))
+
+PISA_gender <- Pisa_score_Mathscale_gender |>
+  left_join(Pisa_score_readingscale_gender, by = c("Jurisdiction", "Year/Study")) |>
+  left_join(Pisa_score_Sciencescale_gender, by = c("Jurisdiction", "Year/Study"))
+```
+
+```{r}
+PISA <- PISA |>
+  pivot_wider(names_from = `Year/Study`,
+              values_from = c("Math_Score","Reading_Score", "Science_Score"))
+```
+
+```{r}
+PISA_gender <- PISA_gender |>
+  pivot_wider(names_from = `Year/Study`,
+              values_from = c("Math_Score_M","Reading_Score_M", "Science_Score_M", "Math_Score_F","Reading_Score_F", "Science_Score_F"))
+```
+
+
 
 ### GNI_percapita cleaning. 
 No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
-The indicator columns is eliminated, as it is unnecessary for our analysis. 
+The indicator columns is eliminated, as it is unnecessary for our analysis.
 ```{r}
 GNI_percapita <- GNI_percapita |>
   select(-`Indicator Code`)
@@ -322,6 +315,8 @@ GDP_growth <- GDP_growth |>
 
 
 ## Presentation of the dataset and variable explainantion
+
+Lastly, in order to have a clearer display of our datasets, we created a function that would return the name of the variables in the datasets, the number of rows and columns for each observation and a small comment. 
 
 ```{r}
 
@@ -339,7 +334,6 @@ get_dataset_info <- function(dataset) {
 ```
 
 ```{r}
-
 result <- get_dataset_info(GNI_percapita)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
@@ -348,6 +342,14 @@ This indicator offers the per-person measurement of Gross National Income (GNI, 
 We decided to keep the Country Name and Country Code to identify unequivocally the countries. 
 The Indicator name that define the type of measurement and lastly the observation from 2009 to 2022.
 
+```{r}
+result <- get_dataset_info(UNESCO)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
+```
 
-
-
+```{r}
+result <- get_dataset_info(UNE)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
+```
