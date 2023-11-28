@@ -240,7 +240,7 @@ Pisa_score_Sciencescale_gender$Science_Score_M <- iconv(Pisa_score_Sciencescale_
 Pisa_score_Sciencescale_gender$Science_Score_F <- iconv(Pisa_score_Sciencescale_gender$Science_Score_F, to="UTF-8", sub = NA)
 ```
 
-Since all the data have a similar structure, we created a function that remove the last four observation which contained the source of the dataset (OECD) and some notes about the aggregation of the datasent. We used the same function to make the year as a numeric variable, to make aggregation easier.
+Since all the data have a similar structure, we created a function that remove the last four observation which contained the source of the data set (OECD) and some notes about the aggregation of the data set. We used the same function to make the year as a numeric variable, to make aggregation easier.
 
 ```{r}
 
@@ -257,7 +257,6 @@ PISA_treatment <- function(data) {
 }
 ```
 
-Run this code only once, 
 ```{r}
 
 Pisa_score_Mathscale <- PISA_treatment(Pisa_score_Mathscale)
@@ -299,12 +298,9 @@ Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender %>%
               names_sep = "_")
 ```
 
+Important note: Some countries, namely (Albania, Argentina, Kazakhstan and Malaysia), experience unusual scores in 2015 and for this reason were reported separately from the rest of the observation. Considering the situation, we decided to validate the score of 2015 and and so placing it back in its original position, we have done so by a modification in the cvs file. 
+
 there is still some cleaning to do, as some of the data take the form "name of country" (2015) and are to be accounted for as they are missing from the "normal" row of the countries. Good thing is that it is consistently the same issue with the same countries in all the datasets, namely (Albania, Argentina, Kazakhstan and Malaysia). In the end we commited another felony and got back each data csv and manually moved the (2015) data to the proper place) It will be important to account for this as they seem systematically above general averages for these countries. Which might explain why they were separated in the first place.
-
-
-
-### Household income cleaning
-we first remove some observation we are not interested in. we create a function that verifies that the column we want to remove are effectively all of NA values. eventually we removed the others cause not related to our analysis.
 
 ### GNI_percapita cleaning. 
 No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
