@@ -42,10 +42,11 @@ Fertility_Rate <- read.csv(here("WB_Data/Population Fertility - Copie.csv"))
 Some small changes in the csv file were needed again for the Fertility Rate data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change. Once rid of these the file works. Otherwise we are doomed to commit some sort of felony.
 
 
-### OECD Data
-Household income
+### WorldBank Data 
+GNI per capita, PPP (current international $)
+Avalaible at the link here[here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=)
 ```{r}
-Household_income <- vroom(here("HI_Data/data.csv"))
+GNI_percapita <- vroom(here("HI_Data/data1.csv"))
 ```
 
 ### Pisa score Data
@@ -157,13 +158,11 @@ Template to get the Country_Codes : Country_Code_test <- DATA |> distinct(LOCATI
 ## World Bank Data
 
 There are only a few datasets from the WB treating them is quicker
-
 ```{r}
 FertiliT <- Fertility_Rate |> select(Country_Name, Country_Code, Indicator_Name, X2009, X2012, X2015, X2018) |> rename( "2009" = "X2009", "2012"="X2012", "2015"="X2015", "2018"="X2018")
 DensiT <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")
 ```
 The WB data are now ready for a first join.
-
 
 
 ## OECD (PISA) Data
@@ -247,13 +246,34 @@ Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender %>%
               names_sep = "_")
 ```
 
-Household income cleaning
-No particular cleaning done in the Household Income data
-
-Small example on how to present the dataset for the project.
+## GNI_percapita cleaning. 
+No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
+The indicator columns is eliminated, as it is unnecessary for our analysis. 
 ```{r}
-variable_names <- names(Household_income3)
-observations_count <- sapply(Household_income3, function(x) length(x))
-variable_table <- data.frame(Variable = variable_names, Observations = observations_count)
-knitr::kable(variable_table, caption = "Number of Observations for Each Variable")
+GNI_percapita <- GNI_percapita |>
+  select(-`Indicator Code`)
 ```
+### Presentation of the dataset and variable explainantion
+
+```{r}
+get_dataset_info <- function(dataset) {
+  num_rows <- nrow(dataset)
+  num_cols <- ncol(dataset)
+  variable_names <- names(dataset)
+  info_table <- data.frame(
+    "Number of Rows" = num_rows,
+    "Number of Columns" = num_cols,
+    "Variable Names" = paste(variable_names, collapse = ", ")
+  )
+  return(info_table)
+}
+```
+
+```{r}
+result <- get_dataset_info(GNI_percapita)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
+```
+This indicator offers the per-person measurement of Gross National Income (GNI, previously known as GNP) in current international dollars, adjusted by a purchasing power parity (PPP) conversion factor. 
+We decided to keep the Country Name and Country Code to identify unequivocally the countries. 
+The Indicator name that define the type of measurement and lastly the observation from 2009 to 2022.
