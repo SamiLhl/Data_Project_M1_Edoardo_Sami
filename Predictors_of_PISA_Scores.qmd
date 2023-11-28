@@ -20,6 +20,12 @@ library(vroom)
 library(tidyr)
 ```
 
+## Research Project : Exploratory analysis of potential predictors of PISA Scores
+
+[Link to the Github Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami) 
+
+Research Question: 
+
 ## Data Acquisition
 
 This section summarizes how the different data sets were acquired. We had to access open data from three major international organizations: the World Bank, the OECD and the UN under its UNESCO mandate. 
@@ -122,14 +128,10 @@ Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=
 GDP_growth <- vroom(here("GDP_data/data2.csv"))
 ```
 
-Right now R recognizes none of the variables a number but all as chr. Modifications are necessary. Good thing however is that all the vars are useful. We need to assign the years to each of the data set but as they are of the exact same length we only need to know how many obs there is for each year in one data to know for the rest.
+In the PISA data, R recognizes none of the variables as numbers but all as chr. Modifications are necessary. We also need to assign the years to each of the data set.
 
-Notes for later :
+Notes for later : MUST LOOK AT THIS
 - When UNESCO data are aggregated in regional form they don't have a name in character but a number, so it should be easy to rid or separate with a is.number or something of that kind
-- Most of the data has a 'value' to show the value, problem is we would end up with a whole lot of 'values' so need to rename all this probably at the end of each datasets treatment, right before joining everything
-- Some variable are duplicated(Share_Studs_Priv has twice Time as well as ALL the UNESCO data), we will need to rid of them
-- Might be good to quickly turn Start and End of Year data sets into one so we can acquire the info we want out of it, namely the duration of a school year.
-- The data is sometimes way too massive compared to what we want to study, so some of the treatment will need to be done separately for each variables.
 
 
 ## Data treatment + variable description
