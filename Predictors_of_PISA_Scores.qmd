@@ -15,10 +15,51 @@ library(vroom)
 library(tidyr)
 ```
 
-### Data Loading 
+## Data Acquisition
+
+This section summarizes how the different data sets were acquired. We had to access open data from three major international organizations: the World Bank, the OECD and the UN under its UNESCO mandate. 
+
+### World Bank:
+All we had to do was to download the CSV which was an option on the first page when accessing the data page.
+
+- [Population Density](https://data.worldbank.org/indicator/EN.POP.DNST): Measure of countries’ population per square kilometers.
+
+- [Fertility Rates](https://data.worldbank.org/indicator/SP.DYN.TFRT.IN): Measure of the number of births per woman. A fertility rate of 2 indicates natural replacement of the population. 
+
+### PISA: 
+All the variables were acquired in one go, using the [PISA Data Explorer](https://pisadataexplorer.oecd.org/ide/idepisa/) 
+
+- Step 1 Selecting Criteria: We selected the Reading, Mathematics and Science variable, selected the 4 time periods we are using 2018, 2015, 2012, 2009, selected the three ‘measures’: PISA Reading, Mathematics and Science Scale Overall. And took the OECD and partners groups.
+
+- Step 2 Select Variables : We selected the All students and Student (standardized) Gender variables.
+
+- Step 3 + 4 Edit and Build Reports: We did not change anything to the default options which gives 6 different reports. We got the data explorer to build the reports and we go to download them. 
+
+### UNESCO:
+The [UNESCO Interface](http://data.uis.unesco.org/) allows one to select the variables needed. In our case we found all our data in the path: 
+Education -> Other policy relevant indicators. 
+
+-	Enrolment rate: Number of students and enrolment/attendance by level of education  -> Enrolment ratios  ->  Total net enrolment rate by level of education 
+
+-	Entrance age: Official entrance age and theoretical duration by level of education (years) -> Official entrance age 
+
+-	Start_Yr + End_Yr: Start and end of academic school year (month, year)
+
+-	Government Expenditure: Government expenditure on education as a percentage of GDP
+
+-	Mean Schooling: Mean Years of Schooling 
+
+-	Share of Students in Private: Percentage of enrolment in private institutions by level of education -> Distribution of enrolment by type of institution
+
+-	Survival Rate: Survival rate by grade for primary education -> Survival rate in primary education
+
+After accessing each of the dataset it is necessary to customize the data, using the customize tool and selecting the time option, selecting only the 2009, 2012, 2015, 2018 observations. Finally we export in CSV format.
+
+
+## Data Loading 
 Data files are small yet numerous, fortunately, there are only so many ways organizations can name countries so joining the files is not too challenging.
 
-## Data on Educational Attainments
+### Data on Educational Attainments
 Source: UNESCO
 Avalaible at the link [here](http://data.uis.unesco.org)
 ```{r}
@@ -35,14 +76,14 @@ EntranceAge <- vroom(here("Data_UNESCO_28_11/Entrance_Age.csv"))
 ```
 
 
-## Data on Population Density and Fertility rate
+### Data on Population Density and Fertility rate
 Source : WORLD BANK
 Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=EN.POP.DNST&country=) and [here](https://databank.worldbank.org/reports.aspx?source=2&series=SP.DYN.TFRT.IN&country=)
 ```{r}
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
 Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
 ```
-## Data on GNI per capita 
+### Data on GNI per capita 
 Source : WORLD BANK
 GNI per capita, PPP (current international $)
 Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=)
@@ -77,9 +118,9 @@ Notes for later :
 - The data is sometimes way too massive compared to what we want to study, so some of the treatment will need to be done separately for each variables.
 
 
-### Data treatment 
+## Data treatment 
 
-## UNESCO DATA
+### UNESCO DATA
 --> All the UNESCO data are structured the same way, as such we can create a function to treat them efficiently
 We need to :
 - Rid ourselves of the Flag and Flag ID and NATMON var as they are empty and/or uninformative
@@ -143,27 +184,19 @@ UNESCO <- Gov_Exp |>
   left_join(MeanSchooling, by = c("Country","Time")) |>
   left_join(Survival_Rate, by = c("Country","Time")) 
 ```
-
-I am uncertain as to what to do about the entrance age. In fact there two interesting variables. 
--> one on the age of compulsory education 
--> one on the age where schooling starts (like when you are 3 in France for instance)
-
-There is one more country when testing between nb of tags in Mean Schooling and Gov Exp WE MIGHT NEED TO SEE ABOUT THAT. PERHAPS ADD THE MISSING COUNTRIES AS WE ANALYZE MORE VARS
-
-
-
-```{r}
-##inner_join()
-```
-
-
+Government Expenditure:
+Enrolment :
+Entrance Age:
+- Early:
+- Mandatory:
+Start and End year:
+Share of Students in Private:
+Mean Schooling:
+Survival Rate: 
 Template to get 2009 and 2018 data 
-## DATA_NAME2009 <- DATA |> filter (Time == 2009)
-## DATA_NAME2018 <- DATA |> filter (Time == 2018)
 
-Template to get the Country_Codes : Country_Code_test <- DATA |> distinct(LOCATION)
 
-## World Bank Data
+### World Bank Data
 Some small changes in the csv file were needed again for the Fertility Rate data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change. Once rid of these the file works. Otherwise we are doomed to commit some sort of felony.
 
 There are only a few datasets from the WB treating them is quicker
@@ -174,7 +207,7 @@ Pop_Density <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name,
 The WB data are now ready for a first join.
 
 
-## OECD (PISA) Data
+### OECD (PISA) Data
 
 Pisa Score in the different domain, two kind of data, given also gender distribution
 Small modifications in the csv files were necessary for R to identify variables properly. Gender specification or all students conditions were added to their average variables rather than being put separately.
@@ -269,10 +302,10 @@ there is still some cleaning to do, as some of the data take the form "name of c
 
 
 
-## Household income cleaning
+### Household income cleaning
 we first remove some observation we are not interested in. we create a function that verifies that the column we want to remove are effectively all of NA values. eventually we removed the others cause not related to our analysis.
 
-## GNI_percapita cleaning. 
+### GNI_percapita cleaning. 
 No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
 The indicator columns is eliminated, as it is unnecessary for our analysis. 
 ```{r}
@@ -280,7 +313,7 @@ GNI_percapita <- GNI_percapita |>
   select(-`Indicator Code`)
 ```
 
-## GDP_growth cleaning.
+### GDP_growth cleaning.
 No particular cleaning done in the GDP dataset, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
 Few years are eliminated, as they are unnecessary for our analysis.
 ```{r}
@@ -289,7 +322,7 @@ GDP_growth <- GDP_growth |>
 ```
 
 
-### Presentation of the dataset and variable explainantion
+## Presentation of the dataset and variable explainantion
 
 ```{r}
 
