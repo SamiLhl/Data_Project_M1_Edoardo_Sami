@@ -276,7 +276,6 @@ GDP_growth <- GDP_growth |>
 
 ### Presentation of the dataset and variable explainantion
 
-
 ```{r}
 
 get_dataset_info <- function(dataset) {
@@ -301,5 +300,7 @@ knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the V
 This indicator offers the per-person measurement of Gross National Income (GNI, previously known as GNP) in current international dollars, adjusted by a purchasing power parity (PPP) conversion factor. 
 We decided to keep the Country Name and Country Code to identify unequivocally the countries. 
 The Indicator name that define the type of measurement and lastly the observation from 2009 to 2022.
+
+
 
 
