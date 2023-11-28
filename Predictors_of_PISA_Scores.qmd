@@ -211,6 +211,7 @@ PISA_treatment <- function(data) {
 ```
 
 Since all the data have a similar structure, we created a function that remove the last four observation and make the year as a numeric variable, this is to make further aggregation of the data easier. 
+Run this code only once
 ```{r}
 Pisa_score_Mathscale <- PISA_treatment(Pisa_score_Mathscale)
 Pisa_score_Mathscale_gender <-PISA_treatment(Pisa_score_Mathscale_gender)
@@ -262,7 +263,7 @@ Household_income3 <- Household_income3 |> pivot_wider(names_from = Indicator,
   rename(Real_Household_Disp_Income = "Real household net disposable income, deflated by household Final consumption, millions of national currency"
   ) 
 Household_income3 <- Household_income3 %>%
-  filter(TIME < 2000 | TIME > 2010)
+  filter(TIME < 2000 | TIME > 2009)
 Household_income3 <- Household_income3 |>
   pivot_wider(names_from = TIME,
               values_from = Real_Household_Disp_Income) 
