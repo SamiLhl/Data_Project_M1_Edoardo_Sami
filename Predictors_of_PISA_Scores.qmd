@@ -18,9 +18,6 @@ library(tidyr)
 ### Data Loading 
 Data files are small yet numerous, fortunately, there are only so many ways organizations can name countries so joining the files is not too challenging.
 
-<<<<<<< HEAD
-## UNESCO Data
-=======
 ## Data on Educational Attainments
 Source: UNESCO
 Avalaible at the link [here](http://data.uis.unesco.org)
@@ -63,6 +60,11 @@ Pisa_score_Mathscale <- vroom(here("Pisa_Score/Mathscale.csv"))
 Pisa_score_Mathscale_gender <- vroom(here("Pisa_Score/Mathscale_gender.csv"))
 Pisa_score_Sciencescale <- vroom(here("Pisa_Score/Sciencescale.csv"))
 Pisa_score_Sciencescale_gender <- vroom(here("Pisa_Score/Sciencescale_gender.csv"))
+```
+
+### Data on GDP 
+```{r}
+GDP_growth <- vroom(here("GDP_data/GDP-data.csv"))
 ```
 
 Right now R recognizes none of the variables a number but all as chr. Modifications are necessary. Good thing however is that all the vars are useful. We need to assign the years to each of the data set but as they are of the exact same length we only need to know how many obs there is for each year in one data to know for the rest.
@@ -260,10 +262,18 @@ we first remove some observation we are not interested in. we create a function 
 No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
 The indicator columns is eliminated, as it is unnecessary for our analysis. 
 ```{r}
-
 GNI_percapita <- GNI_percapita |>
   select(-`Indicator Code`)
 ```
+
+## GDP_growth cleaning.
+No particular cleaning done in the GDP dataset, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
+Few years are eliminated, as they are unnecessary for our analysis.
+```{r}
+GDP_growth <- GDP_growth |>
+  select(-`1998`:-`2008`)
+```
+
 
 ### Presentation of the dataset and variable explainantion
 
