@@ -211,7 +211,12 @@ There are only a few datasets from the WB treating them is quicker
 Fertility_Rate <- Fertility_Rate |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
 Pop_Density <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")
 ```
-The WB data are now ready for a first join.
+
+```{r}
+WB <- Fertility_Rate |>
+  left_join(Pisa_score_readingscale, by = c("Jurisdiction", "Year/Study")) |>
+  left_join(Pisa_score_Sciencescale, by = c("Jurisdiction", "Year/Study"))
+```
 
 
 ### OECD (PISA) Data
@@ -347,8 +352,4 @@ names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
 ```
 
-```{r}
-result <- get_dataset_info(PISA)
-names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
-```
+
