@@ -132,7 +132,7 @@ We rid ourselves of the Flag, Flag ID and NATMON var as they are empty and/or un
 
 ```{r}
 UNESCO_Treatment <- function(Data){
-  Data <- Data |> select(-`Flag Codes`, - Flags, - NATMON_IND, -TIME, -LOCATION)
+  Data <- Data |> select(-`Flag Codes`, - Flags, - NATMON_IND, -TIME, -Country)
 }
 ```
 
@@ -165,15 +165,18 @@ End_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "End month of th
 
 ```{r Joining UNESCO}
 UNESCO <- Gov_Exp |>
-  left_join(Enrolment, by = c("Country","Time")) |>
-  left_join(EntranceAgeEarly, by = c("Country","Time")) |>
-  left_join(EntranceAgeManda, by = c("Country","Time")) |>
-  left_join(End_Yr, by = c("Country","Time")) |>
-  left_join(Start_Yr, by = c("Country","Time")) |>
-  left_join(Share_Studs_Priv, by = c("Country","Time")) |>
-  left_join(MeanSchooling, by = c("Country","Time")) |>
-  left_join(Survival_Rate, by = c("Country","Time")) 
+  left_join(Enrolment, by = c("LOCATION","Time")) |>
+  left_join(EntranceAgeEarly, by = c("LOCATION","Time")) |>
+  left_join(EntranceAgeManda, by = c("LOCATION","Time")) |>
+  left_join(End_Yr, by = c("LOCATION","Time")) |>
+  left_join(Start_Yr, by = c("LOCATION","Time")) |>
+  left_join(Share_Studs_Priv, by = c("LOCATION","Time")) |>
+  left_join(MeanSchooling, by = c("LOCATION","Time")) |>
+  left_join(Survival_Rate, by = c("LOCATION","Time")) 
+
+UNESCO <- UNESCO |> rename("Tag" = "LOCATION", "Year"="Time")
 ```
+
 
 Government Expenditure: Government expenditure in lower secondary education as a share of GDP (%)
 
