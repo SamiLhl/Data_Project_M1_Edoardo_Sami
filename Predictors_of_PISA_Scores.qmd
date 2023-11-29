@@ -400,24 +400,21 @@ knitr::kable(result, caption = "Final Data Overview")
 ```
 
 ### Graphical representation of target variable 
-
+for sami, the only issue i still dont' understand why, even tho we did the data are still characters, so in this version i had to as.numeric
 ```{r}
-pisa_wide <- PISA %>%
-  select("Math_Score", "Tag", "Year")
-  pivot_wider(names_from = "Year", values_from = "Math_Score")
-
-# Now that the data is pivoted wider, you can proceed with visualizing the distribution of Math scores for each Tag
-# For example, using a density plot
-
-ggplot(pisa_wide, aes(x = `2009`, fill = Tag)) +
-  geom_density(alpha = 0.5) +
-  geom_density(aes(x = `2012`, fill = Tag), alpha = 0.5) +
-  geom_density(aes(x = `2015`, fill = Tag), alpha = 0.5) +
-  geom_density(aes(x = `2018`, fill = Tag), alpha = 0.5) +
-  xlab("Math Score") +
-  ylab("Density") +
-  ggtitle("Distribution of Math Scores by Tag across Years") +
-  scale_fill_discrete(name = "Tag") +
-  theme_minimal()
+Mathscalewider <- PISA %>%
+  pivot_wider(names_from = "Year", values_from = c("Math_Score", "Reading_Score", "Science_Score"))
+Mathscale_long <- Mathscalewider %>%
+  pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
+  drop_na() %>%
+  mutate(Score = as.numeric(Score))  
+ggplot(Mathscale_long, aes(x = Year_Study, y = Score)) +
+  geom_boxplot() +
+  xlab("Year/Study") +
+  ylab("Score") +
+  ggtitle("Distribution of Scores Across Years/Studies") +
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
 ```
+
 
