@@ -428,7 +428,7 @@ ggplot(GenderPISA_longF, aes(x = Year_Study, y = Score)) +
 geom_boxplot() +
 xlab("Measurement in the different Years") +
 ylab("Score") +
-ggtitle("Distribution of Scores for Female Across Years/Studies") +
+ggtitle("Distribution of Scores for Female Across Years of Studies") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -443,7 +443,7 @@ ggplot(GenderPISA_longM, aes(x = Year_Study, y = Score)) +
 geom_boxplot() +
 xlab("Measurement in the different Years") +
 ylab("Score") +
-ggtitle("Distribution of Scores for Male Across Years/Studies") +
+ggtitle("Distribution of Scores for Male Across Years of Studies") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
