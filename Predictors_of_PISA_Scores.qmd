@@ -321,7 +321,7 @@ TAG_Name <- Pop_Density |> select("Country Name", "Country Code") |> rename ("Ju
 PISA <- Pisa_score_Mathscale |>
   left_join(Pisa_score_readingscale, by = c("Jurisdiction", "Year/Study")) |>
   left_join(Pisa_score_Sciencescale, by = c("Jurisdiction", "Year/Study"))
-PISA <- TAG_Name |> left_join(PISA, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
+PISA <- PISA |> left_join(TAG_Name, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
 PISA$Tag= coalesce(PISA$Tagg, PISA$"Country Code")
 PISA <- PISA |> select(-"Country Code", -"Tagg")
 PISA <- PISA |> na.omit(PISA)
@@ -389,8 +389,7 @@ names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
 ```
 
-```{r}
-```
+
 
 
 ```{r}
