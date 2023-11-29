@@ -387,6 +387,9 @@ names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
 ```
 
+```{r}
+```
+
 
 ```{r}
 result <- get_dataset_info(WB_long)
