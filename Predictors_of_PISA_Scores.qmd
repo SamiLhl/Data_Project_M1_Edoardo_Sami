@@ -401,3 +401,23 @@ knitr::kable(result, caption = "Final Data Overview")
 
 ### Graphical representation of target variable 
 
+```{r}
+pisa_wide <- PISA %>%
+  select("Math_Score", "Tag", "Year")
+  pivot_wider(names_from = "Year", values_from = "Math_Score")
+
+# Now that the data is pivoted wider, you can proceed with visualizing the distribution of Math scores for each Tag
+# For example, using a density plot
+
+ggplot(pisa_wide, aes(x = `2009`, fill = Tag)) +
+  geom_density(alpha = 0.5) +
+  geom_density(aes(x = `2012`, fill = Tag), alpha = 0.5) +
+  geom_density(aes(x = `2015`, fill = Tag), alpha = 0.5) +
+  geom_density(aes(x = `2018`, fill = Tag), alpha = 0.5) +
+  xlab("Math Score") +
+  ylab("Density") +
+  ggtitle("Distribution of Math Scores by Tag across Years") +
+  scale_fill_discrete(name = "Tag") +
+  theme_minimal()
+```
+
