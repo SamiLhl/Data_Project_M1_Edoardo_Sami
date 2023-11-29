@@ -320,7 +320,7 @@ TAG_Name <- Pop_Density |> select("Country Name", "Country Code") |> rename ("Ju
 PISA <- Pisa_score_Mathscale |>
   left_join(Pisa_score_readingscale, by = c("Jurisdiction", "Year/Study")) |>
   left_join(Pisa_score_Sciencescale, by = c("Jurisdiction", "Year/Study"))
-PISA <- TAG_Name |> left_join(PISA, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
+PISA <- PISA |> left_join(TAG_Name, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
 PISA$Tag= coalesce(PISA$Tagg, PISA$"Country Code")
 PISA <- PISA |> select(-"Country Code", -"Tagg")
 PISA <- PISA |> na.omit(PISA)
@@ -387,11 +387,18 @@ names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Unesco Data Overview")
 ```
 
+<<<<<<< HEAD
 ```{r}
 result <- get_dataset_info(WB_long)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "World Bank Data Overview")
 ```
+||||||| 997390a
+```{r}
+```
+=======
+
+>>>>>>> 752cf448ae3d6e0c9a55b80c9f62f454b486b20c
 
 ```{r}
 result <- get_dataset_info(Final_Data)
