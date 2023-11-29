@@ -192,23 +192,13 @@ Survival Rate: Share of primary school pupils, within a cohort, who successfully
 
 
 ### World Bank Data
-Some small changes in the csv file were needed again for the Fertility Rate data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change. Once rid of these the file works. Otherwise we are doomed to commit some sort of felony.
+The World Bank data sets, even if extracted from different measurement, were all treated in a similar way. Before uploading them on Rstudio, some small changes in the csv file were needed again for the data set to make it properly readable. Mostly, it required putting a _ on the variable names and getting rid of the first information provided in the .csv that were telling that it was WB data and its date of change.
+We used pivot longer to transforme the data and make them more accessible, and so to be ready for the merge. We then adjust the variables name, and remove superflous observations. 
 
-There are only a few datasets from the WB treating them is quicker
 ```{r}
 Fertility_Rate <- Fertility_Rate |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
-Pop_Density <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")|> rename( "Country Name" ="Country_Name", "Country Code"="Country_Code") 
-```
-
-No particular cleaning done in the Household Income data, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
-The indicator columns is eliminated, as it is unnecessary for our analysis.
-```{r}
+Pop_Density <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")|> rename( "Country Name" ="Country_Name", "Country Code"="Country_Code")
 GNI_percapita <- GNI_percapita |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
-```
-
-No particular cleaning done in the GDP dataset, just a minor adjustment in the cvs file, in order to be readable in rstudio. 
-Few years are eliminated, as they are unnecessary for our analysis.
-```{r}
 GDP_growth <- GDP_growth |>
   select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018") |> rename("GDP" ="Indicator Name")
 ```
@@ -218,9 +208,6 @@ GDP_growth_long <- GDP_growth %>%
   pivot_longer(cols = starts_with("20"),  
                names_to = "Year",
                values_to = "Indicator Names")
-```
-
-```{r}
 Fertility_Rate_long <- Fertility_Rate %>%
   pivot_longer(cols = starts_with("20"),  
                names_to = "Year",
@@ -229,9 +216,6 @@ Pop_Density_long <- Pop_Density %>%
   pivot_longer(cols = starts_with("20"),  
                names_to = "Year",
                values_to = "Indicator Names")
-```
-
-```{r}
 GNI_long <- GNI_percapita %>%
   pivot_longer(cols = starts_with("20"),  
                names_to = "Year",
