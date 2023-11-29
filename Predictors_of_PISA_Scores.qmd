@@ -402,17 +402,17 @@ knitr::kable(result, caption = "Final Data Overview")
 ### Graphical representation of target variable 
 for sami, the only issue i still dont' understand why, even tho we did the data are still characters, so in this version i had to as.numeric
 ```{r}
-Mathscalewider <- PISA %>%
+PISA_WIDER <- PISA %>%
   pivot_wider(names_from = "Year", values_from = c("Math_Score", "Reading_Score", "Science_Score"))
-Mathscale_long <- Mathscalewider %>%
+PISAW_long <- PISA_WIDER %>%
   pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
   drop_na() %>%
   mutate(Score = as.numeric(Score))  
-ggplot(Mathscale_long, aes(x = Year_Study, y = Score)) +
+ggplot(PISAW_long, aes(x = Year_Study, y = Score)) +
   geom_boxplot() +
-  xlab("Year/Study") +
+  xlab("Measurement in the different Years") +
   ylab("Score") +
-  ggtitle("Distribution of Scores Across Years/Studies") +
+  ggtitle("Distribution of Scores Across Years of Studies") +
   theme_minimal()+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  
 ```
