@@ -417,4 +417,34 @@ ggplot(PISAW_long, aes(x = Year_Study, y = Score)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  
 ```
 
-
+```{r}
+GenderPISA_widerF <- PISA_gender |> select(-Math_Score_M, -Reading_Score_M, -Science_Score_M)|>
+pivot_wider(names_from = "Year", values_from = c("Math_Score_F", "Reading_Score_F" ,"Science_Score_F"))
+GenderPISA_longF <- GenderPISA_widerF %>%
+pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
+drop_na() %>%
+mutate(Score = as.numeric(Score))
+ggplot(GenderPISA_longF, aes(x = Year_Study, y = Score)) +
+geom_boxplot() +
+xlab("Year/Study") +
+ylab("Score") +
+ggtitle("Distribution of Scores for Female Across Years/Studies") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r}
+GenderPISA_widerM <- PISA_gender |> select(-Math_Score_F, -Reading_Score_F, -Science_Score_F) |>
+pivot_wider(names_from = "Year", values_from = c("Math_Score_M", "Reading_Score_M", "Science_Score_M"))
+GenderPISA_longM <- GenderPISA_widerM %>%
+pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
+drop_na() %>%
+mutate(Score = as.numeric(Score))
+ggplot(GenderPISA_longM, aes(x = Year_Study, y = Score)) +
+geom_boxplot() +
+xlab("Year/Study") +
+ylab("Score") +
+ggtitle("Distribution of Scores for Male Across Years/Studies") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+From these graphs we can observe that the world average PISA scores have been decreasing. It is interesting to observe that male started at higher level of Math performance and saw their average score decrease faster than their female counterpart. Invertly to the Reading scores where males students underperformed relatively to their female counterpart and saw their performance decrease to a slower extent. In science, both genders started off at similar levels of performance, but males saw their performances decrease faster than females 
