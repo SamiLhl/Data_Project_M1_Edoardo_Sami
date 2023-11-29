@@ -296,13 +296,25 @@ Important note: Some countries, namely (Albania, Argentina, Kazakhstan and Malay
 For the aggregation of the data set, we opted for two differentiated one, the first one is PISA a comparison of the three categories (Science, Math and Reading) over the years where the data where aggregated by the year/study and Jurisdiction. While the second one PISA_gender, is the same comparison taking in consideration gender distribution. 
 
 ```{r}
+J <- c("Czech Republic","Korea","Russia","Turkey","Baku (Azerbaijan)")
+Ta <- c("CZE",  "KOR","RUS","TUR","AZE")
+Add_Tag <- data.frame(Jurisdiction = J, Tagg = Ta)
+TAG_Name <- Pop_Density |> select("Country Name", "Country Code") |> rename ("Jurisdiction" = "Country Name")
+
 PISA <- Pisa_score_Mathscale |>
   left_join(Pisa_score_readingscale, by = c("Jurisdiction", "Year/Study")) |>
   left_join(Pisa_score_Sciencescale, by = c("Jurisdiction", "Year/Study"))
+PISA <- PISA |> left_join(TAG_Name, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
+PISA$Tag= coalesce(PISA$Tagg, PISA$"Country Code")
+PISA <- PISA |> select(-"Country Code", -"Tagg")
 
 PISA_gender <- Pisa_score_Mathscale_gender |>
   left_join(Pisa_score_readingscale_gender, by = c("Jurisdiction", "Year/Study")) |>
   left_join(Pisa_score_Sciencescale_gender, by = c("Jurisdiction", "Year/Study"))
+PISA_gender <- PISA_gender |> left_join(TAG_Name, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
+PISA_gender$Tag= coalesce(PISA_gender$Tagg, PISA_gender$"Country Code")
+PISA_gender <- PISA_gender |> select(-"Country Code", -"Tagg")
+
 ```
 
 
