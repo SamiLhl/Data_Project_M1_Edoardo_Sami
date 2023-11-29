@@ -247,6 +247,7 @@ WB_long <- Fertility_Rate_long |>
   left_join(Pop_Density_long, by = c("Country Name", "Country Code", "Year")) |>
   left_join(GNI_long, by = c("Country Name", "Country Code", "Year")) |>
   left_join(GDP_growth_long, by = c("Country Name", "Country Code", "Year"))
+WB_long <- WB_long |> rename("Tag" = "Country Code")
 ```
 
 ```{r}
