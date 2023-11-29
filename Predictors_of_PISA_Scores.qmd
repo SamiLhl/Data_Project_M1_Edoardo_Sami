@@ -107,7 +107,7 @@ EntranceAge <- vroom(here("Data_UNESCO_28_11/Entrance_Age.csv"))
 
 
 ### World Bank
-Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=EN.POP.DNST&country=), for the density [here](https://databank.worldbank.org/reports.aspx?source=2&series=SP.DYN.TFRT.IN&country=) for the GNI [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=) and about GDP [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
+Fertility data available at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=EN.POP.DNST&country=), density [here](https://databank.worldbank.org/reports.aspx?source=2&series=SP.DYN.TFRT.IN&country=) the GNI per capita [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=) and values about GDP [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
 ```{r}
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
 Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
@@ -200,8 +200,7 @@ Survival Rate: Share of primary school pupils, within a cohort, who successfully
 
 
 ### World Bank Data
-The World Bank data sets, even if extracted from different measurement, were all treated in a similar way. Before uploading them on Rstudio, some small changes in the csv file were needed for the data set to make it properly readable. Mostly, it required getting rid of the first informations provided in the .csv that were telling that it was WB data and its date of change.
-We used pivot longer to transform the data and make them more accessible and ready for the merge. We then adjusted the variables name, and removed superfluous observations. 
+The World Bank data sets, even if extracted from different measurement, were all treated in a similar way. Before uploading them on Rstudio, some small changes in the csv file were needed for the data set to make it properly readable. Mostly, it required getting rid of the first informations provided in the .csv that were telling that it was WB data and its date of change. We then adjusted the variables name, and removed superfluous observations. 
 
 ```{r}
 Fertility_Rate <- Fertility_Rate |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
@@ -251,7 +250,7 @@ Fertility Rate: Measure of the number of births per woman. A fertility rate of 2
 
 GDP: Measure of the total monetary value of all final goods and services produced within a country in a specific time period.
 
-GNI per capita: Measure of the total income earned by a country's residents, plus, the net inflow of primary income (comprising compensation received by employees and income from property) from abroad.
+GNI per capita: Measure of the total income earned by a country's residents, plus, the net inflow of primary income (comprising compensation received by employees and income from property) from abroad. The measurement is expressed at the PPP. 
 
 ### OECD (PISA) Data
 The PISA score were formatted in similar ways, where possible, we used functions to modify the data, however, due to the different variables, in some cases we performed the operations at the dataset level. We started our data cleaning by simplifying the names in the different datasets, and removing the standard error column, as it is outside the scope of our analysis. 
@@ -349,12 +348,6 @@ Final_Data <- PISA |>
   left_join(WB_long, by =c("Tag","Year")) |>
   left_join(UNESCO, by = c("Tag","Year")) 
 ```
-```{r}
-sorted_data <- Final_Data[order(Final_Data$Tag), ]
-print(sorted_data)
-```
-In the final dataset, we merged the 4 datasets we had, by 
-
 This is the final dataset. It joins all the intermediary datasets by their common variables, namely (country) Tag and (observations') Year. This dataset will allow our exploratory analysis on potential predictors of PISA scores in the next sections.
 
 ## Presentation of the dataset and variables
@@ -379,24 +372,32 @@ get_dataset_info <- function(dataset) {
 ```{r}
 result <- get_dataset_info(PISA)
 names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Data Overview")
+knitr::kable(result, caption = "Pisa Data Overview")
 ```
 
 ```{r}
 result <- get_dataset_info(PISA_gender)
 names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Data Overview")
+knitr::kable(result, caption = "Pisa by Gender Data Overview")
 ```
 
 ```{r}
 result <- get_dataset_info(UNESCO)
 names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Data Overview")
+knitr::kable(result, caption = "Unesco Data Overview")
 ```
 
 ```{r}
 result <- get_dataset_info(WB_long)
 names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Data Overview")
+knitr::kable(result, caption = "World Bank Data Overview")
 ```
+
+```{r}
+result <- get_dataset_info(Final_Data)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Final Data Overview")
+```
+
+### Graphical representation of target variable 
 
