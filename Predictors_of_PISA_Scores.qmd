@@ -240,6 +240,7 @@ WB_long <- WB_long |> rename("Tag" = "Country Code")
 ```{r}
 WB_long <- WB_long |>
   rename("Fertility Rate"="Indicator Names.x", "Poulation density"="Indicator Names.y", "Fertility Rate"="Indicator Names.x", "GNI per capita"="Indicator Names.x.x", "GDP rate"="Indicator Names.y.y") |> select(-"Indicator Name.x", -"Indicator_Name", -"Indicator Name.y", -"GDP" )
+WB_long <- WB_long |> select(-`Country Name`)
 ```
 
 ### OECD (PISA) Data
@@ -321,8 +322,11 @@ PISA_gender <- PISA_gender |> left_join(TAG_Name, by = "Jurisdiction") |> left_j
 PISA_gender$Tag= coalesce(PISA_gender$Tagg, PISA_gender$"Country Code")
 PISA_gender <- PISA_gender |> select(-"Country Code", -"Tagg")
 
+Tag_Country <- PISA|> select(Tag, Jurisdiction)
+PISA <- PISA |> select(-Jurisdiction)
+PISA_gender <- PISA_gender |> select(-Jurisdiction)
 ```
-
+We integrate a tag variable to join PISA with the rest of the Datasets. From the tag and country variable we get a table to keep these information at hand.
 
 ## Presentation of the dataset and variable explainantion
 
