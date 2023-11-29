@@ -24,7 +24,16 @@ library(tidyr)
 
 [Link to the Github Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami) 
 
-Research Question: 
+### Research Question 
+
+  The national level of education is an important element to account for in public policy. In economic terms, it represents how well the nation develops its human capital, offering greater economic outcomes to its inhabitants.  Universal access to education may also contribute to improving the equality of opportunity with a country’s population. Moreover, beyond resource production and distribution, people may value education as a good in itself. 
+The OECD’s PISA initiative is a remarkable opportunity for cross-country comparisons in terms of educational attainments at the lower secondary level when students are aged around 15. It is also a major opportunity to use cross-country differences in other metrics to determine potential predictors for greater national PISA scores.
+
+  Using PISA, all reported national scores from 2009 to 2018, along with variables gathered across multiple international organizations, this project searches for potential variables that are able to explain cross-country differences in performance at the PISA test. The variables used are different in nature. Some feature the current state of a nation’s economy, others observe their demographic condition, while others tackle the way education is provided in the different observed countries to a deeper extent. As such, we hope to acquire a wide array of possible predictors for higher or lower PISA scores.
+
+  The completion of this research project may provide valuable insights. It may offer explanations as to why some countries perform better than others, orienting the agency of respective national governments. It may also leave room for some form of determinism, as some variables, such as geographic, demographic, or economic variables, may impact students’ performances while being more difficult or less desirable for governments to act upon in the short term.  
+Finally, this research project provides potential criticism as to what the PISA score truly reflects. Some variables have been selected to test potential flaws as to how the OECD can gather information about a nation's educational attainment, which could overlook important elements such as who can be evaluated by the OECD when devising the PISA scores and do they accurately represent the general student population of the studied country.   
+
 
 ## Data Acquisition
 
@@ -234,6 +243,8 @@ WB_long <- WB_long |> rename("Tag" = "Country Code")
 ```{r}
 WB_long <- WB_long |>
   rename("Fertility Rate"="Indicator Names.x", "Poulation density"="Indicator Names.y", "Fertility Rate"="Indicator Names.x", "GNI per capita"="Indicator Names.x.x", "GDP rate"="Indicator Names.y.y") |> select(-"Indicator Name.x", -"Indicator_Name", -"Indicator Name.y", -"GDP" )
+WB_long <- WB_long |> select(-`Country Name`)
+WB_long$Year <- as.numeric(WB_long$Year)
 ```
 
 ### OECD (PISA) Data
@@ -315,8 +326,20 @@ PISA_gender <- PISA_gender |> left_join(TAG_Name, by = "Jurisdiction") |> left_j
 PISA_gender$Tag= coalesce(PISA_gender$Tagg, PISA_gender$"Country Code")
 PISA_gender <- PISA_gender |> select(-"Country Code", -"Tagg")
 
+Tag_Country <- PISA|> select(Tag, Jurisdiction)
+PISA <- PISA |> select(-Jurisdiction) |> rename("Year"="Year/Study")
+PISA_gender <- PISA_gender |> select(-Jurisdiction)|> rename("Year"="Year/Study")
+```
+We integrate a tag variable to join PISA with the rest of the Datasets. From the tag and country variable we get a table to keep these information at hand.
+
+```{r}
+Final_Data <- UNESCO |>
+  left_join(WB_long, by =c("Tag","Year")) |>
+  left_join(PISA, by = c("Tag","Year")) |>
+  left_join(PISA_gender, by = c("Tag","Year"))
 ```
 
+This is the final dataset. ADD DESCRIPTIVES ABOUT IT
 
 ## Presentation of the dataset and variable explainantion
 
@@ -356,9 +379,12 @@ knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the V
 ```
 
 ```{r}
+```
+
+
+```{r}
 result <- get_dataset_info(WB_long)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
 ```
-
 
