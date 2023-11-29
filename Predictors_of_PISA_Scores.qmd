@@ -426,7 +426,7 @@ drop_na() %>%
 mutate(Score = as.numeric(Score))
 ggplot(GenderPISA_longF, aes(x = Year_Study, y = Score)) +
 geom_boxplot() +
-xlab("Year/Study") +
+xlab("Measurement in the different Years") +
 ylab("Score") +
 ggtitle("Distribution of Scores for Female Across Years/Studies") +
 theme_minimal()+
@@ -441,7 +441,7 @@ drop_na() %>%
 mutate(Score = as.numeric(Score))
 ggplot(GenderPISA_longM, aes(x = Year_Study, y = Score)) +
 geom_boxplot() +
-xlab("Year/Study") +
+xlab("Measurement in the different Years") +
 ylab("Score") +
 ggtitle("Distribution of Scores for Male Across Years/Studies") +
 theme_minimal()+
