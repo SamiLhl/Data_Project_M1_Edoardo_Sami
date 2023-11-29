@@ -338,6 +338,11 @@ Final_Data <- UNESCO |>
   left_join(PISA, by = c("Tag","Year")) |>
   left_join(PISA_gender, by = c("Tag","Year"))
 ```
+```{r}
+sorted_data <- Final_Data[order(Final_Data$Tag), ]
+print(sorted_data)
+```
+In the final dataset, we merged the 4 datasets we had, by 
 
 This is the final dataset. ADD DESCRIPTIVES ABOUT IT
 
@@ -363,28 +368,24 @@ get_dataset_info <- function(dataset) {
 ```{r}
 result <- get_dataset_info(PISA)
 names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
+knitr::kable(result, caption = "Data Overview")
 ```
 
 ```{r}
 result <- get_dataset_info(PISA_gender)
 names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
+knitr::kable(result, caption = "Data Overview")
 ```
 
 ```{r}
 result <- get_dataset_info(UNESCO)
 names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
+knitr::kable(result, caption = "Data Overview")
 ```
-
-```{r}
-```
-
 
 ```{r}
 result <- get_dataset_info(WB_long)
 names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
+knitr::kable(result, caption = "Data Overview")
 ```
 
