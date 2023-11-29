@@ -99,19 +99,7 @@ Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=
 ```{r}
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
 Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
-```
-
-### Data on GNI per capita 
-Source : WORLD BANK
-GNI per capita, PPP (current international $)
-Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=)
-```{r}
 GNI_percapita <- vroom(here("HI_Data/data1.csv"))
-```
-### Data on GDP 
-Source: WORLD BANK
-Avalaible at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
-```{r}
 GDP_growth <- vroom(here("GDP_data/data2.csv"))
 ```
 
@@ -332,18 +320,6 @@ PISA_gender <- Pisa_score_Mathscale_gender |>
   left_join(Pisa_score_Sciencescale_gender, by = c("Jurisdiction", "Year/Study"))
 ```
 
-```{r}
-PISA <- PISA |>
-  pivot_wider(names_from = `Year/Study`,
-              values_from = c("Math_Score","Reading_Score", "Science_Score"))
-```
-
-```{r}
-PISA_gender <- PISA_gender |>
-  pivot_wider(names_from = `Year/Study`,
-              values_from = c("Math_Score_M","Reading_Score_M", "Science_Score_M", "Math_Score_F","Reading_Score_F", "Science_Score_F"))
-```
-
 
 ## Presentation of the dataset and variable explainantion
 
@@ -381,6 +357,10 @@ result <- get_dataset_info(UNESCO)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Number of Rows, Number of Columns, Name of the Variable")
 ```
+
+```{r}
+```
+
 
 ```{r}
 result <- get_dataset_info(WB_long)
