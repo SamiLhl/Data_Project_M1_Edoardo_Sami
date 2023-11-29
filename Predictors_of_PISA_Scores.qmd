@@ -387,18 +387,11 @@ names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Unesco Data Overview")
 ```
 
-<<<<<<< HEAD
 ```{r}
 result <- get_dataset_info(WB_long)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "World Bank Data Overview")
 ```
-||||||| 997390a
-```{r}
-```
-=======
-
->>>>>>> 752cf448ae3d6e0c9a55b80c9f62f454b486b20c
 
 ```{r}
 result <- get_dataset_info(Final_Data)
