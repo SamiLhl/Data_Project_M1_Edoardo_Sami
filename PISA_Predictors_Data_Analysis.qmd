@@ -1,0 +1,44 @@
+---
+title: "PISA Predictors: Data Analysis"
+author: "Edoardo Ruvolo, Sami Louahlia"
+format: html
+execute:
+  message: false
+  warning: false
+echo: false
+---
+
+
+```{r}
+here::i_am("Data_Project_M1_Edoardo_Sami.Rproj")
+library(here)
+library(ggplot2)
+library(dplyr)
+library(vroom)
+library(tidyr)
+```
+## Research Project : Exploratory analysis of potential predictors of PISA Scores
+
+[Link to the Github Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami) 
+This is the same Repository as for the Data Treatment, we now proceed with the Dataset we produced in a new quarto document.
+
+## Part 1 : Research Question 
+
+
+
+
+
+## Part 2 : Data sets descriptions (size, production condition, main variables)*
+
+
+
+## Part 3 : Data analysis
+
+```{r}
+Dataset <- read.csv(here("Final_Data"))
+```
+
+
+
+
+
