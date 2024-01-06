@@ -450,3 +450,9 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 From these graphs we can observe that the world average PISA scores have been decreasing. It is interesting to observe that male started at higher level of Math performance and saw their average score decrease faster than their female counterpart. Invertly to the Reading scores where males students underperformed relatively to their female counterpart and saw their performance decrease to a slower extent. In science, both genders started off at similar levels of performance, but males saw their performances decrease faster than females.
 
+## Saving the final Data set
+
+```{r}
+write.csv(Final_Data, file = here("Final_Data"), na = "NA", row.names = FALSE)
+```
+
