@@ -179,6 +179,16 @@ We thus try modeling a non linear relationship between Mandatory Entrance Age an
 ```
 
 
+## Mean Yrs of Schooling MIGHT HAVE TO NONO OUT OF EXISTENCE FOR NOT BEING RELEVANT AT ALL (THE LADS ARE ALL TAKING THE TEST IN LATE MIDDLE SCHOOL SO THAT SHOWS NOTHING BEYONG MEAN YRS BEING HIGHER FOR RICH COUNTRIES)
+```{r Dens_Read}
+ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Math_Score))+
+geom_point()+
+xlab("Mean Years of Schooling") +
+ylab("Math Score") +
+ggtitle("Scatterplot of PISA Reading score given Mean Years of schooling ") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
 
 
