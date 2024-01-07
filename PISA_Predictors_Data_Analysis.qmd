@@ -133,6 +133,51 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 There does not seem to be any form of linear correlation between population density and PISA scores. 
 
+### Entrance Age
+There are important debate on the impact of the entrance age of pupils into school and their academic performances. 
+```{r}
+Entrance_PISA <- Dataset |> select(Math_Score, Reading_Score, Science_Score, Entrance_Mandatory)|> filter(!is.na(Entrance_Mandatory))
+```
+
+
+```{r Entr_Math}
+
+ggplot(Entrance_PISA, aes(x= as.factor(Entrance_Mandatory), y=Math_Score))+
+geom_boxplot()+
+xlab("Mandatory Entrance Age") +
+ylab("Math Score") +
+ggtitle("Scatterplot of PISA Math score given national Entrance Age into school") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r Entr_Sci}
+ggplot(Entrance_PISA, aes(x= as.factor(Entrance_Mandatory), y=Science_Score))+
+geom_boxplot()+
+xlab("Mandatory Entrance Age") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA Science score given national Entrance Age into school") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r Entr_Read}
+ggplot(Entrance_PISA, aes(x= as.factor(Entrance_Mandatory), y=Reading_Score))+
+geom_boxplot()+
+xlab("Mandatory Entrance Age") +
+ylab("Reading Score") +
+ggtitle("Scatterplot of PISA Reading score given national Entrance Age into school") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+There seem to be a non-linear relationship between Mandatory Entrance Age and PISA scores. Which reflects quite well the tradeoffs often mentioned in the literature, according to which, children may need time to mature before entering school, even though waiting for too long might not be profitable as children would be ready to for being schooled and are not, meaning they might reach the age/year for taking the PISA with less competencies acquired during school than other pupils who started school earlier.()
+We thus try modeling a non linear relationship between Mandatory Entrance Age and PISA scores
+
+```{r}
+##mod_age_mat <- nls(Math_Score ~ log(Entrance_Mandatory), data =Entrance_PISA, start = ##(Entrance_Mandatory = 3))
+```
+
 
 
 
