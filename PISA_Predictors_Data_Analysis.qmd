@@ -191,4 +191,27 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 
+## Start and End Month
 
+This variable may be used in multiple fashions. One point of interest might be the length of the school year. 
+(ADD ARTICLES SAYING STUFF ABOUT THAT)
+```{r}
+YrLength_PISA <- Dataset |> select(Math_Score, Reading_Score, Science_Score, End_Month, Start_Month)
+```
+
+```{r}
+YrLength_PISA$Year_Length <- (YrLength_PISA$End_Month - YrLength_PISA$Start_Month + 12) %% 12
+YrLength_PISA$Year_Length <- ifelse(YrLength_PISA$Year_Length < 4, NA, YrLength_PISA$Year_Length)
+```
+Some values seem hardly probable and are very rare, thus we omit them for further analysis (EXPAND ON THAT)
+
+```{r Dens_Read}
+YrLengthPISA <- YrLength_PISA |> filter(!is.na(Year_Length))
+ggplot(YrLength_PISA, aes(x= as.factor(Year_Length), y=Math_Score))+
+geom_boxplot()+
+xlab("Year_Length") +
+ylab("Math Score") +
+ggtitle("Scatterplot of PISA Math score given the Year Length") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
