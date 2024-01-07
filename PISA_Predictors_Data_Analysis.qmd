@@ -59,7 +59,25 @@ mod_GDP_mat <- lm(Math_Score ~ GNI.per.capita, data=Dataset)
 ```
 
 
+### GDP growth and PISA Scores 
+Booming economies may have hopes to become an advanced economy in the span of a generation or two, in a similar fashion the Asian tigers did in past. As such countries experiencing high economic growth may put greater efforts in their education services and have greater PISA scores.
 
+```{r}
+ggplot(Dataset, aes(x= GDP.rate, y=Math_Score))+
+geom_point()+
+xlab("GDP growth rate") +
+ylab("Math_Score") +
+ggtitle("Scatterplot of PISA Math score given GDP growth rate") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+As can be seen, graphical representation of Math Score being only predicted by growth rate does not show much. By doing so, we confound high income countries, which have lower growth rate as they do not experience growth from convergence with lower income countries that also have lower growth rate. It is necessary to control for GNI per capita before assessing the relevance of the growth rate of the economy in predicting PISA scores.
+
+```{r gy controlling for GNI per cap}
+mod_gy_mat_GDPc <- lm(Math_Score ~ GDP.rate + GNI.per.capita , data=Dataset)
+summary(mod_gy_mat_GDPc)
+```
+Once controlling for GDP per capita, it appears that the growth rate of the economy is not significantly correlated with PISA scores.
 
 
 ### Fertility Rates and PISA Scores
