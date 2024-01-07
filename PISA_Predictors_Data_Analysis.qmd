@@ -206,7 +206,7 @@ YrLength_PISA$Year_Length <- ifelse(YrLength_PISA$Year_Length < 4, NA, YrLength_
 Some values seem hardly probable and are very rare, thus we omit them for further analysis (EXPAND ON THAT)
 
 ```{r Dens_Read}
-YrLengthPISA <- YrLength_PISA |> filter(!is.na(Year_Length))
+YrLength_PISA <- YrLength_PISA |> filter(!is.na(Year_Length))
 ggplot(YrLength_PISA, aes(x= as.factor(Year_Length), y=Math_Score))+
 geom_boxplot()+
 xlab("Year_Length") +
@@ -215,3 +215,5 @@ ggtitle("Scatterplot of PISA Math score given the Year Length") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+There does not seem to be a linear relationship between academic year length and PISA scores.
+
