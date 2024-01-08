@@ -152,7 +152,7 @@ After controlling for GNI per capita, fertility are still, significantly, negati
 
 ### Population Density 
 
-
+Population density could potentially affect academic performance through multiple channels. For instance, low population density could lead to longer commuting time to school. However, high density areas may have multiple schools and reinforce social segregation between schools in turn potentially decreasing the means available to children of lower strata people. Borland and Howsen (1999) investigate this dynamic in Kentucky and notice that students from highly urban and highly rural areas perform similarly, and worse than students enjoying more moderate population density.
 ```{r Dens_Math}
 ggplot(Dataset, aes(x= Poulation.density, y=Math_Score))+
 geom_point()+
@@ -185,7 +185,12 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
-There does not seem to be any form of linear correlation between population density and PISA scores. 
+There does not seem to be any form of linear correlation between population density and PISA scores. However, the relationship we are looking for should rather look like a u-shaped curve and we do not control for GNI per capita.
+
+```{r Non linear model of Pop_Density controlling for GNI per capita}
+
+```
+
 
 ### Entrance Age
 There are important debate on the impact of the entrance age of pupils into school and their academic performances. 
@@ -275,6 +280,9 @@ There does not seem to be a linear relationship between academic year length and
 
 
 ### Sources 
+
+Borland, M. V., & Howsen, R. M. (1999). A Note on Student Academic Performance: In Rural versus Urban Areas. The American Journal of Economics and Sociology, 58(3), 537–546. http://www.jstor.org/stable/3487782
+
 Hu, H. The Consequences of Fertility Decline on Educational Attainment in China. Popul Res Policy Rev 42, 94 (2023). https://doi-org.proxy.bu.dauphine.fr/10.1007/s11113-023-09834-7
 
 Sittisom,W. (2020). Barriers in way towards quality education: poverty, fertility rate and
