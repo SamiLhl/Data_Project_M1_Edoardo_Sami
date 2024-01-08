@@ -1,7 +1,11 @@
 ---
 title: "PISA Predictors: Data Analysis"
 author: "Edoardo Ruvolo, Sami Louahlia"
-format: html
+format:
+  wordcount-html:
+    toc: true
+    fig-align: center
+    cap-location: margin
 execute:
   message: false
   warning: false
@@ -25,13 +29,7 @@ This is the same Repository as for the Data Treatment, we now proceed with the D
 
 ## Part 1 : Research Question 
 
-
-
-
-
 ## Part 2 : Data sets descriptions (size, production condition, main variables)*
-
-
 
 ## Part 3 : Data analysis
 
