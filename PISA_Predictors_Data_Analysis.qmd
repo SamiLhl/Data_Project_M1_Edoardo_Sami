@@ -193,7 +193,7 @@ There does not seem to be any form of linear correlation between population dens
 
 
 ### Entrance Age
-There are important debate on the impact of the entrance age of pupils into school and their academic performances. 
+There are important debate on the impact of the entrance age of pupils into school and their academic performances. The Child Care Research Network (2007) argued that even though, kids entering school at an older age did perform better than their younger counterparts, these advantages were small in magnitude and decreased in importance over time. 
 ```{r}
 Entrance_PISA <- Dataset |> select(Math_Score, Reading_Score, Science_Score, Entrance_Mandatory)|> filter(!is.na(Entrance_Mandatory))
 ```
@@ -280,6 +280,8 @@ There does not seem to be a linear relationship between academic year length and
 
 
 ### Sources 
+
+Child Care Research Network, N. E. (2007). Age of Entry to Kindergarten and Children’s Academic Achievement and Socioemotional Development. Early Education and Development, 18(2), 337. https://doi.org/10.1080/10409280701283460
 
 Borland, M. V., & Howsen, R. M. (1999). A Note on Student Academic Performance: In Rural versus Urban Areas. The American Journal of Economics and Sociology, 58(3), 537–546. http://www.jstor.org/stable/3487782
 
