@@ -82,7 +82,11 @@ Once controlling for GDP per capita, it appears that the growth rate of the econ
 
 ### Fertility Rates and PISA Scores
 
-The underlying assumption behind suspecting this relation stems from a 'quality over quantity' reasoning. When the population rapidly expands in size, the quantity of workers, able to finance children's education, relative to the quantity of children, in need of education provision, diminishes. As such, we expect countries with high fertility rates to have lower PISA scores. 
+
+The literature, generally supports a negative relationship between fertility rates and educational achievements. One possible explanation takes the form of a 'quality over quantity' reasoning. When the population rapidly expands in size, the quantity of workers, able to finance children's education, relative to the quantity of children, in need of education provision, diminishes (Hu, 2023; Sittisom, 2020). This is also notably channelled through women enjoying greater education than their parents having less children. For instance, Osili and Long (2007) found that increase female education by one year reduces early fertility by 0.26 in Nigeria. This implies that it might also be education that reduces fertility rate (Brand and Davis, 2012). 
+As such, we expect countries with high fertility rates to have lower PISA scores. 
+
+
 
 ```{r Fert_Math}
 ggplot(Dataset, aes(x= Fertility.Rate, y=Math_Score))+
@@ -267,3 +271,15 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 There does not seem to be a linear relationship between academic year length and PISA scores.
 
+## Annex + Sources
+
+
+### Sources 
+Hu, H. The Consequences of Fertility Decline on Educational Attainment in China. Popul Res Policy Rev 42, 94 (2023). https://doi-org.proxy.bu.dauphine.fr/10.1007/s11113-023-09834-7
+
+Sittisom,W. (2020). Barriers in way towards quality education: poverty, fertility rate and
+increasing population, Journal of Security and Sustainability Issues, 9(January), 215-227. http://doi.org/10.9770/jssi.2020.9.J(16)
+
+Brand, J. E., & Davis, D. (2011). The Impact of College Education on Fertility: Evidence for Heterogeneous Effects. Demography, 48(3), 863. https://doi.org/10.1007/s13524-011-0034-3
+
+Osili, U. and Long, B. T. (2007). Does female schooling reduce fertility? evidence from nigeria.. https://doi.org/10.3386/w13070
