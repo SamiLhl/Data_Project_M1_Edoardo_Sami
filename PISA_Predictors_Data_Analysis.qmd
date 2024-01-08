@@ -138,9 +138,13 @@ It may be important to account for the fact that low fertility rates at a nation
 
 ```{r Controlling for GDP per capita}
 mod_fer_mat_GDPc <- lm(Math_Score ~ Fertility.Rate + GNI.per.capita, data=Dataset)
+mod_fer_sci_GDPc <- lm(Science_Score ~ Fertility.Rate + GNI.per.capita, data=Dataset)
+mod_fer_red_GDPc <- lm(Reading_Score ~ Fertility.Rate + GNI.per.capita, data=Dataset)
+summary(mod_fer_mat_GDPc)
+summary(mod_fer_sci_GDPc)
+summary(mod_fer_red_GDPc)
 ```
-
-
+After controlling for GNI per capita, fertility are still, significantly, negatively associated with PISA scores. An increase of 1 in fertility rate is associated with a 48 points decrease in PISA Math scores, a 43.85 points decrease in Science and a 40.08 decrease in Reading Score.
 
 ### Population Density 
 
@@ -226,7 +230,7 @@ We thus try modeling a non linear relationship between Mandatory Entrance Age an
 
 
 ## Mean Yrs of Schooling MIGHT HAVE TO NONO OUT OF EXISTENCE FOR NOT BEING RELEVANT AT ALL (THE LADS ARE ALL TAKING THE TEST IN LATE MIDDLE SCHOOL SO THAT SHOWS NOTHING BEYONG MEAN YRS BEING HIGHER FOR RICH COUNTRIES)
-```{r Dens_Read}
+```{r Mean_Schl_Math}
 ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Math_Score))+
 geom_point()+
 xlab("Mean Years of Schooling") +
@@ -251,7 +255,7 @@ YrLength_PISA$Year_Length <- ifelse(YrLength_PISA$Year_Length < 4, NA, YrLength_
 ```
 Some values seem hardly probable and are very rare, thus we omit them for further analysis (EXPAND ON THAT)
 
-```{r Dens_Read}
+```{r Yr_Length_Math}
 YrLength_PISA <- YrLength_PISA |> filter(!is.na(Year_Length))
 ggplot(YrLength_PISA, aes(x= as.factor(Year_Length), y=Math_Score))+
 geom_boxplot()+
