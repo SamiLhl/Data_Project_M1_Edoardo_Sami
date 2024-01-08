@@ -21,6 +21,7 @@ library(dplyr)
 library(vroom)
 library(tidyr)
 library(nlstools)
+library(broom)
 ```
 ## Research Project : Exploratory analysis of potential predictors of PISA Scores
 
@@ -34,10 +35,40 @@ This is the same Repository as for the Data Treatment, we now proceed with the D
 ## Part 3 : Data analysis
 
 ```{r}
+
+combine_lm_results <- function(model1, model2, model3, name_table) {
+  # Combine lm results into a list
+  model_results <- list(model1, model2, model3)
+  
+  # Extract p-values from each model
+  p_values <- lapply(model_results, function(model) summary(model)$coefficients[, 4])
+  
+  # Create a list of tidy data frames for each model
+  tidy_dfs <- lapply(model_results, tidy)
+  
+  # Add a p-value column to each tidy data frame
+  tidy_dfs <- Map(cbind, tidy_dfs, p_value = p_values)
+
+  
+  # Combine tidy data frames into one
+  combined_df <- do.call(rbind, tidy_dfs)
+  
+  return(combined_df)
+  
+  # Turn into a Table
+  name_table <- knitr::kable(combined_df, format = "markdown", 
+      col.names = c("Model", "Term", "Estimate", "Std. Error", "t value","p value"))
+}
+```
+
+
+
+```{r}
 Dataset <- read.csv(here("Final_Data"))
 ```
 ## Financial Condition and PISA score
-Rich countries may generally be expected to provide better education services as they have greater means for doing so and need a highly educated population to perform tasks with important added value. As a result. Economies with an ambition for reaching high income status may also strive towards educating its population to become as productive as in advanced economies. Thus, observing these indicators in their ability to predict PISA scores is of great relevance. Moreover, these characteristics, if powerful in predicting PISA score, might be used as control variable to observe other socio-economic phenomena. Therefore, we start our analysis with these variables. 
+
+Rich countries may generally be expected to provide better education services as they have greater means for doing so and need a highly educated population to perform tasks with important added value.Economies with an ambition for reaching high income status may also strive towards educating its population to become as productive as in advanced economies. Thus, observing these indicators in their ability to predict PISA scores is of great relevance. Moreover, these characteristics, if powerful in predicting PISA score, might be used as control variable to observe other socio-economic phenomena. Therefore, we start our analysis with these variables. 
 
 ### GNI per Capita and Fertility Rate
 
@@ -54,7 +85,11 @@ It appears that GNI per capita is powerfully correlated with PISA scores. Howeve
 
 ```{r GNI and PISA}
 mod_GDP_mat <- lm(Math_Score ~ GNI.per.capita, data=Dataset)
+mod_GDP_sci <- lm(Science_Score ~ GNI.per.capita, data=Dataset)
+mod_GDP_red <- lm(Reading_Score ~ GNI.per.capita, data=Dataset)
+combine_lm_results(mod_GDP_mat, mod_GDP_sci, mod_GDP_red, TableGDP)
 ```
+GNI per capita is indeed, significantly associated with higher PISA Scores
 
 
 ### GDP growth and PISA Scores 
