@@ -34,34 +34,6 @@ This is the same Repository as for the Data Treatment, we now proceed with the D
 
 ## Part 3 : Data analysis
 
-```{r}
-
-combine_lm_results <- function(model1, model2, model3, name_table) {
-  # Combine lm results into a list
-  model_results <- list(model1, model2, model3)
-  
-  # Extract p-values from each model
-  p_values <- lapply(model_results, function(model) summary(model)$coefficients[, 4])
-  
-  # Create a list of tidy data frames for each model
-  tidy_dfs <- lapply(model_results, tidy)
-  
-  # Add a p-value column to each tidy data frame
-  tidy_dfs <- Map(cbind, tidy_dfs, p_value = p_values)
-
-  
-  # Combine tidy data frames into one
-  combined_df <- do.call(rbind, tidy_dfs)
-  
-  return(combined_df)
-  
-  # Turn into a Table
-  name_table <- knitr::kable(combined_df, format = "markdown", 
-      col.names = c("Model", "Term", "Estimate", "Std. Error", "t value","p value"))
-}
-```
-
-
 
 ```{r}
 Dataset <- read.csv(here("Final_Data"))
