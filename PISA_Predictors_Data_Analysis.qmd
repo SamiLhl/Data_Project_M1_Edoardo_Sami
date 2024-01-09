@@ -1,8 +1,8 @@
 ---
 title: "PISA Predictors: Data Analysis"
 author: "Edoardo Ruvolo, Sami Louahlia"
-format:
-  wordcount-html:
+format: 
+   wordcount-html:
     toc: true
     fig-align: center
     cap-location: margin
@@ -335,6 +335,7 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 Science score is independent from the governament expenditure. The average governament expenditure is around 1 and is related to a math score of 490.
 By increasing the expenditure there is no benefit to the math score.
 
+### Enrolment rate
 ```{r}
 ggplot(Dataset, aes(x=Enrolment_Rate, y=Science_Score))+
 geom_point()+
@@ -346,6 +347,7 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+### SHare of private expenditure
 ```{r}
 ggplot(Dataset, aes(x=Share_Private, y=Science_Score))+
 geom_point()+
@@ -356,9 +358,7 @@ ggtitle("Scatterplot of PISA Science Score given Share Private") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
-
-### General overview
+### General overview to explain why we can use only science
 ```{r}
 Dataset %>% group_by(Year) %>% summarise(Math_Score = mean(Math_Score), Science_Score=mean(Science_Score), Reading_Score = mean(Reading_Score)) %>%
 ggplot (aes(x = Year)) +
@@ -373,6 +373,33 @@ ggplot (aes(x = Year)) +
   scale_color_manual(values = c("Math Score" = "blue", "Science Score" = "red", "Reading Score" = "green"))
 ```
 We can see that the scores over the years present a similar pattern. There is a clear drop after 2012, that caused scores to drop by 20 points circa. Since we found that three scores have a similar behaviours, we might decide to conduct our analysis only using one of them, in this case science.
+
+
+### Trial on the regression 
+```{r}
+ggplot(Dataset, aes(x= GNI.per.capita, y=Science_Score))+
+geom_point()+
+xlab("GNI per capita") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA science score given GNI per capita") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r}
+lm1 <- lm(Science_Score ~ Survival_Rate_Primary, data=Dataset)
+summary(lmn1)
+```
+
+```{r, message=FALSE}
+lm2 <- lm(Science_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
+summary(lm2)
+```
+
+```{r, message=FALSE}
+lm3 <- lm(Science_Score ~ Survival_Rate_Primary + Enrolment_Rate + GNI.per.capita, data=Dataset)
+summary(lm3)
+```
+Add a comment for each of them
 
 ## Annex + Sources
 
