@@ -47,6 +47,7 @@ Rich countries may generally be expected to provide better education services as
 ```{r}
 ggplot(Dataset, aes(x= GNI.per.capita, y=Math_Score))+
 geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("GNI per capita") +
 ylab("Math_Score") +
 ggtitle("Scatterplot of PISA Math score given GNI per capita") +
@@ -90,35 +91,15 @@ As such, we expect countries with high fertility rates to have lower PISA scores
 
 
 
-```{r Fert_Math}
-ggplot(Dataset, aes(x= Fertility.Rate, y=Math_Score))+
-geom_point()+
-xlab("Fertility Rate") +
-ylab("Math_Score") +
-ggtitle("Scatterplot of PISA Math score given Fertility Rate") +
-theme_minimal()+
-theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-```
 
 
 ```{r Fert_Sci}
 ggplot(Dataset, aes(x= Fertility.Rate, y=Science_Score))+
 geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("Fertility Rate") +
 ylab("Science_Score") +
 ggtitle("Scatterplot of PISA Science score given Fertility Rate") +
-theme_minimal()+
-theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-
-```{r Fert_Read}
-ggplot(Dataset, aes(x= Fertility.Rate, y=Reading_Score))+
-geom_point()+
-xlab("Fertility Rate") +
-ylab("Reading_Score") +
-ggtitle("Scatterplot of PISA Reading score given Fertility Rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -193,6 +174,7 @@ We thus try modeling a non linear relationship between Mandatory Entrance Age an
 ```{r Mean_Schl_Math}
 ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Science_Score))+
 geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("Mean Years of Schooling") +
 ylab("Math Score") +
 ggtitle("Scatterplot of PISA Reading score given Mean Years of schooling ") +
