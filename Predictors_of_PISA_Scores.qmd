@@ -72,7 +72,7 @@ All we had to do was to download the CSV which was an option on the first page w
 
 - [Fertility Rates](https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)
 
-- [GDP](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
+- [GDP growth](https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG)
 
 - [GNI per capita](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=) 
 
@@ -112,7 +112,7 @@ Fertility data available at the link [here](https://databank.worldbank.org/repor
 Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
 Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
 GNI_percapita <- vroom(here("HI_Data/data1.csv"))
-GDP_growth <- vroom(here("GDP_data/data2.csv"))
+GDP_growth <- vroom(here("WB_Data/GDP_growth.csv"))
 ```
 
 ### PISA
