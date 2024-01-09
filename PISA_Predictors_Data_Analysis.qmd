@@ -346,6 +346,17 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+```{r}
+ggplot(Dataset, aes(x=Share_Private, y=Science_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+xlab("Share Private") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA Science Score given Share Private") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 
 ### General overview
 ```{r}
