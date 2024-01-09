@@ -21,6 +21,7 @@ library(dplyr)
 library(vroom)
 library(tidyr)
 library(nlstools)
+library(gtsummary)
 ```
 ## Research Project : Exploratory analysis of potential predictors of PISA Scores
 
@@ -199,6 +200,8 @@ Even while controlling for GDP per capita, mandatory entrance age is here signif
 
 
 ## Mean Yrs of Schooling MIGHT HAVE TO NONO OUT OF EXISTENCE FOR NOT BEING RELEVANT AT ALL (THE LADS ARE ALL TAKING THE TEST IN LATE MIDDLE SCHOOL SO THAT SHOWS NOTHING BEYONG MEAN YRS BEING HIGHER FOR RICH COUNTRIES)
+
+At first sight, the national mean years of schooling may seem as an curious variable to observe. As students are all tested at the same level namely end of middle school, normally aged 15. However, the fact that students are expected to complete many more years in schooling could lead programs to be less dense. In countries where only few people stay in school past a certain number of years, the remaining students could be the most capable, or the wealthiest.  
 ```{r Mean_Schl_Math}
 ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Science_Score))+
 geom_point()+
@@ -209,12 +212,19 @@ ggtitle("Scatterplot of PISA Reading score given Mean Years of schooling ") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+As expected, there seem to be a positive correlation between mean years of schooling.
+
+```{r}
+mod_MYrs <- lm(Science_Score ~ Mean_Yrs_Schooling + GNI.per.capita, data=Dataset)
+lmMYrs <- Model_to_Table(mod_MYrs)
+Table_Entrance <- knitr::kable(lmMYrs)
+summary(mod_MYrs)
+```
 
 
-## Start and End Month
+## Academic Year Length
 
-This variable may be used in multiple fashions. One point of interest might be the length of the school year. 
-(ADD ARTICLES SAYING STUFF ABOUT THAT)
+Some of the skills acquired at school may be lost as a result of extended period without practising those skills. As such, part of the literature argues that long summer holidays may negatively affect student performances as mentioned by Finnie et al. (2019) Thus, we try looking for differences between countries where the academic year is relatively shorter and those where it is relatively longer
 ```{r}
 YrLength_PISA <- Dataset |> select( Science_Score, End_Month, Start_Month)
 ```
@@ -222,20 +232,31 @@ YrLength_PISA <- Dataset |> select( Science_Score, End_Month, Start_Month)
 ```{r}
 YrLength_PISA$Year_Length <- (YrLength_PISA$End_Month - YrLength_PISA$Start_Month + 12) %% 12
 YrLength_PISA$Year_Length <- ifelse(YrLength_PISA$Year_Length < 4, NA, YrLength_PISA$Year_Length)
+YrLength_PISA$Year_Length_binary <- ifelse(YrLength_PISA$Year_Length <=9 , "Short", "Long")
 ```
-Some values seem hardly probable and are very rare, thus we omit them for further analysis (EXPAND ON THAT)
+We omit some outliers with very small school years.
 
 ```{r Yr_Length_Sci}
 YrLength_PISA <- YrLength_PISA |> filter(!is.na(Year_Length))
-ggplot(YrLength_PISA, aes(x= as.factor(Year_Length), y=Science_Score))+
-geom_boxplot()+
+#ggplot(YrLength_PISA, aes(x= as.factor(Year_Length), y=Science_Score))+
+ggplot(YrLength_PISA, aes(x= Year_Length_binary, y=Science_Score))+
+  geom_boxplot()+
 xlab("Year_Length") +
-ylab("Math Score") +
-ggtitle("Scatterplot of PISA Math score given the Year Length") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA Science score given the Year Length") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-There does not seem to be a linear relationship between academic year length and PISA scores.
+At first sight, there does not seem to be a notable difference between short and long years.
+
+```{r}
+chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Score)
+#Sum_Chi_Yr <- tbl_summary(chi_Yr)
+Table_Chi_Yr <- knitr::kable(Sum_Chi_Yr)
+```
+
+`r Table_Chi_Yr`
+A Chi-Squarred test confirms 
 
 ### Survival rate 
 ```{r Mean_Surv_Math}
@@ -248,7 +269,7 @@ ggtitle("Scatterplot of PISA Science score given the mortality rate ") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-### Governament Expenditure
+### Government Expenditure
 
 ```{r}
 ggplot(Dataset, aes(x=Gov_Expenditure, y=Science_Score))+
@@ -275,7 +296,7 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-### SHare of private expenditure
+### Share of private expenditure
 ```{r}
 ggplot(Dataset, aes(x=Share_Private, y=Science_Score))+
 geom_point()+
@@ -346,3 +367,5 @@ increasing population, Journal of Security and Sustainability Issues, 9(January)
 Brand, J. E., & Davis, D. (2011). The Impact of College Education on Fertility: Evidence for Heterogeneous Effects. Demography, 48(3), 863. https://doi.org/10.1007/s13524-011-0034-3
 
 Osili, U. and Long, B. T. (2007). Does female schooling reduce fertility? evidence from nigeria.. https://doi.org/10.3386/w13070
+
+Finnie, R. K. C., Peng, Y., Hahn, R. A., Johnson, R. L., Fielding, J. E., Truman, B. I., Muntaner, C., Fullilove, M. T., Zhang, X., & Community Preventive Services Task Force (2019). Examining the Effectiveness of Year-Round School Calendars on Improving Educational Attainment Outcomes Within the Context of Advancement of Health Equity: A Community Guide Systematic Review. Journal of public health management and practice : JPHMP, 25(6), 590–594. https://doi.org/10.1097/PHH.0000000000000860
