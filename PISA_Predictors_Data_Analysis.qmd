@@ -309,6 +309,46 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 There does not seem to be a linear relationship between academic year length and PISA scores.
 
+### Survival rate 
+```{r Mean_Schl_Math}
+ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Science_Score))+
+geom_point() +
+xlab("Survival rate") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA Science score given the mortality rate ") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+### Governament Expenditure
+
+```{r}
+ggplot(Dataset, aes(x=Gov_Expenditure, y=Science_Score))+
+geom_point()+
+xlab("Governamenent Expenditure") +
+ylab("Math Score") +
+ggtitle("Scatterplot of PISA Math Score given gvernament expenditure") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+Math score is independet from the governament expenditure. The average governament expenditure is around 1 and is related to a math score of 490.
+By increasing the expendirture there is no benefit to the math score. 
+
+### General overview
+```{r}
+Dataset %>% group_by(Year) %>% summarise(Math_Score = mean(Math_Score), Science_Score=mean(Science_Score), Reading_Score = mean(Reading_Score)) %>%
+ggplot (aes(x = Year)) +
+  geom_line(aes(y = Math_Score, color = "Math Score")) +
+  geom_line(aes(y = Science_Score, color = "Science Score")) +
+  geom_line(aes(y = Reading_Score, color = "Reading Score")) +
+  xlab("Year") +
+  ylab("Score") +
+  ggtitle("Scores Growth Over Years") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_manual(values = c("Math Score" = "blue", "Science Score" = "red", "Reading Score" = "green"))
+```
+We can see that the scores over the years present a similar pattern. There is a clear drop after 2012, that caused scores to drop by 20 points circa. Since we found that three scores have a similar behaviours, we might decide to conduct our analysis only using one of them, in this case science.
+
 ## Annex + Sources
 
 
