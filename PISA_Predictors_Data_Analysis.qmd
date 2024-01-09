@@ -258,12 +258,14 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 At first sight, there does not seem to be a notable difference between short and long years.
 
 ```{r}
-chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Score)
+#chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Score)
 #Sum_Chi_Yr <- tbl_summary(chi_Yr)
-Table_Chi_Yr <- knitr::kable(Sum_Chi_Yr)
+#Table_Chi_Yr <- knitr::kable(Sum_Chi_Yr)
+
+#`r Table_Chi_Yr`
 ```
 
-`r Table_Chi_Yr`
+
 A Chi-Squarred test confirms 
 
 ### Survival rate 
