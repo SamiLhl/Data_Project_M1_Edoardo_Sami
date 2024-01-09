@@ -313,6 +313,7 @@ There does not seem to be a linear relationship between academic year length and
 ```{r Mean_Schl_Math}
 ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Science_Score))+
 geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
 xlab("Survival rate") +
 ylab("Science Score") +
 ggtitle("Scatterplot of PISA Science score given the mortality rate ") +
@@ -324,14 +325,27 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```{r}
 ggplot(Dataset, aes(x=Gov_Expenditure, y=Science_Score))+
 geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
 xlab("Governamenent Expenditure") +
-ylab("Math Score") +
-ggtitle("Scatterplot of PISA Math Score given gvernament expenditure") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA Science score given gvernament expenditure") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-Math score is independet from the governament expenditure. The average governament expenditure is around 1 and is related to a math score of 490.
-By increasing the expendirture there is no benefit to the math score. 
+Science score is independent from the governament expenditure. The average governament expenditure is around 1 and is related to a math score of 490.
+By increasing the expenditure there is no benefit to the math score.
+
+```{r}
+ggplot(Dataset, aes(x=Enrolment_Rate, y=Science_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+xlab("Enrolemnt Rate") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA Science Score given Enrolment Rate") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 
 ### General overview
 ```{r}
