@@ -65,7 +65,7 @@ ggtitle("Scatterplot of PISA Science score given GNI per capita") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-It appears that GNI per capita is powerfully correlated with PISA scores. However, it seems that it ceases to be, past a certain level of income. At first sight, this could perhaps be represented by a form of a log function, given we overlook the very high income outliers, which generally represent small population such as Qatar, Singapore or Luxembourg.
+It appears that GNI per capita is powerfully correlated with PISA scores. However, it seems that it ceases to be, past a certain level of income. At first sight, this could perhaps be represented by a form of a log function, given we overlook the very high income outliers, which represent small populations, such as Qatar, Singapore or Luxembourg.
 
 ```{r GNI and PISA}
 mod_GDP_sci <- lm(Science_Score ~ GNI.per.capita, data=Dataset)
@@ -73,31 +73,35 @@ lmGNI <- Model_to_Table(mod_GDP_sci)
 Table_GNI <- knitr::kable(lmGNI)
 
 ```
-`r Table_GNI`GNI per capita is indeed, significantly associated with higher PISA Scores
+`r Table_GNI` GNI per capita is indeed, significantly associated with higher PISA Scores (p<0.001).
+For every additional dollar, the PISA score increases by 0.001, so that an additional 1000 dollar is associated with one additional point on the PISA score STILL DOES NOT HAVE THE R SQUARE
 
 
 ### GDP growth and PISA Scores 
-Booming economies may have hopes to become an advanced economy in the span of a generation or two, in a similar fashion the Asian tigers did in past. As such countries experiencing high economic growth may put greater efforts in their education services and have greater PISA scores.
+Booming economies may have hopes to become an advanced economy in the span of a generation or two, in a similar fashion the Asian tigers did in past. As such countries experiencing high economic growth may put greater efforts in their education services and have greater PISA scores. In dealing with this variable we rid ourselves of the 2009 observations taking place at the same time as the Global Financial Crisis.
 
 ```{r}
-ggplot(Dataset, aes(x= GDP.rate, y=Math_Score))+
+NO2009 <- Dataset |> filter(Year != 2009)
+ggplot(NO2009, aes(x= GDP.rate, y=Science_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("GDP growth rate") +
-ylab("Math_Score") +
-ggtitle("Scatterplot of PISA Math score given GDP growth rate") +
+ylab("Science_Score") +
+ggtitle("Scatterplot of PISA Science score given GDP growth rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 As can be seen, graphical representation of Math Score being only predicted by growth rate does not show much. By doing so, we confound high income countries, which have lower growth rate as they do not experience growth from convergence with lower income countries that also have lower growth rate. It is necessary to control for GNI per capita before assessing the relevance of the growth rate of the economy in predicting PISA scores.
+Another startegy might be to try and isolate low and middle income countries. As of 2023, a nation is considered part of the High Income group once the GDP per capita reaches US$13845.
 
 ```{r gy controlling for GNI per cap}
-mod_gy_sci_GDPc <- lm(Science_Score ~ GDP.rate + GNI.per.capita , data=Dataset)
+NO2009Rich <- NO2009 |> filter(GNI.per.capita <= 13845)
+mod_gy_sci_GDPc <- lm(Science_Score ~ GDP.rate + GNI.per.capita , data=NO2009Rich)
 lmgy_GNIc <- Model_to_Table(mod_gy_sci_GDPc)
 Table_gy_GNI <- knitr::kable(lmgy_GNIc)
 
 ```
-`r Table_gy_GNI`Once controlling for GDP per capita, it appears that the growth rate of the economy is not significantly correlated with PISA scores.
+`r Table_gy_GNI`Once controlling for GDP per capita, it appears that the growth rate of the economy is not significantly correlated with PISA scores. GDP per capita is not significant either in this model. However, it is important to acknowledge that only 29 observations had GNI per capita below US$13845, making any statistical investigation hardly feasible.
 
 ## Demographic indicators and PISA scores
 
@@ -126,6 +130,7 @@ lmfer <- Model_to_Table(mod_fer_sci)
 Table_Fer_Sci <- knitr::kable(lmfer)
 ```
 `r Table_Fer_Sci`
+
 The correlation is significant (p<.01). The best linear model provide sizeable coefficient. For an increase in fertility rate of 1, the expected national PISA score decreases 55.1 in science.
 
 It may be important to account for the fact that low fertility rates at a national level are generally associated with higher living standards and higher income. As such, it might be necessary to control for some metrics, such as gdp per capita to ensure that fertility rates truly play a role in providing better education.
@@ -136,7 +141,8 @@ lmfer_GDPc <- Model_to_Table(mod_fer_sci)
 Table_Fer_GDPc <- knitr::kable(lmfer_GDPc)
 ```
 `r Table_Fer_GDPc`
-After controlling for GNI per capita, fertility is still significantly and negatively associated with PISA scores. An increase of 1 in fertility rate is associated with a 43.85 points decrease in Science score.
+
+After controlling for GNI per capita, fertility is still significantly and negatively associated with PISA scores(p<.001). An increase of 1 in fertility rate is associated with a 43.85 points decrease in Science score.
 
 ### Population Density 
 
@@ -165,8 +171,6 @@ There are important debate on the impact of the entrance age of pupils into scho
 ```{r}
 Entrance_PISA <- Dataset |> select( Science_Score, Entrance_Mandatory)|> filter(!is.na(Entrance_Mandatory))
 ```
-
-
 
 ```{r Entr_Sci}
 ggplot(Entrance_PISA, aes(x= as.factor(Entrance_Mandatory), y=Science_Score))+
