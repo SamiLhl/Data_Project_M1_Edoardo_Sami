@@ -30,6 +30,14 @@ This is the same Repository as for the Data Treatment, we now proceed with the D
 
 ## Part 1 : Research Question 
 
+The national level of education is an important element to account for in public policy. In economic terms, it represents how well the nation develops its human capital, offering greater economic outcomes to its inhabitants.  Universal access to education may also contribute to improving the equality of opportunity within a country’s population. Moreover, beyond resource production and distribution, people may value education as a good in itself. 
+The OECD’s PISA initiative is a remarkable opportunity for cross-country comparisons in terms of educational attainments at the lower secondary level, when students are aged around 15. It is also a major opportunity to use cross-country differences in other metrics to determine potential predictors for greater national PISA scores.
+
+  Using PISA datasets that reported national scores from 2009 to 2018, along with variables gathered across multiple international organizations, this project searches for potential variables, able to explain cross-country differences in performances at the PISA test. The variables used are different in nature. Some feature the current state of a nation’s economy, others observe their demographic condition, while others tackle the way education is provided in the different observed countries to a deeper extent. As such, we hope to acquire a wide array of possible predictors for higher or lower PISA scores.
+
+  The completion of this research project may provide valuable insights. It may offer explanations as to why some countries perform better than others, orienting the agency of respective national governments. It may also leave room for some form of determinism, as some variables, such as geographic, demographic, or economic variables, may impact students’ performances while being more difficult or less desirable for governments to act upon in the short term.  
+Finally, this research project provides potential criticism as to what the PISA score truly reflects. Some variables have been selected to test potential flaws as to how the OECD can gather information about a nation's educational attainment, which could overlook important elements such as who can be evaluated by the OECD when devising the PISA scores and do they accurately represent the general student population of the studied country.
+
 ## Part 2 : Data sets descriptions (size, production condition, main variables)*
 
 ## Part 3 : Data analysis
