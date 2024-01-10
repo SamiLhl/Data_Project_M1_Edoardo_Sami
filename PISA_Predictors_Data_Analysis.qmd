@@ -46,7 +46,6 @@ Finally, this research project provides potential criticism as to what the PISA 
 
 ## Part 3 : Data analysis
 
-
 ```{r}
 Dataset <- read.csv(here("Final_Data"))
 Dataset <- Dataset |> select(-Jurisdiction.x) |> rename(Country = Jurisdiction.y)
@@ -62,7 +61,8 @@ filtered_MAP <- Dataset #|>
 # Merge your data with the map data
 filtered_MAP <- filtered_MAP |>
     mutate(Country = ifelse(Country == "United States", "USA", Country))|>
-    mutate(Country = ifelse(Country == "Viet Nam", "Vietnam", Country))
+    mutate(Country = ifelse(Country == "Viet Nam", "Vietnam", Country))|>
+    mutate(Country = ifelse(Country == "United Kingdom", "UK", Country))
 PISA_map <- left_join(world_map, filtered_MAP, by = c("region" = "Country"))
 
 
@@ -74,6 +74,7 @@ ggplot(PISA_map, aes(x = long, y = lat, group= group, fill = Science_Score)) +
   labs(title = "Map of PISA Science Scores in 2018") +
   theme_void()
 ```
+Before starting analysis it is important to acknowledge some important limitations of the PISA data. As this map shows, important parts of the world do not participate to the PISA test. While Europe, North and South America as well as Oceania are almost fully represented in the PISA dataset, only few countries of the Arab world and South East Asia participated and no Sub-Saharan countries were represented in the Dataset. As such, most of the developing world is not taken into account. Thus, the number of independent observations is limited, justifying our usage of up to four observations per countries, among those that participated to the PISA test. Additionally, the studied variables may lack the variability needed to fully observe variables effects on the PISA score. Insights that developing countries could have potentially offered.
 
 
 ```{r}
@@ -267,7 +268,7 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 As expected, there seem to be a positive correlation between mean years of schooling. We now wonder whether this positive tendency is due only to other factors, while mean years of schooling actually affects negatively performances at the PISA test.
 
 ```{r}
-mod_MYrs <- lm(Science_Score ~ Mean_Yrs_Schooling + GNI.per.capita + Fertility.Rate + , data=Dataset)
+mod_MYrs <- lm(Science_Score ~ Mean_Yrs_Schooling + GNI.per.capita + Fertility.Rate, data=Dataset)
 lmMYrs <- Model_to_Table(mod_MYrs)
 Table_Myrs <- knitr::kable(lmMYrs)
 ```
