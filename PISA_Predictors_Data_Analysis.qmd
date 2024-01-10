@@ -206,8 +206,8 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-There seem to be a non-linear relationship between Mandatory Entrance Age and PISA scores. Which reflects quite well the tradeoffs often mentioned in the literature, according to which, children may need time to mature before entering school, even though waiting for too long might not be profitable as children would be ready to for being schooled and are not, meaning they might reach the age/year for taking the PISA with less competencies acquired during school than other pupils who started school earlier.()
-For simplicity however, we only realize a linear model of Entrance Age and PISA scores.
+There seem to be a non-linear relationship between Mandatory Entrance Age and PISA scores. Which reflects quite well the tradeoffs often mentioned in the literature, according to which, children may need time to mature before entering school, even though waiting for too long might not be profitable as children would be ready for being schooled and were not schooled, meaning they might reach the age/year for taking the PISA with less competencies acquired at school than other pupils who started school earlier.()
+For simplicity however, we only realize a linear model of Entrance Age and PISA scores, as the maximum mandatory entrance age observe was 7, which does not seem, at least visually, to negatively impact students too much, relative to 6 years mandatory entrance age. Were the data to contain countries with higher age of mandatory entrance, using a linear model could have been more problematic.  
 
 ```{r}
 Entrance_PISA$Entr_M <- as.numeric(Entrance_PISA$Entrance_Mandatory)
@@ -215,14 +215,11 @@ mod_Entr <- lm(Science_Score ~ Entr_M + GNI.per.capita, data=Entrance_PISA)
 lmEntr <- Model_to_Table(mod_Entr)
 Table_Entrance <- knitr::kable(lmEntr)
 
-#initial_val <- list(a=100, b=2)
-#Density_Model <- nls(Science_Score ~ a + Entr_M ^ b, data=Entrance_PISA, start = initial_val)
-#Density_Model <- polr(Entr_M ~ Science_Score, data=Entrance_PISA)
-#summary(Density_Model)
 ```
 `r Table_Entrance`
 
-Even while controlling for GDP per capita, mandatory entrance age is here significantly associated with PISA scores (p<.001). Making entry to school mandatory one year later is associated with a 15.54 points increase in PISA score. 
+Even while controlling for GDP per capita, mandatory entrance age is here significantly associated with PISA scores (p<.001). Making entry to school mandatory one year later is associated with a 15.54 points increase in PISA score.
+It is important to point out that the data is a reflection of the policies carried out by governments about the age at which children are required to attend school. These do not necessarily reflect the actual entrance age in studied countries, only the approach of the government on the matter.
 
 
 ## Mean Yrs of Schooling MIGHT HAVE TO NONO OUT OF EXISTENCE FOR NOT BEING RELEVANT AT ALL (THE LADS ARE ALL TAKING THE TEST IN LATE MIDDLE SCHOOL SO THAT SHOWS NOTHING BEYONG MEAN YRS BEING HIGHER FOR RICH COUNTRIES)
