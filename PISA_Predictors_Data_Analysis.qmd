@@ -408,7 +408,7 @@ summary(lm2)
 ```
 
 
-Add a comment for each of them
+Add a comment for each of them, and we need to properly apply the function
 
 ## Annex + Sources
 
