@@ -1,11 +1,11 @@
 ---
 title: "PISA Predictors: Data Analysis"
 author: "Edoardo Ruvolo, Sami Louahlia"
-format: 
-   wordcount-html:
-    toc: true
-    fig-align: center
-    cap-location: margin
+format: html
+   # wordcount-html:
+   #  toc: true
+   #  fig-align: center
+   #  cap-location: margin
 execute:
   message: false
   warning: false
@@ -43,11 +43,26 @@ Finally, this research project provides potential criticism as to what the PISA 
 
 ## Part 3 : Data analysis
 
-
 ```{r}
 Dataset <- read.csv(here("Final_Data"))
 ```
 
+```{r}
+Dataset |> group_by(Year) |> summarise(Math_Score = mean(Math_Score), Science_Score=mean(Science_Score), Reading_Score = mean(Reading_Score)) |>
+ggplot (aes(x = Year)) +
+  geom_line(aes(y = Math_Score, color = "Math Score")) +
+  geom_line(aes(y = Science_Score, color = "Science Score")) +
+  geom_line(aes(y = Reading_Score, color = "Reading Score")) +
+  xlab("Year") +
+  ylab("Score") +
+  ggtitle("Scores Growth Over Years") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_manual(values = c("Math Score" = "blue", "Science Score" = "red", "Reading Score" = "green"))
+```
+In order to have a clearer understanding of the data, we started by plotting the mean of the score over the years, and we discovered that they present a similar pattern. There is a clear drop after 2012, that caused scores to drop by 20 points circa. Since we found the three scores having a similar behaviors, we decided to conduct our analysis only using one of them for simplicity in the readability of the results. 
+
+In our case the science score seems the most interesting to take into consideration. 
 ```{r Function tabling stuff}
 
 Model_to_Table <- function(Model){
@@ -81,8 +96,9 @@ It appears that GNI per capita is powerfully correlated with PISA scores. Howeve
 mod_GDP_sci <- lm(Science_Score ~ GNI.per.capita, data=Dataset)
 lmGNI <- Model_to_Table(mod_GDP_sci)
 Table_GNI <- knitr::kable(lmGNI)
-
 ```
+
+
 `r Table_GNI` GNI per capita is indeed, significantly associated with higher PISA Scores (p<0.001).
 For every additional dollar, the PISA score increases by 0.001, so that an additional 1000 dollar is associated with one additional point on the PISA score STILL DOES NOT HAVE THE R SQUARE
 
@@ -147,7 +163,7 @@ It may be important to account for the fact that low fertility rates at a nation
 
 ```{r Controlling for GDP per capita}
 mod_fer_sci_GDPc <- lm(Science_Score ~ Fertility.Rate + GNI.per.capita, data=Dataset)
-lmfer_GDPc <- Model_to_Table(mod_fer_sci)
+lmfer_GDPc <- Model_to_Table(mod_fer_sci_GDPc)
 Table_Fer_GDPc <- knitr::kable(lmfer_GDPc)
 ```
 `r Table_Fer_GDPc`
@@ -227,7 +243,6 @@ As expected, there seem to be a positive correlation between mean years of schoo
 mod_MYrs <- lm(Science_Score ~ Mean_Yrs_Schooling + GNI.per.capita, data=Dataset)
 lmMYrs <- Model_to_Table(mod_MYrs)
 Table_Entrance <- knitr::kable(lmMYrs)
-summary(mod_MYrs)
 ```
 
 
@@ -259,14 +274,11 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 At first sight, there does not seem to be a notable difference between short and long years.
 
 ```{r}
-#chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Score)
+chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Score)
 #Sum_Chi_Yr <- tbl_summary(chi_Yr)
 #Table_Chi_Yr <- knitr::kable(Sum_Chi_Yr)
-
 #`r Table_Chi_Yr`
 ```
-
-
 A Chi-Squarred test confirms 
 
 
@@ -276,6 +288,7 @@ Dataset %>% select(Science_Score, Survival_Rate_Primary, Gov_Expenditure, Enrolm
 
 
 ### Survival rate 
+
 ```{r Mean_Surv_Math}
 ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Science_Score))+
 geom_point() +
@@ -286,6 +299,23 @@ ggtitle("Scatterplot of PISA Science score given the mortality rate ") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+```{r first attempt  sur}
+mod_sur_sci <- lm(Science_Score ~ Survival_Rate_Primary, data = Dataset)
+lmsur <- Model_to_Table(mod_sur_sci)
+Table_Sur_Sci <- knitr::kable(lmsur)
+```
+`r Table_Sur_Sci`
+
+```{r}
+mod_surrs <- lm(Science_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
+lmsurrs <- Model_to_Table(mod_surrs)
+Table_Sur_Sci1 <- knitr::kable(lmsurrs)
+```
+`r Table_Sur_Sci1`
+
+a comment is to be added about the results 
+
 ### Government Expenditure
 
 ```{r}
@@ -348,8 +378,6 @@ ggtitle("Scatterplot of PISA Science Score given Share Private") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
-
 ```{r first attempt sp }
 mod_sp_sci <- lm(Science_Score ~ Share_Private, data = Dataset)
 lmsp <- Model_to_Table(mod_sp_sci)
@@ -368,7 +396,6 @@ Table_Sp_Sci1 <- knitr::kable(lmsp1)
 A comment is to be added
 
 ### Trial on the regression 
-
 ```{r}
 lm1 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate + Share_Private, data=Dataset)
 summary(lm1)
