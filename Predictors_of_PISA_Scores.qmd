@@ -337,6 +337,7 @@ Tag_Country <- PISA|> select(Tag, Jurisdiction)
 PISA <- PISA |> select(-Jurisdiction) |> rename("Year"="Year/Study")
 PISA_gender <- PISA_gender |> select(-Jurisdiction)|> rename("Year"="Year/Study")
 ```
+
 We integrate a tag variable to join PISA with the rest of the Datasets. From the tag and country variable we get a table to keep these information at hand.
 
 
@@ -348,6 +349,11 @@ Final_Data <- PISA |>
   left_join(WB_long, by =c("Tag","Year")) |>
   left_join(UNESCO, by = c("Tag","Year")) 
 ```
+
+```{r add the Jurisdiction variable back into the thing}
+Final_Data <- Final_Data |> left_join(Tag_Country, by = "Tag")
+```
+
 This is the final dataset. It joins all the intermediary datasets by their common variables, namely (country) Tag and (observations') Year. This dataset will allow our exploratory analysis on potential predictors of PISA scores in the next sections.
 
 ## Presentation of the dataset and variables

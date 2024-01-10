@@ -23,6 +23,7 @@ library(tidyr)
 library(nlstools)
 library(gtsummary)
 library(corrr)
+library(rworldmap)
 ```
 ## Research Project : Exploratory analysis of potential predictors of PISA Scores
 
@@ -41,6 +42,22 @@ Finally, this research project provides potential criticism as to what the PISA 
 
 ## Part 2 : Data sets descriptions (size, production condition, main variables)*
 
+
+```{r}
+# Merge the data with the map
+world_map <- joinCountryData2Map(Dataset, joinCode = "ISO3", nameJoinColumn = "Country")
+
+# Create the map
+mapDevice()
+
+# Plot the map with color-coded values
+mapCountryData(
+  world_map,
+  nameColumnToPlot = "Variable",
+  catMethod = "fixedWidth",
+  mapTitle = "World Map with Color-Coded Variable",
+  colourPalette = "Blues"
+)
 ## Part 3 : Data analysis
 
 ```{r}
