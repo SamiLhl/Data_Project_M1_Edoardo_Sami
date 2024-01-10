@@ -224,7 +224,7 @@ It is important to point out that the data is a reflection of the policies carri
 
 ## Mean Yrs of Schooling MIGHT HAVE TO NONO OUT OF EXISTENCE FOR NOT BEING RELEVANT AT ALL (THE LADS ARE ALL TAKING THE TEST IN LATE MIDDLE SCHOOL SO THAT SHOWS NOTHING BEYONG MEAN YRS BEING HIGHER FOR RICH COUNTRIES)
 
-At first sight, the national mean years of schooling may seem as an curious variable to observe. As students are all tested at the same level namely end of middle school, normally aged 15. However, the fact that students are expected to complete many more years in schooling could lead programs to be less dense. In countries where only few people stay in school past a certain number of years, the remaining students could be the most capable, or the wealthiest.  
+At first sight, the national mean years of schooling may seem as a curious variable to observe. As students are all tested at the same level namely end of middle school, normally aged 15. However, the fact that students are expected to complete many more years in schooling could lead programs to be less dense.  
 ```{r Mean_Schl_Math}
 ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Science_Score))+
 geom_point()+
@@ -235,13 +235,16 @@ ggtitle("Scatterplot of PISA Reading score given Mean Years of schooling ") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-As expected, there seem to be a positive correlation between mean years of schooling.
+As expected, there seem to be a positive correlation between mean years of schooling. We now wonder whether this positive tendency is due only to other factors, while mean years of schooling actually affects negatively performances at the PISA test.
 
 ```{r}
-mod_MYrs <- lm(Science_Score ~ Mean_Yrs_Schooling + GNI.per.capita, data=Dataset)
+mod_MYrs <- lm(Science_Score ~ Mean_Yrs_Schooling + GNI.per.capita + Fertility.Rate + , data=Dataset)
 lmMYrs <- Model_to_Table(mod_MYrs)
-Table_Entrance <- knitr::kable(lmMYrs)
+Table_Myrs <- knitr::kable(lmMYrs)
 ```
+`r Table_Myrs`
+
+It does not seem as Mean Years of Schooling can explain more than what is already explained by GNI per capita. When pooling them into a model, GNI per capita becomes insignificant. We favour keeping GNI per capita as it a more logical indicator when observing PISA scores of children who only reached end of middle school at the time of tests.
 
 
 ## Academic Year Length
@@ -277,7 +280,7 @@ chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Sco
 #Table_Chi_Yr <- knitr::kable(Sum_Chi_Yr)
 #`r Table_Chi_Yr`
 ```
-A Chi-Squarred test confirms 
+A Chi-Squarred test confirms that year length is not significant in predicting the value of the PISA score. Having a longer or a shorter break in between two grades does not appear to affect students' performances.
 
 
 ```{r}
