@@ -22,6 +22,7 @@ library(vroom)
 library(tidyr)
 library(nlstools)
 library(gtsummary)
+library(corrr)
 ```
 ## Research Project : Exploratory analysis of potential predictors of PISA Scores
 
@@ -62,7 +63,7 @@ coefficients_table <- lm_summary$coefficients
 
 Rich countries may generally be expected to provide better education services as they have greater means for doing so and need a highly educated population to perform tasks with important added value.Economies with an ambition for reaching high income status may also strive towards educating its population to become as productive as in advanced economies. Thus, observing these indicators in their ability to predict PISA scores is of great relevance. Moreover, these characteristics, if powerful in predicting PISA score, might be used as control variable to observe other socio-economic phenomena. Therefore, we start our analysis with these variables. 
 
-### GNI per Capita and Fertility Rate
+### GNI per Capita
 
 ```{r}
 ggplot(Dataset, aes(x= GNI.per.capita, y=Science_Score))+
@@ -268,6 +269,12 @@ At first sight, there does not seem to be a notable difference between short and
 
 A Chi-Squarred test confirms 
 
+
+```{r}
+Dataset %>% select(Science_Score, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) %>% correlate()
+```
+
+
 ### Survival rate 
 ```{r Mean_Surv_Math}
 ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Science_Score))+
@@ -294,6 +301,15 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 Science score is independent from the governament expenditure. The average governament expenditure is around 1 and is related to a math score of 490.
 By increasing the expenditure there is no benefit to the math score.
 
+```{r first attempt gov }
+mod_gov_sci <- lm(Science_Score ~ Gov_Expenditure, data = Dataset)
+lmgov <- Model_to_Table(mod_gov_sci)
+Table_Gov_Sci <- knitr::kable(lmgov)
+```
+`r Table_Gov_Sci`
+
+a comment is to be added about the results (not significant because p>0.1)
+
 ### Enrolment rate
 ```{r}
 ggplot(Dataset, aes(x=Enrolment_Rate, y=Science_Score))+
@@ -305,6 +321,21 @@ ggtitle("Scatterplot of PISA Science Score given Enrolment Rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+```{r first attempt ER }
+mod_er_sci <- lm(Science_Score ~ Enrolment_Rate, data = Dataset)
+lmer <- Model_to_Table(mod_er_sci)
+Table_Er_Sci <- knitr::kable(lmer)
+```
+`r Table_Er_Sci`
+
+```{r}
+mod_ersr <- lm(Science_Score ~ Enrolment_Rate + GNI.per.capita, data=Dataset)
+lmer1 <- Model_to_Table(mod_ersr)
+Table_Er_Sci1 <- knitr::kable(lmer1)
+```
+`r Table_Er_Sci1`
+
+A comment is to be added
 
 ### Share of private expenditure
 ```{r}
@@ -317,48 +348,40 @@ ggtitle("Scatterplot of PISA Science Score given Share Private") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-### General overview to explain why we can use only science
-```{r}
-Dataset %>% group_by(Year) %>% summarise(Math_Score = mean(Math_Score), Science_Score=mean(Science_Score), Reading_Score = mean(Reading_Score)) %>%
-ggplot (aes(x = Year)) +
-  geom_line(aes(y = Math_Score, color = "Math Score")) +
-  geom_line(aes(y = Science_Score, color = "Science Score")) +
-  geom_line(aes(y = Reading_Score, color = "Reading Score")) +
-  xlab("Year") +
-  ylab("Score") +
-  ggtitle("Scores Growth Over Years") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_manual(values = c("Math Score" = "blue", "Science Score" = "red", "Reading Score" = "green"))
-```
-We can see that the scores over the years present a similar pattern. There is a clear drop after 2012, that caused scores to drop by 20 points circa. Since we found that three scores have a similar behaviours, we might decide to conduct our analysis only using one of them, in this case science.
 
+
+```{r first attempt sp }
+mod_sp_sci <- lm(Science_Score ~ Share_Private, data = Dataset)
+lmsp <- Model_to_Table(mod_sp_sci)
+Table_Sp_Sci <- knitr::kable(lmsp)
+```
+`r Table_Sp_Sci`
+
+significance at p<0.1
+```{r}
+mod_sp <- lm(Science_Score ~ Share_Private + GNI.per.capita, data=Dataset)
+lmsp1 <- Model_to_Table(mod_sp)
+Table_Sp_Sci1 <- knitr::kable(lmsp1)
+```
+`r Table_Sp_Sci1`
+
+A comment is to be added
 
 ### Trial on the regression 
+
 ```{r}
-ggplot(Dataset, aes(x= GNI.per.capita, y=Science_Score))+
-geom_point()+
-xlab("GNI per capita") +
-ylab("Science Score") +
-ggtitle("Scatterplot of PISA science score given GNI per capita") +
-theme_minimal()+
-theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-```{r}
-lm1 <- lm(Science_Score ~ Survival_Rate_Primary, data=Dataset)
+lm1 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate + Share_Private, data=Dataset)
 summary(lm1)
 ```
+drop share private
 
-```{r, message=FALSE}
-lm2 <- lm(Science_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
+```{r}
+lm2 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate, data=Dataset)
 summary(lm2)
 ```
 
-```{r, message=FALSE}
-lm3 <- lm(Science_Score ~ Survival_Rate_Primary + Enrolment_Rate + GNI.per.capita, data=Dataset)
-summary(lm3)
-```
-Add a comment for each of them
+
+Add a comment for each of them, and we need to properly apply the function
 
 ## Annex + Sources
 
