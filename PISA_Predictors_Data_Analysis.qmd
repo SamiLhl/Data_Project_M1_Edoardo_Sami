@@ -117,7 +117,7 @@ ggtitle("Scatterplot of PISA Science score given GDP growth rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-As can be seen, graphical representation of Math Score being only predicted by growth rate does not show much. By doing so, we confound high income countries, which have lower growth rate as they do not experience growth from convergence with lower income countries that also have lower growth rate. It is necessary to control for GNI per capita before assessing the relevance of the growth rate of the economy in predicting PISA scores.
+As can be seen, graphical representation of Science Score being only predicted by growth rate does not show much. By doing so, we confound high income countries, which have lower growth rate as they do not experience growth from convergence with lower income countries that also have lower growth rate. It is necessary to control for GNI per capita before assessing the relevance of the growth rate of the economy in predicting PISA scores.
 Another startegy might be to try and isolate low and middle income countries. As of 2023, a nation is considered part of the High Income group once the GDP per capita reaches US$13845.
 
 ```{r gy controlling for GNI per cap}
@@ -134,7 +134,7 @@ Table_gy_GNI <- knitr::kable(lmgy_GNIc)
 ### Fertility Rates and PISA Scores
 
 
-The literature, generally supports a negative relationship between fertility rates and educational achievements. One possible explanation takes the form of a 'quality over quantity' reasoning. When the population rapidly expands in size, the quantity of workers, able to finance children's education, relative to the quantity of children, in need of education provision, diminishes (Hu, 2023; Sittisom, 2020). This is also notably channelled through women enjoying greater education than their parents having less children. For instance, Osili and Long (2007) found that increase female education by one year reduces early fertility by 0.26 in Nigeria. This implies that it might also be education that reduces fertility rate (Brand and Davis, 2012). 
+The literature, generally supports a negative relationship between fertility rates and educational achievements. One possible explanation takes the form of a 'quality over quantity' reasoning. When the population rapidly expands in size, the quantity of workers, able to finance children's education, relative to the quantity of children, in need of education provision, diminishes (Hu, 2023; Sittisom, 2020). This is also notably channelled through women enjoying greater education than their parents, having less children. For instance, Osili and Long (2007) found that increase female education by one year reduces early fertility by 0.26 in Nigeria. This implies that it might also be education that reduces fertility rate (Brand and Davis, 2012). 
 As such, we expect countries with high fertility rates to have lower PISA scores. 
 
 ```{r Fert_Sci}
@@ -148,8 +148,7 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-There seem to be some form of negative linear relationship between fertility rate and PISA scores. The Reading Score seem to correlate less strongly with fertility rates. 
-
+There seem to be some form of negative linear relationship between fertility rate and PISA scores. 
 ```{r first attempt with Fertility}
 mod_fer_sci <- lm(Science_Score ~ Fertility.Rate, data = Dataset)
 lmfer <- Model_to_Table(mod_fer_sci)
@@ -169,6 +168,8 @@ Table_Fer_GDPc <- knitr::kable(lmfer_GDPc)
 `r Table_Fer_GDPc`
 
 After controlling for GNI per capita, fertility is still significantly and negatively associated with PISA scores(p<.001). An increase of 1 in fertility rate is associated with a 43.85 points decrease in Science score.
+
+It might be challenging, however, to disentangle how fertility affects education and education affect fertility, out of PISA data, ???as we lack the ability to determine which of the two variables had precedence in their change???. 
 
 ### Population Density 
 
