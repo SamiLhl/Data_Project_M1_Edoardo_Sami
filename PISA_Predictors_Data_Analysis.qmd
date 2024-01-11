@@ -176,7 +176,7 @@ Table_gy_GNI <- knitr::kable(lmgy_GNIc)
 ### Fertility Rates and PISA Scores
 
 
-The literature, generally supports a negative relationship between fertility rates and educational achievements. One possible explanation takes the form of a 'quality over quantity' reasoning. When the population rapidly expands in size, the quantity of workers, able to finance children's education, relative to the quantity of children, in need of education provision, diminishes (Hu, 2023; Sittisom, 2020). This is also notably channelled through women enjoying greater education than their parents, having less children. For instance, Osili and Long (2007) found that increase female education by one year reduces early fertility by 0.26 in Nigeria. This implies that it might also be education that reduces fertility rate (Brand and Davis, 2012). 
+The literature, generally supports a negative relationship between fertility rates and educational achievements. One possible explanation takes the form of a 'quality over quantity' reasoning. When the population rapidly expands in size, the quantity of workers, able to finance children's education, relative to the quantity of children, in need of education provision, diminishes (Hu, 2023; Sittisom, 2020). This is also notably channelled through women enjoying greater education than their parents, having less children. For instance, Osili and Long (2007) found that increasing female education by one year reduces early fertility by 0.26 in Nigeria. This implies that it might also be education that reduces fertility rate (Brand and Davis, 2012). 
 As such, we expect countries with high fertility rates to have lower PISA scores. 
 
 ```{r Fert_Sci}
@@ -191,6 +191,7 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 There seem to be some form of negative linear relationship between fertility rate and PISA scores. 
+
 ```{r first attempt with Fertility}
 mod_fer_sci <- lm(Science_Score ~ Fertility.Rate, data = Dataset)
 lmfer <- Model_to_Table(mod_fer_sci)
@@ -198,7 +199,7 @@ Table_Fer_Sci <- knitr::kable(lmfer)
 ```
 `r Table_Fer_Sci`
 
-The correlation is significant (p<.01). The best linear model provide sizeable coefficient. For an increase in fertility rate of 1, the expected national PISA score decreases 55.1 in science.
+The model shows that Fertility rate is a significant predictor of PISA scores (p<.01). The best linear model provide sizeable coefficient. For an increase in fertility rate of 1, the expected national PISA score decreases 55.1 in science.
 
 It may be important to account for the fact that low fertility rates at a national level are generally associated with higher living standards and higher income. As such, it might be necessary to control for some metrics, such as gdp per capita to ensure that fertility rates truly play a role in providing better education.
 
@@ -211,11 +212,11 @@ Table_Fer_GDPc <- knitr::kable(lmfer_GDPc)
 
 After controlling for GNI per capita, fertility is still significantly and negatively associated with PISA scores(p<.001). An increase of 1 in fertility rate is associated with a 43.85 points decrease in Science score.
 
-It might be challenging, however, to disentangle how fertility affects education and education affect fertility, out of PISA data, ???as we lack the ability to determine which of the two variables had precedence in their change???. 
+It might be challenging, however, to disentangle how fertility affects education and education affects fertility, out of PISA data. The data lacks the ability to determine which of the two variables had precedence over the other. 
 
 ### Population Density 
 
-Population density could potentially affect academic performance through multiple channels. For instance, low population density could lead to longer commuting time to school. However, high density areas may have multiple schools and reinforce social segregation between schools in turn potentially decreasing the means available to children of lower strata people. Borland and Howsen (1999) investigate this dynamic in Kentucky and notice that students from highly urban and highly rural areas perform similarly, and worse than students enjoying more moderate population density.
+Population density could potentially affect academic performance through multiple channels. For instance, low population density could lead to longer commuting time to school or the lack of teachers teaching each grade separately. However, high density areas may have multiple schools and reinforce social segregation between schools in turn potentially decreasing the means available to children of lower strata people. Borland and Howsen (1999) investigate this dynamic in Kentucky and notice that students from highly urban and highly rural areas perform similarly, and worse than students enjoying more moderate population density.
 
 ```{r Dens_Sci}
 ggplot(Dataset, aes(x= Poulation.density, y=Science_Score))+
@@ -228,11 +229,11 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
 
-There does not seem to be any form of linear correlation between population density and PISA scores. There seem to be little to support any non-linear relationship either.
+There does not seem to be any form of linear correlation between population density and PISA scores. There seem to be little to support for any non-linear relationship either.
 
 ### Entrance Age
 
-There are important debate on the impact of the entrance age of pupils into school and their academic performances. The Child Care Research Network (2007) argued that even though, kids entering school at an older age did perform better than their younger counterparts, these advantages were small in magnitude and decreased in importance over time. 
+There are important debate on the impact of the entrance age of pupils into school and their academic performances. The NICHD Early Child Care Research Network (2007) argued that even though, kids entering school at an older age did perform better than their younger counterparts, these advantages were small in magnitude and decreased in importance over time. 
 ```{r}
 Entrance_PISA <- Dataset |> select(Science_Score, Entrance_Mandatory, GNI.per.capita)|> filter(!is.na(Entrance_Mandatory))
 ```
@@ -248,8 +249,8 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-There seem to be a non-linear relationship between Mandatory Entrance Age and PISA scores. Which reflects quite well the tradeoffs often mentioned in the literature, according to which, children may need time to mature before entering school, even though waiting for too long might not be profitable as children would be ready for being schooled and were not schooled, meaning they might reach the age/year for taking the PISA with less competencies acquired at school than other pupils who started school earlier.()
-For simplicity however, we only realize a linear model of Entrance Age and PISA scores, as the maximum mandatory entrance age observe was 7, which does not seem, at least visually, to negatively impact students too much, relative to 6 years mandatory entrance age. Were the data to contain countries with higher age of mandatory entrance, using a linear model could have been more problematic.  
+There seem to be a non-linear relationship between Mandatory Entrance Age and PISA scores. Which reflects quite well the tradeoffs often mentioned in the literature, according to which, children may need time to mature before entering school, even though waiting for too long might not be profitable as children would be ready for being schooled and were not schooled, meaning they might reach the age/year for taking the PISA with less competencies acquired at school than other pupils who started school earlier.(NICDH, 2007)
+For simplicity however, we only realize a linear model of Entrance Age and PISA scores, as the maximum mandatory entrance age observed was 7, which does not seem, at least visually, to negatively impact students too much, relative to 6 years mandatory entrance age. Were the data to contain countries with higher age of mandatory entrance, using a linear model could have been more problematic.  
 
 ```{r}
 Entrance_PISA$Entr_M <- as.numeric(Entrance_PISA$Entrance_Mandatory)
@@ -264,20 +265,42 @@ Even while controlling for GDP per capita, mandatory entrance age is here signif
 It is important to point out that the data is a reflection of the policies carried out by governments about the age at which children are required to attend school. These do not necessarily reflect the actual entrance age in studied countries, only the approach of the government on the matter.
 
 
-## Mean Yrs of Schooling MIGHT HAVE TO NONO OUT OF EXISTENCE FOR NOT BEING RELEVANT AT ALL (THE LADS ARE ALL TAKING THE TEST IN LATE MIDDLE SCHOOL SO THAT SHOWS NOTHING BEYONG MEAN YRS BEING HIGHER FOR RICH COUNTRIES)
+## Mean Yrs of Schooling
 
-At first sight, the national mean years of schooling may seem as a curious variable to observe. As students are all tested at the same level namely end of middle school, normally aged 15. However, the fact that students are expected to complete many more years in schooling could lead programs to be less dense.  
+At first sight, the national mean years of schooling may seem as a curious variable to observe. As students are all tested at the same level namely end of middle school, normally aged 15. However, the fact that students are expected to complete many more years in schooling could lead programs to be less dense or differently constructed. As shown below, higher mean years of schooling are associated with higher GNI per capita, and PISA participants are predominantly countries with high mean years of schooling. Therefore, one could imagine the PISA test to be better tailored to school programs imagined for students expected to continue studying long after the PISA test, and not for programs in which students are expected to leave school soon after. As a result, developing economies where the population enjoy lower mean years of schooling would be disadvantaged in achieving higher PISA scores.
+
+```{r MeanSchl_GNI.per.Capita}
+ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=GNI.per.capita))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+xlab("Mean Years of Schooling") +
+ylab("GNI per capita") +
+ggtitle("Scatterplot of GNI per capita given Mean Years of schooling ") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r}
+ggplot(Dataset, aes(x= Mean_Yrs_Schooling))+
+geom_density()+
+xlab("Mean Years of Schooling") +
+ggtitle("Number of observations at different level of Mean Years of Schooling ") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+
 ```{r Mean_Schl_Math}
 ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Science_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("Mean Years of Schooling") +
-ylab("Math Score") +
-ggtitle("Scatterplot of PISA Reading score given Mean Years of schooling ") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA Science score given Mean Years of schooling ") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-As expected, there seem to be a positive correlation between mean years of schooling. We now wonder whether this positive tendency is due only to other factors, while mean years of schooling actually affects negatively performances at the PISA test.
+As expected, there seem to be a positive correlation between mean years of schooling. We now wonder whether this positive tendency is due only to higher GNI per capita.
 
 ```{r}
 mod_MYrs <- lm(Science_Score ~ Mean_Yrs_Schooling + GNI.per.capita + Fertility.Rate, data=Dataset)
@@ -286,12 +309,13 @@ Table_Myrs <- knitr::kable(lmMYrs)
 ```
 `r Table_Myrs`
 
-It does not seem as Mean Years of Schooling can explain more than what is already explained by GNI per capita. When pooling them into a model, GNI per capita becomes insignificant. We favour keeping GNI per capita as it a more logical indicator when observing PISA scores of children who only reached end of middle school at the time of tests.
+When pooling GNI per capita and Mean years of schooling into a model, GNI per capita becomes insignificant. Their collinearity makes it difficult to disentangle another effect from more years of schooling, beyond higher GNI per capita, in turn improving education quality or even years of schooling itself. We favour keeping GNI per capita as it a more logical indicator when observing PISA scores of children who only reached end of middle school at the time of tests.
 
 
 ## Academic Year Length
 
-Some of the skills acquired at school may be lost as a result of extended period without practising those skills. As such, part of the literature argues that long summer holidays may negatively affect student performances as mentioned by Finnie et al. (2019) Thus, we try looking for differences between countries where the academic year is relatively shorter and those where it is relatively longer
+Some of the skills acquired at school may be lost as a result of extended period without practising those skills. As such, part of the literature argues that long summer holidays may negatively affect student performances as mentioned by Finnie et al. (2019) Thus, we try looking for differences between countries where the academic year is relatively shorter and those where it is relatively longer. In doing so, we omit some outliers with very short (below 4 months) school years.
+
 ```{r}
 YrLength_PISA <- Dataset |> select( Science_Score, End_Month, Start_Month)
 ```
@@ -301,7 +325,6 @@ YrLength_PISA$Year_Length <- (YrLength_PISA$End_Month - YrLength_PISA$Start_Mont
 YrLength_PISA$Year_Length <- ifelse(YrLength_PISA$Year_Length < 4, NA, YrLength_PISA$Year_Length)
 YrLength_PISA$Year_Length_binary <- ifelse(YrLength_PISA$Year_Length <=9 , "Short", "Long")
 ```
-We omit some outliers with very small school years.
 
 ```{r Yr_Length_Sci}
 YrLength_PISA <- YrLength_PISA |> filter(!is.na(Year_Length))
@@ -458,7 +481,7 @@ Add a comment for each of them, and we need to properly apply the function
 
 ### Sources 
 
-Child Care Research Network, N. E. (2007). Age of Entry to Kindergarten and Children’s Academic Achievement and Socioemotional Development. Early Education and Development, 18(2), 337. https://doi.org/10.1080/10409280701283460
+NICHD Early Child Care Research Network (2007) Age of Entry to Kindergarten and Children's Academic Achievement and Socioemotional Development, Early Education and Development, 18:2, 337-368, DOI: 10.1080/10409280701283460
 
 Borland, M. V., & Howsen, R. M. (1999). A Note on Student Academic Performance: In Rural versus Urban Areas. The American Journal of Economics and Sociology, 58(3), 537–546. http://www.jstor.org/stable/3487782
 
