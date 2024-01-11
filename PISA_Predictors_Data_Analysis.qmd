@@ -90,9 +90,21 @@ ggplot (aes(x = Year)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_color_manual(values = c("Math Score" = "blue", "Science Score" = "red", "Reading Score" = "green"))
 ```
-In order to have a clearer understanding of the data, we started by plotting the mean of the score over the years, and we discovered that they present a similar pattern. There is a clear drop after 2012, that caused scores to drop by 20 points circa. Since we found the three scores having a similar behaviors, we decided to conduct our analysis only using one of them for simplicity in the readability of the results. 
+We started our analysis by a general overview of the scores by plotting the mean of each over the years. We observed that the scores have similar trends over the years that can be summarized in three major moments. The three scores held fairly constant from to 2009 until 2012, after that year a major drop until 2015, that made the value of each score drop of around 20 points. After 2015 the scores are decreasing more gently towards the current mean score in each category. 
 
-In our case the science score seems the most interesting to take into consideration. 
+OECD and other researchers have proposed different explanations on the declining scores, such as the difficulty of the schooling systems in recruiting more teachers or a declining in the student's attention due to an increase use of technology. (Barshay, J. 2023)
+
+Since the three average scores have a similar unfolding, we decided to use the science score to proceed in our analysis. (we can mention the fact that science is easier to score more as it is easier to prepare)
+
+```{r}
+table_sciencegender <- Dataset %>%
+  group_by(Year) %>%
+  summarise(Boys_Average = mean(Science_Score_M),
+            Girls_Average = mean(Science_Score_F))
+knitr::kable(table_sciencegender)
+```
+In order to dive deeper in the data, we compared the performances of girls and boys in science over the years. Systematically young girls have performed better than their counterparts by few points, however for our analysis, we will use the total score in science, as the difference is even out in the average.  
+
 ```{r Function tabling stuff}
 
 Model_to_Table <- function(Model){
@@ -518,4 +530,7 @@ Osili, U. and Long, B. T. (2007). Does female schooling reduce fertility? eviden
 
 Finnie, R. K. C., Peng, Y., Hahn, R. A., Johnson, R. L., Fielding, J. E., Truman, B. I., Muntaner, C., Fullilove, M. T., Zhang, X., & Community Preventive Services Task Force (2019). Examining the Effectiveness of Year-Round School Calendars on Improving Educational Attainment Outcomes Within the Context of Advancement of Health Equity: A Community Guide Systematic Review. Journal of public health management and practice : JPHMP, 25(6), 590–594. https://doi.org/10.1097/PHH.0000000000000860
 
-Koen, V. André, C. Beom, J. Purwin A. Byungjun K.,(2021) Better Policies to Prolong the Miracle on the Han River, OECD, 82-95.   
+Koen, V. André, C. Beom, J. Purwin A. Byungjun K.,(2021) Better Policies to Prolong the Miracle on the Han River, OECD, 82-95. 
+
+Barshay, J. (2023), Proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic. The Hechinger Report.  
+https://hechingerreport.org/proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic/
