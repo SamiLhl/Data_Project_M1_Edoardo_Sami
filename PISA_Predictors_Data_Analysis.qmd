@@ -476,6 +476,12 @@ summary(lm2)
 
 Add a comment for each of them, and we need to properly apply the function
 
+## Conclusion and Limitations
+
+Throughout our analysis, we have tried finding important predictors of educational attainment, proxied by PISA scores. We found that GNI per capita was an important predictor, while GDP growth does not appear relevant or negatively impact educational attainments. While the first observation is well known and recognized, the latter seem counter-intuitive. These surprising results could possibly be related to the time of observation and the observed countries. Depending on the level of economic advancement of a country it may prioritize low skill jobs rather than targeting high value added sectors, while the contrary would occur past some level of economic advancement. 
+We tried looking at the impact of some demographical factors in predicting PISA scores. While fertility rate was significantly associated with lower PISA scores, we were not able to find any association between population density and PISA scores. This may be due to population density being more important when looking at regions, provinces or states within one country. Low population density could hide very dense population hub accounting for most of the national PISA score while the rest of the nation is empty of people and barely has students participating to the PISA test.
+
+
 ## Annex + Sources
 
 
