@@ -159,7 +159,7 @@ Table_gy_GNI_all <- knitr::kable(lmgy_GNIc)
 ```
 `r Table_gy_GNI_all`
 
-
+At first sight, there seem to be a negative correlation between GDP growth rate and PISA scores, something we have no explanation for.
 Another strategy might be to try and isolate low and middle income countries. As of 2023, a nation is considered part of the High Income group once the GDP per capita reaches US$13845.
 
 ```{r gy controlling for only low_mid inc GNI per cap}
