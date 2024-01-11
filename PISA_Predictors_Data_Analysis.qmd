@@ -378,15 +378,15 @@ Dataset %>% select(Science_Score, Survival_Rate_Primary, Gov_Expenditure, Enrolm
 ```
 
 
-### Survival rate 
-
+### Survival rate  to the last grade of primary education
+As experience could suggest, a continuous enrollment in an educational program allows pupils to demonstrate improved performance in the PISA score. The more the students are able to receive a continuous and homogeneous educational level the higher their chances of scoring a better result in the Pisa Test. Given that this could be obvious in many western countries it is not the case in everyone of them especially in the developing ones, as some of them have high school abandonment rates.  
 ```{r Mean_Surv_Math}
 ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Science_Score))+
 geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
 xlab("Survival rate") +
 ylab("Science Score") +
-ggtitle("Scatterplot of PISA Science score given the mortality rate ") +
+ggtitle("Scatterplot of PISA Science score given the Survival rate to the last grade of primary education") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
