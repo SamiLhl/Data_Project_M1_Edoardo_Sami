@@ -398,6 +398,7 @@ Table_Sur_Sci <- knitr::kable(lmsur)
 ```
 `r Table_Sur_Sci`
 
+
 ```{r}
 mod_surrs <- lm(Science_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
 lmsurrs <- Model_to_Table(mod_surrs)
