@@ -134,11 +134,24 @@ For every additional dollar, the Science score increases by 0.001, so that an ad
 
 
 ### GDP growth and PISA Scores 
-Booming economies may have hopes to become an advanced economy in the span of a generation or two, in a similar fashion to the Asian tigers did in past. In a similar fashion that South Korea consolidated after its economic miracle, and joined the ranks of advanced economies, through notably human capital investment (Koen et al.,2021), countries experiencing high economic growth may put greater efforts in their education services, and thus, have greater PISA scores. In dealing with this variable we rid ourselves of the 2009 observations taking place at the same time as the Global Financial Crisis.
+Booming economies may have hopes to become an advanced economy in the span of a generation or two, in a similar fashion to the Asian tigers did in past. In a similar fashion that South Korea consolidated after its economic miracle, and joined the ranks of advanced economies, through notably human capital investment (Koen et al.,2021), countries experiencing high economic growth may put greater efforts in their education services, and thus, have greater PISA scores. In dealing with this variable we rid ourselves of the 2009 observations taking place at the same time as the Global Financial Crisis. We also get ourselves rid of an outlier in which GDP growth rate reaches 24%, in Ireland in 2015 and is probably related to the fiscal changes that took place and led to massive momentary growth due to financial capital being moved to Ireland.
 
 ```{r}
 NO2009 <- Dataset |> filter(Year != 2009)
-ggplot(NO2009, aes(x= GDP.rate, y=Science_Score))+
+NO2009Outlier <- NO2009 |> filter (GDP.rate <= 15)
+ggplot(NO2009Outlier, aes(x= GDP.rate, y=Gov_Expenditure))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+xlab("GDP growth rate") +
+ylab("Government Expenditure on Education as share of GDP") +
+ggtitle("Scatterplot of PISA Science score given GDP growth rate") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+Observations on how GDP growth rate negatively correlate with government expenditure on education seem to invalidate our hypothesis that growing economies invest further in their education. We advance further and try investigating the phenomenon through PISA outcomes, in case increased efforts in education are reflected differently than in greater spendings.
+
+```{r}
+ggplot(NO2009Outlier, aes(x= GDP.rate, y=Science_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("GDP growth rate") +
@@ -163,7 +176,7 @@ At first sight, there seem to be a negative correlation between GDP growth rate 
 Another strategy might be to try and isolate low and middle income countries. As of 2023, a nation is considered part of the High Income group once the GDP per capita reaches US$13845.
 
 ```{r gy controlling for only low_mid inc GNI per cap}
-NO2009Rich <- NO2009 |> filter(GNI.per.capita <= 13845)
+NO2009Rich <- NO2009Outlier |> filter(GNI.per.capita <= 13845)
 mod_gy_sci_GDPc <- lm(Science_Score ~ GDP.rate + GNI.per.capita , data=NO2009Rich)
 lmgy_GNIc <- Model_to_Table(mod_gy_sci_GDPc)
 Table_gy_GNI <- knitr::kable(lmgy_GNIc)
@@ -478,8 +491,11 @@ Add a comment for each of them, and we need to properly apply the function
 
 ## Conclusion and Limitations
 
-Throughout our analysis, we have tried finding important predictors of educational attainment, proxied by PISA scores. We found that GNI per capita was an important predictor, while GDP growth does not appear relevant or negatively impact educational attainments. While the first observation is well known and recognized, the latter seem counter-intuitive. These surprising results could possibly be related to the time of observation and the observed countries. Depending on the level of economic advancement of a country it may prioritize low skill jobs rather than targeting high value added sectors, while the contrary would occur past some level of economic advancement. 
+Throughout our analysis, we have tried finding important predictors of educational attainment, proxied by PISA scores. We found that GNI per capita was an important predictor, while GDP growth does not appear relevant or negatively impact educational attainments. While the foremost observation is well known and recognized, the latter seem counter-intuitive, even though it goes along well with our observation that at higher GNI per capita,  government expenditure on education were lower and that government expenditures on education were not significantly associated with PISA scores. These results could possibly be related to the time of observation and the observed countries. Depending on the level of economic advancement of a country it may prioritize low skill jobs rather than targeting high value added sectors, while the contrary would occur past some level of economic advancement. ADD OTHER STUFF ON OECD COUNTRIES NOT BEING BEST FIT FOR OBSERVATION.
+
 We tried looking at the impact of some demographical factors in predicting PISA scores. While fertility rate was significantly associated with lower PISA scores, we were not able to find any association between population density and PISA scores. This may be due to population density being more important when looking at regions, provinces or states within one country. Low population density could hide very dense population hub accounting for most of the national PISA score while the rest of the nation is empty of people and barely has students participating to the PISA test.
+
+Finally, we looked at how education policy affect PISA scores. 
 
 
 ## Annex + Sources
