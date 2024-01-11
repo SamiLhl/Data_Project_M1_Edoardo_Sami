@@ -74,7 +74,7 @@ ggplot(PISA_map, aes(x = long, y = lat, group= group, fill = Science_Score)) +
   labs(title = "Map of PISA Science Scores in 2018") +
   theme_void()
 ```
-Before starting analysis it is important to acknowledge some important limitations of the PISA data. As this map shows, important parts of the world do not participate to the PISA test. While Europe, North and South America as well as Oceania are almost fully represented in the PISA dataset, only few countries of the Arab world and South East Asia participated and no Sub-Saharan countries were represented in the Dataset. As such, most of the developing world is not taken into account. Thus, the number of independent observations is limited, justifying our usage of up to four observations per countries, among those that participated to the PISA test. Additionally, the studied variables may lack the variability needed to fully observe variables effects on the PISA score. Insights that developing countries could have potentially offered.
+Before starting analysis it is important to acknowledge some important limitations of the PISA data. As this map shows, important parts of the world do not participate to the PISA test. While Europe, North and South America as well as Oceania are almost fully represented in the PISA dataset, only few countries of the Arab world and South East Asia participated, and no Sub-Saharan nor south Asian countries were represented in the Dataset. As such, most of the developing world is not taken into account. Thus, the number of independent observations is limited, justifying our usage of up to four observations per countries, among those that participated to the PISA test. Additionally, the studied variables may lack the variability needed to fully observe variables effects on the PISA score. Insights that developing countries could have potentially offered.
 
 
 ```{r}
@@ -106,7 +106,7 @@ coefficients_table <- lm_summary$coefficients
 ```
 ## Financial Condition and PISA score
 
-Rich countries may generally be expected to provide better education services as they have greater means for doing so and need a highly educated population to perform tasks with important added value.Economies with an ambition for reaching high income status may also strive towards educating its population to become as productive as in advanced economies. Thus, observing these indicators in their ability to predict PISA scores is of great relevance. Moreover, these characteristics, if powerful in predicting PISA score, might be used as control variable to observe other socio-economic phenomena. Therefore, we start our analysis with these variables. 
+Rich countries may generally be expected to provide better education services, as they have greater means for doing so, and need a highly educated population to perform tasks with important added value. Economies with an ambition for reaching high income status may also strive towards educating its population to become as productive as in advanced economies. Thus, observing these indicators in their ability to predict PISA scores is of great relevance. Moreover, these characteristics, if powerful in predicting PISA scores, might be used as control variables to observe and isolate the impact of other socio-economic phenomena, later on , in our analysis. Therefore, we start our analysis by looking at these variables. 
 
 ### GNI per Capita
 
@@ -120,7 +120,7 @@ ggtitle("Scatterplot of PISA Science score given GNI per capita") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-It appears that GNI per capita is powerfully correlated with PISA scores. However, it seems that it ceases to be, past a certain level of income. At first sight, this could perhaps be represented by a form of a log function, given we overlook the very high income outliers, which represent small populations, such as Qatar, Singapore or Luxembourg.
+It appears that GNI per capita is powerfully correlated with PISA scores. However, it seems that it ceases to be, past a certain level of income. At first sight, this could perhaps be represented by a form of a log function, given we overlook the very high income outliers, which represent small populations, such as Qatar, Singapore or Luxembourg. For simplicity, we stick to a linear relationship in modelling GNI per capita predicting PISA Science score.
 
 ```{r GNI and PISA}
 mod_GDP_sci <- lm(Science_Score ~ GNI.per.capita, data=Dataset)
@@ -129,12 +129,12 @@ Table_GNI <- knitr::kable(lmGNI)
 ```
 
 
-`r Table_GNI` GNI per capita is indeed, significantly associated with higher PISA Scores (p<0.001).
-For every additional dollar, the PISA score increases by 0.001, so that an additional 1000 dollar is associated with one additional point on the PISA score STILL DOES NOT HAVE THE R SQUARE
+`r Table_GNI` GNI per capita is indeed, significantly associated with higher Science Scores (p<0.001).
+For every additional dollar, the Science score increases by 0.001, so that an additional 1000 dollar is associated with one additional point on the PISA score. NO RSQUARE AS OF NOW
 
 
 ### GDP growth and PISA Scores 
-Booming economies may have hopes to become an advanced economy in the span of a generation or two, in a similar fashion the Asian tigers did in past. As such countries experiencing high economic growth may put greater efforts in their education services and have greater PISA scores. In dealing with this variable we rid ourselves of the 2009 observations taking place at the same time as the Global Financial Crisis.
+Booming economies may have hopes to become an advanced economy in the span of a generation or two, in a similar fashion to the Asian tigers did in past. In a similar fashion that South Korea consolidated after its economic miracle, and joined the ranks of advanced economies, through notably human capital investment (Koen et al.,2021), countries experiencing high economic growth may put greater efforts in their education services, and thus, have greater PISA scores. In dealing with this variable we rid ourselves of the 2009 observations taking place at the same time as the Global Financial Crisis.
 
 ```{r}
 NO2009 <- Dataset |> filter(Year != 2009)
@@ -147,10 +147,22 @@ ggtitle("Scatterplot of PISA Science score given GDP growth rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-As can be seen, graphical representation of Science Score being only predicted by growth rate does not show much. By doing so, we confound high income countries, which have lower growth rate as they do not experience growth from convergence with lower income countries that also have lower growth rate. It is necessary to control for GNI per capita before assessing the relevance of the growth rate of the economy in predicting PISA scores.
-Another startegy might be to try and isolate low and middle income countries. As of 2023, a nation is considered part of the High Income group once the GDP per capita reaches US$13845.
+
+As can be seen, graphical representation of Science Score being only predicted by growth rate does not show much. By doing so, we confound high income countries, which have lower growth rate as they do not experience growth from convergence with some lower income countries that did not successfully entered economic convergence yet, also having low growth rate. Or as we said with the previous analysis, GNI per capita is associated with higher PISA scores. Thus, it is necessary to control for GNI per capita before assessing the relevance of the growth rate of the economy in predicting PISA scores.
 
 ```{r gy controlling for GNI per cap}
+
+mod_gy_sci_GDPc <- lm(Science_Score ~ GDP.rate + GNI.per.capita , data=Dataset)
+lmgy_GNIc <- Model_to_Table(mod_gy_sci_GDPc)
+Table_gy_GNI_all <- knitr::kable(lmgy_GNIc)
+
+```
+`r Table_gy_GNI_all`
+
+
+Another strategy might be to try and isolate low and middle income countries. As of 2023, a nation is considered part of the High Income group once the GDP per capita reaches US$13845.
+
+```{r gy controlling for only low_mid inc GNI per cap}
 NO2009Rich <- NO2009 |> filter(GNI.per.capita <= 13845)
 mod_gy_sci_GDPc <- lm(Science_Score ~ GDP.rate + GNI.per.capita , data=NO2009Rich)
 lmgy_GNIc <- Model_to_Table(mod_gy_sci_GDPc)
@@ -460,3 +472,5 @@ Brand, J. E., & Davis, D. (2011). The Impact of College Education on Fertility: 
 Osili, U. and Long, B. T. (2007). Does female schooling reduce fertility? evidence from nigeria.. https://doi.org/10.3386/w13070
 
 Finnie, R. K. C., Peng, Y., Hahn, R. A., Johnson, R. L., Fielding, J. E., Truman, B. I., Muntaner, C., Fullilove, M. T., Zhang, X., & Community Preventive Services Task Force (2019). Examining the Effectiveness of Year-Round School Calendars on Improving Educational Attainment Outcomes Within the Context of Advancement of Health Equity: A Community Guide Systematic Review. Journal of public health management and practice : JPHMP, 25(6), 590–594. https://doi.org/10.1097/PHH.0000000000000860
+
+Koen, V. André, C. Beom, J. Purwin A. Byungjun K.,(2021) Better Policies to Prolong the Miracle on the Han River, OECD, 82-95.   
