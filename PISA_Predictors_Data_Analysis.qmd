@@ -2,10 +2,10 @@
 title: "PISA Predictors: Data Analysis"
 author: "Edoardo Ruvolo, Sami Louahlia"
 format: html
-   # wordcount-html:
-   #  toc: true
-   #  fig-align: center
-   #  cap-location: margin
+    #wordcount-html:
+     #toc: true
+     #fig-align: center
+     #cap-location: margin
 execute:
   message: false
   warning: false
@@ -24,6 +24,7 @@ library(nlstools)
 library(gtsummary)
 library(corrr)
 library(maps)
+library(broom)
 ```
 ## Research Project : Exploratory analysis of potential predictors of PISA Scores
 
@@ -107,15 +108,42 @@ In order to dive deeper in the data, we compared the performances of girls and b
 
 ```{r Function tabling stuff}
 
-Model_to_Table <- function(Model){
+Model_to_Table2 <- function(Model){
 
 # Get the summary table
 lm_summary <- summary(Model)
 
 # Extract coefficients table
 coefficients_table <- lm_summary$coefficients
+
 }
 ```
+
+```{r}
+# Function tabling stuff
+Model_to_Table <- function(Model){
+  
+  # Get the summary table
+  lm_summary <- summary(Model)
+  
+  # Extract coefficients table
+  coefficients_table <- tidy(lm_summary)
+  
+  # Extract R-squared value
+  r_squared <- lm_summary$r.squared
+  
+  # Create a data frame with coefficients and R-squared
+  result_table <- data.frame(
+    "Variable" = rownames(coefficients_table),
+    "Estimate" = coefficients_table[, "estimate"],
+    "Std. Error" = coefficients_table[, "std.error"],
+    "t value" = coefficients_table[, "statistic"],
+    "Pr(>|t|)" = coefficients_table[, "p.value"],
+    "R-squared" = r_squared
+  )}
+```
+
+
 ## Financial Condition and PISA score
 
 Rich countries may generally be expected to provide better education services, as they have greater means for doing so, and need a highly educated population to perform tasks with important added value. Economies with an ambition for reaching high income status may also strive towards educating its population to become as productive as in advanced economies. Thus, observing these indicators in their ability to predict PISA scores is of great relevance. Moreover, these characteristics, if powerful in predicting PISA scores, might be used as control variables to observe and isolate the impact of other socio-economic phenomena, later on , in our analysis. Therefore, we start our analysis by looking at these variables. 
@@ -238,6 +266,7 @@ Table_Fer_GDPc <- knitr::kable(lmfer_GDPc)
 After controlling for GNI per capita, fertility is still significantly and negatively associated with PISA scores(p<.001). An increase of 1 in fertility rate is associated with a 43.85 points decrease in Science score.
 
 It might be challenging, however, to disentangle how fertility affects education and education affects fertility, out of PISA data. The data lacks the ability to determine which of the two variables had precedence over the other. 
+
 
 ### Population Density 
 
@@ -365,11 +394,22 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 At first sight, there does not seem to be a notable difference between short and long years.
 
 ```{r}
-chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Score)
-#Sum_Chi_Yr <- tbl_summary(chi_Yr)
-#Table_Chi_Yr <- knitr::kable(Sum_Chi_Yr)
-#`r Table_Chi_Yr`
+
+Sum_Chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Score)
+
+# Extract relevant information
+chi_square_statistic <- Sum_Chi_Yr$statistic
+p_value <- Sum_Chi_Yr$p.value
+
+# Create a table with Chi-square test results
+Chi_Yr_Results<- data.frame(
+  "Chi-Square Statistic" = chi_square_statistic,
+  "P-Value" = p_value)
+  
+Table_Chi_Yr <- knitr::kable(Chi_Yr_Results)  
+
 ```
+`r Table_Chi_Yr`
 A Chi-Squarred test confirms that year length is not significant in predicting the value of the PISA score. Having a longer or a shorter break in between two grades does not appear to affect students' performances.
 
 
@@ -379,7 +419,7 @@ Dataset %>% select(Science_Score, Survival_Rate_Primary, Gov_Expenditure, Enrolm
 
 
 ### Survival rate  to the last grade of primary education
-As experience could suggest, a continuous enrollment in an educational program allows pupils to demonstrate improved performance in the PISA score. The more the students are able to receive a continuous and homogeneous educational level the higher their chances of scoring a better result in the Pisa Test. Given that this could be obvious in many western countries it is not the case in everyone of them especially in the developing ones, as some of them have high school abandonment rates.  
+As experience could suggest, a continuous enrolment in an educational program allows pupils to demonstrate improved performance in the PISA score. The more the students are able to receive a continuous and homogeneous educational level the higher their chances of scoring a better result in the Pisa Test. Given that this could be obvious in many western countries it is not the case in everyone of them especially in the developing ones, as some of them have high school abandonment rates.  
 ```{r Mean_Surv_Math}
 ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Science_Score))+
 geom_point() +
@@ -399,7 +439,7 @@ Table_Sur_Sci <- knitr::kable(lmsur)
 ```
 `r Table_Sur_Sci`
 
-The model shows that there is a positive correlation between the variables and the  the survival rates is a significant predictor of PISA scores (p<.01). The best linear model provide sizable coefficient. For an increase in the survival rate of 1, the expected national PISA score increases of 6.09 in the score.
+The model shows that there is a positive correlation between the variables and the  the survival rates is a significant predictor of PISA scores (p<.01). The best linear model provide sizeable coefficient. For an increase in the survival rate of 1, the expected national PISA score increases of 6.09 in the score.
 
 ```{r}
 mod_surrs <- lm(Science_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
@@ -514,9 +554,11 @@ Add a comment for each of them, and we need to properly apply the function
 
 Throughout our analysis, we have tried finding important predictors of educational attainment, proxied by PISA scores. We found that GNI per capita was an important predictor, while GDP growth does not appear relevant or negatively impact educational attainments. While the foremost observation is well known and recognized, the latter seem counter-intuitive, even though it goes along well with our observation that at higher GNI per capita,  government expenditure on education were lower and that government expenditures on education were not significantly associated with PISA scores. These results could possibly be related to the time of observation and the observed countries. Depending on the level of economic advancement of a country it may prioritize low skill jobs rather than targeting high value added sectors, while the contrary would occur past some level of economic advancement. ADD OTHER STUFF ON OECD COUNTRIES NOT BEING BEST FIT FOR OBSERVATION.
 
-We tried looking at the impact of some demographical factors in predicting PISA scores. While fertility rate was significantly associated with lower PISA scores, we were not able to find any association between population density and PISA scores. This may be due to population density being more important when looking at regions, provinces or states within one country. Low population density could hide very dense population hub accounting for most of the national PISA score while the rest of the nation is empty of people and barely has students participating to the PISA test.
+We tried looking at the impact of some demographical factors in predicting PISA scores. While fertility rate was significantly associated with lower PISA scores, we were not able to find any association between population density and PISA scores. This may be due to population density being more important when looking at regions, provinces or states within one country. Low population density could hide very dense population hubs accounting for most of the national PISA score while the rest of the nation is empty of people and barely has students participating to the PISA test.
 
-Finally, we looked at how education policy affect PISA scores. 
+Finally, we looked at how education policy affect PISA scores. We have found that enrolment rates and survival rates were significantly and positively associated with PISA scores, even while controlling for GNI per capita. (MAYBE STILL SAY SMTH ABT COLINEARITY )On the other hand,the share of private expenditure was significantly and negatively associated with PISA scores. (NEED MORE INSIGHTS) We found no link between government expenditure on education as a share of GDP and education outcomes. 
+
+While a linear model built out of the studied variables allows to explain 70% of the variance in PISA scores, it is important to acknowledge that some of the variables such as GNI per capita or Entrance age were not in fact behaving linearly. Moreover, most of the developing world did not participate into PISA, meaning we lack important observations to assess best what impacts education outcomes. Rather than having to use four observations of the same country at different times, it would make study like this one more relevant, were developing economies to join the ranks PISA participants.
 
 
 ## Annex + Sources
