@@ -408,7 +408,7 @@ Table_Sur_Sci1 <- knitr::kable(lmsurrs)
 ```
 `r Table_Sur_Sci1`
 
-However we tested as well for the GNI per capita, given that the survival rate is strictly dependent on the development of a country in order to measure the true effect of the survival rate in the model. After controlling for GNI per capita the estimate still has a positive effect, therefore we can conclude that survival rate to the last grade of primary education is beneficicial to higher Pisa score
+However we tested as well for the GNI per capita, given that the survival rate is strictly dependent on the development of a country in order to measure the true effect of the survival rate in the model. After controlling for GNI per capita the estimate still has a positive effect, therefore we can conclude that survival rate to the last grade of primary education is beneficial to higher Pisa score
 
 ### Government Expenditure
 
@@ -422,8 +422,8 @@ ggtitle("Scatterplot of PISA Science score given gvernament expenditure") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-Science score is independent from the governament expenditure. The average governament expenditure is around 1 and is related to a math score of 490.
-By increasing the expenditure there is no benefit to the math score.
+
+A first graphical observation confirms the fact that Pisa Scores are independent of government expenditure, however it is reasonable to say that the majority of the observations reached a score of 490 with a governament expenditure of 1% of the national budget.By increasing the expenditure there is no benefit to the score.
 
 ```{r first attempt gov }
 mod_gov_sci <- lm(Science_Score ~ Gov_Expenditure, data = Dataset)
@@ -432,6 +432,7 @@ Table_Gov_Sci <- knitr::kable(lmgov)
 ```
 `r Table_Gov_Sci`
 
+However we wanted to tested the effect and controlling the effect on regression, which demonstrate that the results are not signifcant because the p>0.1
 a comment is to be added about the results (not significant because p>0.1)
 
 ### Enrolment rate
@@ -445,12 +446,17 @@ ggtitle("Scatterplot of PISA Science Score given Enrolment Rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+A first graphical observation confirms what stated in the correlation matrix therefore a higher enrollment rate correspond to higher Pisa score, however we wanted to verify our intuition by proposing a simple model that explains the correlation between variables. 
+
+
 ```{r first attempt ER }
 mod_er_sci <- lm(Science_Score ~ Enrolment_Rate, data = Dataset)
 lmer <- Model_to_Table(mod_er_sci)
 Table_Er_Sci <- knitr::kable(lmer)
 ```
 `r Table_Er_Sci`
+
+The model shows that there is a positive correlation between the variables and that the enrollment rate is a significant predictor of PISA scores (p<.01). The best linear model provide sizable coefficient. For an increase in the enrollment rate of 1, the expected national PISA score increases of 5.09 in the score.
 
 ```{r}
 mod_ersr <- lm(Science_Score ~ Enrolment_Rate + GNI.per.capita, data=Dataset)
@@ -459,7 +465,7 @@ Table_Er_Sci1 <- knitr::kable(lmer1)
 ```
 `r Table_Er_Sci1`
 
-A comment is to be added
+However, we 
 
 ### Share of private expenditure
 ```{r}
