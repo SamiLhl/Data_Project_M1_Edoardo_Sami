@@ -390,6 +390,7 @@ ggtitle("Scatterplot of PISA Science score given the Survival rate to the last g
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+The graphical abservation seems to show a correlation between the survival rate and the Pisa scores.
 
 ```{r first attempt  sur}
 mod_sur_sci <- lm(Science_Score ~ Survival_Rate_Primary, data = Dataset)
@@ -398,6 +399,7 @@ Table_Sur_Sci <- knitr::kable(lmsur)
 ```
 `r Table_Sur_Sci`
 
+The model shows that there is a positive correlation between the variables and the  the survival rates is a significant predictor of PISA scores (p<.01). The best linear model provide sizable coefficient. For an increase in the survival rate of 1, the expected national PISA score increases of 6.09 in the score.
 
 ```{r}
 mod_surrs <- lm(Science_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
@@ -406,7 +408,7 @@ Table_Sur_Sci1 <- knitr::kable(lmsurrs)
 ```
 `r Table_Sur_Sci1`
 
-a comment is to be added about the results 
+However we tested as well for the GNI per capita, given that the survival rate is strictly dependent on the development of a country in order to measure the true effect of the survival rate in the model. After controlling for GNI per capita the estimate still has a positive effect, therefore we can conclude that survival rate to the last grade of primary education is beneficicial to higher Pisa score
 
 ### Government Expenditure
 
