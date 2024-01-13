@@ -78,6 +78,27 @@ studied country.
 
 ## Part 2 : Data sets descriptions (size, production condition, main variables)\*
 
+```{r}
+
+get_dataset_info <- function(dataset) {
+  num_rows <- nrow(dataset)
+  num_cols <- ncol(dataset)
+  variable_names <- names(dataset)
+  info_table <- data.frame(
+    "Number of Rows" = num_rows,
+    "Number of Columns" = num_cols,
+    "Variable Names" = paste(variable_names, collapse = ", ")
+  )
+  return(info_table)
+}
+``` 
+
+```{r}
+result <- get_dataset_info(Dataset)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Final Data Overview")
+```
+
 ## Part 3 : Data analysis
 
 ```{r}
