@@ -208,6 +208,11 @@ Model_to_Table <- function(Model){
 
 ## Financial Condition and PISA score
 
+```{r}
+Financial_matrix <- Dataset %>% select(Science_Score, GNI.per.capita, GDP.rate) %>% correlate()
+knitr::kable(Financial_matrix)
+```
+
 Rich countries may generally be expected to provide better education
 services, as they have greater means for doing so, and need a highly
 educated population to perform tasks with important added value.
@@ -342,6 +347,8 @@ capita below US\$13845, making any statistical investigation hardly
 feasible.
 
 ## Demographic indicators and PISA scores
+We propose a correlation matrix to find a correspondance between different modalities  of finding correlation.
+
 ```{r}
 Demographic_matrix <- Dataset %>% select(Science_Score, Fertility.Rate, Poulation.density, Entrance_Mandatory, Mean_Yrs_Schooling, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) %>% correlate()
 knitr::kable(Demographic_matrix)
@@ -622,7 +629,7 @@ significant in predicting the value of the PISA score. Having a longer
 or a shorter break in between two grades does not appear to affect
 students' performances.
 
-### Survival rate to the last grade of primary education
+### Survival Rate to the Last Grade of Primary Education
 
 As experience could suggest, a continuous enrolment in an educational
 program allows pupils to demonstrate improved performance in the PISA
@@ -759,7 +766,8 @@ As we were expecting, when controlling for GNI per capita, we have
 significant results and even if the effect of the enrollment rate is
 reduced, there is still a positive correlation between the two.
 
-### Share of students enrolled in private education
+### Share of Students Enrolled in Private Education
+
 Worldwide, educational levels vary greatly and in certain countries where public institutions do not excel, many pupils are enrolled in a private school. 
 In our analysis we focused, on the impact this kind of education has and studied the effects on Pisa score.
 ```{r}
@@ -783,6 +791,7 @@ Table_Sp_Sci <- knitr::kable(lmsp)
 `r Table_Sp_Sci`
 
 Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
+From the results we can conclude that students in private schools tend to score lower than students in public schools. Our claim, find a counter factual on OECD's report on the topic OECD(2018) stating that if accounting for socio-economic background of the students, which in our case could be represented by GNI per capita students in public schools score higher in every category. 
 
 ```{r}
 mod_sp <- lm(Science_Score ~ Share_Private + GNI.per.capita, data=Dataset)
@@ -792,25 +801,30 @@ Table_Sp_Sci1 <- knitr::kable(lmsp1)
 
 `r Table_Sp_Sci1`
 
+Now accounting for the GNI per capita, so adding more about the socio economic background of the students, we are able to confirm the trend of students in private schools usually perform more poorly than their counterparts in public schools.
 
 ### Trial on the regression
 
-
+We are now building up the final model to explain the highest possible level of PISA score of countries over the years.
+We will begin by incorporating every variable that showed a clear trend with PISA score and a significant coefficient in simple lm regression. Then we will evaluate the significance of the model and work towards increasing its performance by looking at coefficients, standard errors, R squared and the adjusted R squared.
 
 ```{r}
 lm1 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate + Share_Private, data=Dataset)
-summary(lm1)
+lms1 <- Model_to_Table(lm1)
+FinalTable <- knitr::kable(lms1)
 ```
+
+`r FinalTable`
 
 drop share private 
 
 ```{r}
 lm2 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate, data=Dataset)
-summary(lm2)
+lms2 <- Model_to_Table(lm2)
+FinalTable_drop <- knitr::kable(lms2)
 ```
 
-Add a comment for each of them, and we need to properly apply the
-function
+`r FinalTable_drop`
 
 ## Conclusion and Limitations
 
@@ -844,7 +858,7 @@ Finally, we looked at how education policy affect PISA scores. We have
 found that enrolment rates and survival rates were significantly and
 positively associated with PISA scores, even while controlling for GNI
 per capita. (MAYBE STILL SAY SMTH ABT COLINEARITY )On the other hand,the
-share of private expenditure was significantly and negatively associated
+share of private school enrollment was significantly and negatively associated
 with PISA scores. (NEED MORE INSIGHTS) We found no link between
 government expenditure on education as a share of GDP and education
 outcomes.
@@ -909,3 +923,5 @@ https://hechingerreport.org/proof-points-there-is-a-worldwide-problem-in-math-an
 Gumus, S. and Kayhan, S. (2012), **The Relationship between Economic
 Growth and School Enrollment Rates: Time SeriesEvidence from Turkey,**
 Educational Policy Analysis and Strategic Research, 2012
+
+OECD 2018, PISA 2018 Results (Volume V) : Effective Policies, Successful Schools
