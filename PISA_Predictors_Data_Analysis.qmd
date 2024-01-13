@@ -342,6 +342,10 @@ capita below US\$13845, making any statistical investigation hardly
 feasible.
 
 ## Demographic indicators and PISA scores
+```{r}
+Demographic_matrix <- Dataset %>% select(Science_Score, Fertility.Rate, Poulation.density, Entrance_Mandatory, Mean_Yrs_Schooling, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) %>% correlate()
+knitr::kable(Demographic_matrix)
+```
 
 ### Fertility Rates and PISA Scores
 
@@ -618,10 +622,6 @@ significant in predicting the value of the PISA score. Having a longer
 or a shorter break in between two grades does not appear to affect
 students' performances.
 
-```{r}
-Dataset %>% select(Science_Score, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) %>% correlate()
-```
-
 ### Survival rate to the last grade of primary education
 
 As experience could suggest, a continuous enrolment in an educational
@@ -643,7 +643,7 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-The graphical abservation seems to show a correlation between the
+The graphical observation seems to show a correlation between the
 survival rate and the Pisa scores.
 
 ```{r first attempt  sur}
@@ -759,8 +759,9 @@ As we were expecting, when controlling for GNI per capita, we have
 significant results and even if the effect of the enrollment rate is
 reduced, there is still a positive correlation between the two.
 
-### Share of private expenditure
-
+### Share of students enrolled in private education
+Worldwide, educational levels vary greatly and in certain countries where public institutions do not excel, many pupils are enrolled in a private school. 
+In our analysis we focused, on the impact this kind of education has and studied the effects on Pisa score.
 ```{r}
 ggplot(Dataset, aes(x=Share_Private, y=Science_Score))+
 geom_point()+
@@ -771,6 +772,7 @@ ggtitle("Scatterplot of PISA Science Score given Share Private") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
 
 ```{r first attempt sp }
 mod_sp_sci <- lm(Science_Score ~ Share_Private, data = Dataset)
@@ -780,7 +782,7 @@ Table_Sp_Sci <- knitr::kable(lmsp)
 
 `r Table_Sp_Sci`
 
-significance at p\<0.1
+Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
 
 ```{r}
 mod_sp <- lm(Science_Score ~ Share_Private + GNI.per.capita, data=Dataset)
@@ -790,16 +792,17 @@ Table_Sp_Sci1 <- knitr::kable(lmsp1)
 
 `r Table_Sp_Sci1`
 
-A comment is to be added
 
 ### Trial on the regression
+
+
 
 ```{r}
 lm1 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate + Share_Private, data=Dataset)
 summary(lm1)
 ```
 
-drop share private
+drop share private 
 
 ```{r}
 lm2 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate, data=Dataset)
