@@ -929,56 +929,43 @@ developing economies to join the ranks PISA participants.
 ### Annex 
 
   Throughout this report, we made extensive use of a dataset previously constructed out of smaller UNESCO, World Bank and OECD datasets. After formatting them into similar formats, with comprehensible and common variable names, we joined all the data together and got rid of redundant and unusable data. Among the actions necessary for the completion of this task, we had to rename variables and set the year associated to each data points, rid ourselves of the standard error of PISA scores, deemed irrelevant to our research.
+  The links to access the different variables' datasets we used throughout the treatment phase are as such: 
+  
+- [Population Density](https://data.worldbank.org/indicator/EN.POP.DNST)
+
+- [Fertility Rates](https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)
+
+- [GDP growth](https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG)
+
+- [GNI per capita](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=) 
+
+- [UNESCO Interface](http://data.uis.unesco.org/)
+
+- [PISA Data Explorer](https://pisadataexplorer.oecd.org/ide/idepisa/) 
+  
   For further details, the Data treatment .qmd file is accessible in the same[Github
 Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami).
   
 ### Sources
 
-NICHD Early Child Care Research Network (2007) Age of Entry to
-Kindergarten and Children's Academic Achievement and Socioemotional
-Development, Early Education and Development, 18:2, 337-368, DOI:
-10.1080/10409280701283460
+Barshay, J. (2023), Proof points there is a worldwide problem in math and it’s not just about the pandemic. The Hechinger Report. \https://hechingerreport.org/proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic/
 
-Borland, M. V., & Howsen, R. M. (1999). A Note on Student Academic
-Performance: In Rural versus Urban Areas. The American Journal of
-Economics and Sociology, 58(3), 537--546.
-http://www.jstor.org/stable/3487782
+Borland, M. V., & Howsen, R. M. (1999). A Note on Student Academic Performance: In Rural versus Urban Areas. The American Journal of Economics and Sociology, 58(3), 537--546. http://www.jstor.org/stable/3487782
 
-Hu, H. The Consequences of Fertility Decline on Educational Attainment
-in China. Popul Res Policy Rev 42, 94 (2023).
-https://doi-org.proxy.bu.dauphine.fr/10.1007/s11113-023-09834-7
+Brand, J. E., & Davis, D. (2011). The Impact of College Education on Fertility: Evidence for Heterogeneous Effects. Demography, 48(3), 863. https://doi.org/10.1007/s13524-011-0034-3
 
-Sittisom,W. (2020). Barriers in way towards quality education: poverty,
-fertility rate and increasing population, Journal of Security and
-Sustainability Issues, 9(January), 215-227.
-http://doi.org/10.9770/jssi.2020.9.J(16)
+Finnie, R. K. C., Peng, Y., Hahn, R. A., Johnson, R. L., Fielding, J. E., Truman, B. I., Muntaner, C., Fullilove, M. T., Zhang, X., & Community Preventive Services Task Force (2019). Examining the Effectiveness of Year-Round School Calendars on Improving Educational Attainment Outcomes Within the Context of Advancement of Health Equity: A Community Guide Systematic Review. Journal of public health management and practice : JPHMP, 25(6), 590--594. https://doi.org/10.1097/PHH.0000000000000860
 
-Brand, J. E., & Davis, D. (2011). The Impact of College Education on
-Fertility: Evidence for Heterogeneous Effects. Demography, 48(3), 863.
-https://doi.org/10.1007/s13524-011-0034-3
+Gumus, S. and Kayhan, S. (2012), The Relationship between Economic Growth and School Enrollment Rates: Time SeriesEvidence from Turkey, Educational Policy Analysis and Strategic Research, 201
 
-Osili, U. and Long, B. T. (2007). Does female schooling reduce
-fertility? evidence from nigeria.. https://doi.org/10.3386/w13070
+Hu, H. (2023) The Consequences of Fertility Decline on Educational Attainment in China. Popul Res Policy Rev 42, 94. https://doi-org.proxy.bu.dauphine.fr/10.1007/s11113-023-09834-7
 
-Finnie, R. K. C., Peng, Y., Hahn, R. A., Johnson, R. L., Fielding, J.
-E., Truman, B. I., Muntaner, C., Fullilove, M. T., Zhang, X., &
-Community Preventive Services Task Force (2019). Examining the
-Effectiveness of Year-Round School Calendars on Improving Educational
-Attainment Outcomes Within the Context of Advancement of Health Equity:
-A Community Guide Systematic Review. Journal of public health management
-and practice : JPHMP, 25(6), 590--594.
-https://doi.org/10.1097/PHH.0000000000000860
+Koen, V. André, C. Beom, J. Purwin A. Byungjun K.,(2021) Better Policies to Prolong the Miracle on the Han River, OECD, 82-95.
 
-Koen, V. André, C. Beom, J. Purwin A. Byungjun K.,(2021) Better Policies
-to Prolong the Miracle on the Han River, OECD, 82-95.
+NICHD Early Child Care Research Network (2007) Age of Entry to Kindergarten and Children's Academic Achievement and Socioemotional Development, Early Education and Development, 18:2, 337-368, DOI: 10.1080/10409280701283460
 
-Barshay, J. (2023),
-Proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic.
-The Hechinger Report.\
-https://hechingerreport.org/proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic/
+OECD 2018, PISA 2018 Results (Volume V) : Effective Policies, Successful Schools, OECD publications 
 
-Gumus, S. and Kayhan, S. (2012), The Relationship between Economic
-Growth and School Enrollment Rates: Time SeriesEvidence from Turkey,
-Educational Policy Analysis and Strategic Research, 2012
+Osili, U. and Long, B. T. (2007). Does female schooling reduce fertility? evidence from nigeria.. https://doi.org/10.3386/w13070
 
-OECD 2018, PISA 2018 Results (Volume V) : Effective Policies, Successful Schools, OECD publications, 2018
+Sittisom,W. (2020). Barriers in way towards quality education: poverty, fertility rate and increasing population, Journal of Security and Sustainability Issues, 9(January), 215-227. http://doi.org/10.9770/jssi.2020.9.J(16)
