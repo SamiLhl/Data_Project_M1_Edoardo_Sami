@@ -1,11 +1,7 @@
 ---
 title: "Research Project : Exploratory analysis of potential predictors of PISA Scores"
 author: "Edoardo Ruvolo, Sami Louahlia"
-format: 
-   wordcount-html:
-     toc: true
-     fig-align: center
-     cap-location: margin
+format: pdf
 execute:
   message: false
   warning: false
@@ -385,7 +381,7 @@ feasible.
 We propose a correlation matrix to find a correspondance between different modalities  of finding correlation.
 
 ```{r}
-Demographic_matrix <- Dataset %>% select(Average_Score, Fertility.Rate, Poulation.density, Entrance_Mandatory, Mean_Yrs_Schooling, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) %>% correlate()
+Demographic_matrix <- Dataset |> select (Average_Score, Fertility.Rate, Poulation.density) |> correlate()
 knitr::kable(Demographic_matrix)
 ```
 
@@ -483,6 +479,11 @@ population density and PISA scores. There seem to be little to support
 for any non-linear relationship either.
 
 ## Government policy and other education indicators
+
+```{r}
+Policy_matrix <- Dataset |> select(Average_Score, Entrance_Mandatory, Mean_Yrs_Schooling, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) |> correlate()
+knitr::kable(Policy_matrix)
+```
 
 ### Entrance Age
 
