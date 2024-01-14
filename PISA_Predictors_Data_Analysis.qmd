@@ -559,15 +559,6 @@ level namely end of middle school, normally aged 15. However, the fact
 that students are expected to complete many more years in schooling
 could lead programs to be differently constructed.
 
-As shown below, higher mean years of schooling are associated with higher
-GNI per capita, and PISA participants are predominantly countries with
-high mean years of schooling. 
-
-A possible explanation could be that PISA test are better tailored to school programs imagined for students expected
-to continue studying long after the PISA test, and not for programs in
-which students are expected to leave school soon after. As a result,
-developing economies where the population enjoy lower mean years of
-schooling would be disadvantaged in achieving higher PISA scores.
 
 ```{r MeanSchl_GNI.per.Capita}
 ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=GNI.per.capita))+
@@ -588,6 +579,11 @@ ggtitle("Number of observations at different level of Mean Years of Schooling ")
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+As shown above, higher mean years of schooling are associated with higher GNI per capita, and PISA participants are predominantly countries with high mean years of schooling. 
+A possible explanation for PISA score difference could be that PISA test are better tailored to school programs imagined for students expected
+to continue studying long after the PISA test, and not for programs in which students are expected to leave school soon after. As a result, countries where the population enjoy lower mean years of schooling would be disadvantaged in achieving higher PISA scores.
+
 
 ```{r Mean_Schl_Math}
 ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Average_Score))+
@@ -612,13 +608,7 @@ Table_Myrs <- knitr::kable(lmMYrs)
 
 `r Table_Myrs`
 
-When pooling GNI per capita and Mean years of schooling into a model,
-GNI per capita becomes insignificant. Their collinearity makes it
-difficult to disentangle another effect from more years of schooling,
-beyond higher GNI per capita, in turn improving education quality or
-even the number of years of schooling itself. We favor keeping GNI per capita as a
-more logical indicator when observing PISA scores of children who only
-reached end of middle school at the time of tests.
+When pooling GNI per capita and Mean years of schooling into a model, GNI per capita becomes insignificant. Their collinearity makes it difficult to disentangle another effect from more years of schooling, beyond higher GNI per capita, in turn improving education quality or even the number of years of schooling itself. We favor rejecting our mean years bias theory and keeping GNI per capita as a more logical indicator when observing PISA scores of children who only reached end of middle school at the time of tests.
 
 ### Academic Year Length
 
@@ -683,7 +673,7 @@ As experience could suggest, a continuous enrolment in an educational
 program allows pupils to demonstrate improved performance in the PISA
 score. The more the students are able to receive a continuous and
 homogeneous educational level the higher their chances of scoring a
-better result in the Pisa Test. Given that this could be obvious in many
+better result in the PISA Test. Given that this could be obvious in many
 western countries it is not the case in everyone of them especially in
 the developing ones, as some of them have high school abandonment rates.
 
@@ -713,7 +703,7 @@ The model shows that there is a positive correlation between the
 variables and the the survival rates is a significant predictor of PISA
 scores (p\<.01). The best linear model provide sizeable coefficient. For
 an increase in the survival rate of 1, the expected national PISA score
-increases of 6.09 in the score.
+increases of 6.12 in the score.
 
 ```{r}
 mod_surrs <- lm(Average_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
@@ -727,8 +717,9 @@ However we tested as well for the GNI per capita, given that the
 survival rate is strictly dependent on the development of a country in
 order to measure the true effect of the survival rate in the model.
 After controlling for GNI per capita the estimate still has a positive
-effect, therefore we can conclude that survival rate to the last grade
-of primary education is beneficial to higher Pisa score
+effect, therefore we can conclude that higher survival rate to the last grade
+of primary education is beneficial to higher PISA score
+A model using GNI per capita and Survival Rate can explain 50% of the variance in PISA scores.  
 
 ### Government Expenditure
 
@@ -743,7 +734,7 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-A first graphical observation confirms the fact that Pisa Scores are
+A first graphical observation confirms the fact that PISA Scores are
 independent of government expenditure, however it is reasonable to say
 that the majority of the observations reached a score of 490 with a
 government expenditure of 1% of the national budget.By increasing the
@@ -757,15 +748,13 @@ Table_Gov_Ave <- knitr::kable(lmgov)
 
 `r Table_Gov_Ave`
 
-However we wanted to tested the effect and controlling the effect on
-regression, which demonstrate that the results are not signifcant
-because the p\>0.1 a comment is to be added about the results (not
-significant because p\>0.1)
+However we wanted to test the effect and controlling the effect on
+regression, which demonstrate that the results are not significant (p >0.1)
 
 ### Enrollment rate
 
-The enrollment rate is a variable that measure the percentage of pupils
-enrolled in any educational program. In the world the enrollment rate
+The enrolment rate is a variable that measure the percentage of pupils
+enrolled in any educational program. In the world the enrolment rate
 varies greatly, and certain nations still struggle to have their
 children attending regularly classes (Gumus, S. and Kayhan, S. 2012).
 
@@ -781,7 +770,7 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 A first graphical observation confirms what stated in the correlation
-matrix therefore a higher enrollment rate correspond to higher Pisa
+matrix therefore a higher enrollment rate correspond to higher PISA
 score, however we wanted to verify our intuition by proposing a simple
 model that explains the correlation between variables.
 
@@ -794,12 +783,10 @@ Table_Er_Ave <- knitr::kable(lmer)
 `r Table_Er_Ave`
 
 The model shows that there is a positive correlation between the
-variables and that the enrollment rate is a significant predictor of
-PISA scores (p\<.01). The best linear model provide sizable coefficient.
-For an increase in the enrollment rate of 1, the expected national PISA
-score increases of 5.09 in the score. However, it has been demonstrated
-a positive relationship between economic growth and enrollment rate
-(Gumus, S. and Kayhan, S. 2012) therefore in order to be able to
+variables, and that the enrolment rate is a significant predictor of
+PISA scores (p<.001). The best linear model provide sizeable coefficient.
+For an increase in the enrolment rate of 1, the expected national PISA
+score increases of 5.92 in the score. However, a positive relationship between economic growth and enrolment rate exists(Gumus, S. and Kayhan, S. 2012) therefore in order to
 disentangle the two effects we must control for the GNI per capita.
 
 ```{r}
@@ -811,7 +798,7 @@ Table_Er_Ave1 <- knitr::kable(lmer1)
 `r Table_Er_Ave1`
 
 As we were expecting, when controlling for GNI per capita, we have
-significant results and even if the effect of the enrollment rate is
+significant results and even if the effect of the enrolment rate is
 reduced, there is still a positive correlation between the two.
 
 ### Share of Students Enrolled in Private Education
@@ -828,7 +815,6 @@ ggtitle("Scatterplot of PISA Score given Share Private") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
 
 ```{r first attempt sp }
 mod_sp_ave <- lm(Average_Score ~ Share_Private, data = Dataset)
@@ -838,8 +824,7 @@ Table_Sp_Ave <- knitr::kable(lmsp)
 
 `r Table_Sp_Ave`
 
-Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
-From the results we can conclude that students in private schools tend to score lower than students in public schools. Our claim, find a counter factual on OECD's report on the topic OECD(2018) stating that if accounting for socio-economic background of the students, which in our case could be represented by GNI per capita students in public schools score higher in every category. 
+From the results we can conclude that countries with a greater share of students in private schools tend to score lower than countries with less students in private schools. The OECD reported on the matter (OECD, 2018) stating that if accounting for socio-economic background, students in public schools score higher in every category. As such, in similar countries, with varying share of students in private schools, we may indeed expect the countries with the highest share of public school students to enjoy a higher national PISA score.
 
 ```{r}
 mod_sp <- lm(Average_Score ~ Share_Private + GNI.per.capita, data=Dataset)
@@ -849,7 +834,7 @@ Table_Sp_Ave1 <- knitr::kable(lmsp1)
 
 `r Table_Sp_Ave1`
 
-Now accounting for the GNI per capita, so adding more about the socio economic background of the students, we are able to confirm the trend of students in private schools usually perform more poorly than their counterparts in public schools.
+Now accounting for the GNI per capita, we are able to confirm the trend of countries in which more students attend private schools usually perform more poorly than their counterparts with similar economic conditions.
 
 ## Final regression
 
@@ -874,53 +859,28 @@ FinalTable_drop <- knitr::kable(lms2)
 
 `r FinalTable_drop`
 
+In the final regression model, all remaining variables are statistically significant (p<.01), and the model is able to explain almost 75% of the variance in PISA scores.
+
 ## Part 4 : Conclusion and Limitations
 
 Throughout our analysis, we have tried finding important predictors of
 educational attainment, proxied by PISA scores. We found that GNI per
-capita was an important predictor, while GDP growth does not appear
-relevant or negatively impact educational attainments. While the
-foremost observation is well known and recognized, the latter seem
-counter-intuitive, even though it goes along well with our observation
-that at higher GNI per capita, government expenditure on education were
-lower and that government expenditures on education were not
-significantly associated with PISA scores. These results could possibly
-be related to the time of observation and the observed countries.
-Depending on the level of economic advancement of a country it may
-prioritize low skill jobs rather than targeting high value added
-sectors, while the contrary would occur past some level of economic
-advancement. ADD OTHER STUFF ON OECD COUNTRIES NOT BEING BEST FIT FOR
-OBSERVATION.
+capita was an important predictor, while GDP growth does not appear relevant or negatively impact educational attainments. 
+While the first observation is well known and recognized, the latter may seem counter-intuitive.
+These results could possibly be related to the time of observation and the observed countries. Depending on the level of economic advancement of a country it may
+prioritize low skill jobs rather than targeting high value added sectors, while the contrary would occur past some level of economic advancement. 
 
-We tried looking at the impact of some demographical factors in
-predicting PISA scores. While fertility rate was significantly
-associated with lower PISA scores, we were not able to find any
-association between population density and PISA scores. This may be due
-to population density being more important when looking at regions,
-provinces or states within one country. Low population density could
-hide very dense population hubs accounting for most of the national PISA
-score while the rest of the nation is empty of people and barely has
-students participating to the PISA test.
+We tried looking at the impact of some demographical factors in predicting PISA scores. While fertility rate was significantly associated with lower PISA scores, we were not able to find any association between population density and PISA scores. This may be due to population density being more important when looking at regions, provinces or states within one country. Low population density could hide very dense population hubs accounting for most of the national PISA score while the rest of the nation is empty of people and barely has students participating to the PISA test.
 
-Finally, we looked at how education policy affect PISA scores. We have
-found that enrolment rates and survival rates were significantly and
-positively associated with PISA scores, even while controlling for GNI
-per capita. (MAYBE STILL SAY SMTH ABT COLINEARITY )On the other hand,the
-share of private school enrollment was significantly and negatively associated
-with PISA scores. The literature have supported our results stating that on average students enrolled in private schools, tend to score lower than those in public schools. We found no link between government expenditure on education as a share of GDP and education
-outcomes.
+Finally, we looked at how education policy affect PISA scores. We have found that enrolment rates and survival rates were significantly and positively associated with PISA scores, even while controlling for GNI per capita. On the other hand, the share of private school enrolment was significantly and negatively associated with PISA scores. The literature have supported our results stating that on average students enrolled in private schools, tend to score lower than those in public schools. We found no link between government expenditure on education as a share of GDP and education outcomes.
 
-While a linear model built out of the studied variables allows to
-explain 70% of the variance in PISA scores, it is important to
-acknowledge that some of the variables such as GNI per capita or
-Entrance age were not in fact behaving linearly. Moreover, most of the
-developing world did not participate into PISA, meaning we lack
-important observations to assess best what impacts education outcomes.
-Rather than having to use four observations of the same country at
-different times, it would make study like this one more relevant, were
-developing economies to join the ranks PISA participants.
+While a linear model built out of the studied variables allows to explain 70% of the variance in PISA scores, it is important to acknowledge that some of the variables such as GNI per capita or Entrance age were not in fact behaving linearly. Moreover, most of the developing world did not participate into PISA, meaning we lack important observations to assess best what impacts education outcomes.
+Further studies would benefit from developing economies joining the ranks PISA participants. It would increase the range of observed values taken by variables and the number of independent observations, making the use of four observations of the same country at different times unnecessary. 
 
 ## Part 5 : Annex + Sources
+
+[Link to the report's Github
+Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami).
 
 ### Annex 
 
@@ -939,7 +899,7 @@ developing economies to join the ranks PISA participants.
 
 - [PISA Data Explorer](https://pisadataexplorer.oecd.org/ide/idepisa/) 
   
-  For further details, the Data treatment .qmd file is accessible in the same[Github
+  For further details, the Data treatment .qmd file is accessible in the same [Github
 Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami).
   
 ### Sources
