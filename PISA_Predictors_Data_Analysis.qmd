@@ -79,6 +79,11 @@ studied country.
 ## Part 2 : Data sets descriptions (size, production condition, main variables)\*
 
 ```{r}
+Dataset <- read.csv(here("Final_Data"))
+Dataset <- Dataset |> select(-Jurisdiction.x) |> rename(Country = Jurisdiction.y)
+```
+
+```{r}
 
 get_dataset_info <- function(dataset) {
   num_rows <- nrow(dataset)
@@ -98,14 +103,11 @@ result <- get_dataset_info(Dataset)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Final Data Overview")
 ```
+For our analysis we use the data set we created during the first phase of the project with the same variables and number of observations. 
 
 ## Part 3 : Data analysis
 
-```{r}
-Dataset <- read.csv(here("Final_Data"))
-Dataset <- Dataset |> select(-Jurisdiction.x) |> rename(Country = Jurisdiction.y)
-```
-
+We proceed with a visual observation of the results to get a first understanding of the distribution of the data. 
 ```{r}
 
 # Load world map data
@@ -173,8 +175,7 @@ recruiting more teachers or a declining in the student's attention due
 to an increase use of technology. (Barshay, J. 2023)
 
 Since the three average scores have a similar unfolding, we decided to
-use the science score to proceed in our analysis. (we can mention the
-fact that science is easier to score more as it is easier to prepare)
+use the science score to analyse the gender score in our analysis. 
 
 ```{r}
 table_sciencegender <- Dataset %>%
@@ -188,7 +189,13 @@ In order to dive deeper in the data, we compared the performances of
 girls and boys in science over the years. Systematically young girls
 have performed better than their counterparts by few points, however for
 our analysis, we will use the total score in science, as the difference
-is even out in the average.
+is even out in the average. Similar results were observed for the other scores.
+
+In order to be able to proceed in our analysis and to facilitate the reading of the report we decided to use a meaned score between the three categories which is going to be added as a new variable in our analysis. 
+```{r}
+Dataset$Average_Score <- rowMeans(Dataset[, c('Math_Score', 'Reading_Score', 'Science_Score')])
+```
+
 
 ```{r Function tabling stuff}
 
@@ -229,10 +236,12 @@ Model_to_Table <- function(Model){
 
 ## Financial Condition and PISA score
 
+Before diving into any regression model we also include a correlation matrix table to have an overlook and a counterfactual on the what to expect from our regressions models.
 ```{r}
-Financial_matrix <- Dataset %>% select(Science_Score, GNI.per.capita, GDP.rate) %>% correlate()
+Financial_matrix <- Dataset %>% select(Average_Score, GNI.per.capita, GDP.rate) %>% correlate()
 knitr::kable(Financial_matrix)
 ```
+
 
 Rich countries may generally be expected to provide better education
 services, as they have greater means for doing so, and need a highly
@@ -249,11 +258,11 @@ start our analysis by looking at these variables.
 ### GNI per Capita
 
 ```{r}
-ggplot(Dataset, aes(x= GNI.per.capita, y=Science_Score))+
+ggplot(Dataset, aes(x= GNI.per.capita, y=Average_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("GNI per capita") +
-ylab("Science_Score") +
+ylab("Average_Score") +
 ggtitle("Scatterplot of PISA Science score given GNI per capita") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -265,17 +274,17 @@ income. At first sight, this could perhaps be represented by a form of a
 log function, given we overlook the very high income outliers, which
 represent small populations, such as Qatar, Singapore or Luxembourg. For
 simplicity, we stick to a linear relationship in modelling GNI per
-capita predicting PISA Science score.
+capita predicting PISA score.
 
 ```{r GNI and PISA}
-mod_GDP_sci <- lm(Science_Score ~ GNI.per.capita, data=Dataset)
+mod_GDP_sci <- lm(Average_Score ~ GNI.per.capita, data=Dataset)
 lmGNI <- Model_to_Table(mod_GDP_sci)
 Table_GNI <- knitr::kable(lmGNI)
 ```
 
 `r Table_GNI` GNI per capita is indeed, significantly associated with
-higher Science Scores (p\<0.001). For every additional dollar, the
-Science score increases by 0.001, so that an additional 1000 dollar is
+higher Pisa Scores (p\<0.001). For every additional dollar, the
+Pisa score increases by 0.001, so that an additional 1000 dollar is
 associated with one additional point on the PISA score. NO RSQUARE AS OF
 NOW
 
@@ -316,11 +325,11 @@ efforts in education are reflected differently than in greater
 spendings.
 
 ```{r}
-ggplot(NO2009Outlier, aes(x= GDP.rate, y=Science_Score))+
+ggplot(NO2009Outlier, aes(x= GDP.rate, y=Average_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("GDP growth rate") +
-ylab("Science_Score") +
+ylab("Average_Score") +
 ggtitle("Scatterplot of PISA Science score given GDP growth rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -338,7 +347,7 @@ economy in predicting PISA scores.
 
 ```{r gy controlling for GNI per cap}
 
-mod_gy_sci_GDPc <- lm(Science_Score ~ GDP.rate + GNI.per.capita , data=Dataset)
+mod_gy_sci_GDPc <- lm(Average_Score ~ GDP.rate + GNI.per.capita , data=Dataset)
 lmgy_GNIc <- Model_to_Table(mod_gy_sci_GDPc)
 Table_gy_GNI_all <- knitr::kable(lmgy_GNIc)
 
@@ -354,7 +363,7 @@ group once the GDP per capita reaches US\$13845.
 
 ```{r gy controlling for only low_mid inc GNI per cap}
 NO2009Rich <- NO2009Outlier |> filter(GNI.per.capita <= 13845)
-mod_gy_sci_GDPc <- lm(Science_Score ~ GDP.rate + GNI.per.capita , data=NO2009Rich)
+mod_gy_sci_GDPc <- lm(Average_Score ~ GDP.rate + GNI.per.capita , data=NO2009Rich)
 lmgy_GNIc <- Model_to_Table(mod_gy_sci_GDPc)
 Table_gy_GNI <- knitr::kable(lmgy_GNIc)
 
@@ -371,7 +380,7 @@ feasible.
 We propose a correlation matrix to find a correspondance between different modalities  of finding correlation.
 
 ```{r}
-Demographic_matrix <- Dataset %>% select(Science_Score, Fertility.Rate, Poulation.density, Entrance_Mandatory, Mean_Yrs_Schooling, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) %>% correlate()
+Demographic_matrix <- Dataset %>% select(Average_Score, Fertility.Rate, Poulation.density, Entrance_Mandatory, Mean_Yrs_Schooling, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) %>% correlate()
 knitr::kable(Demographic_matrix)
 ```
 
@@ -391,11 +400,11 @@ education that reduces fertility rate (Brand and Davis, 2012). As such,
 we expect countries with high fertility rates to have lower PISA scores.
 
 ```{r Fert_Sci}
-ggplot(Dataset, aes(x= Fertility.Rate, y=Science_Score))+
+ggplot(Dataset, aes(x= Fertility.Rate, y=Average_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("Fertility Rate") +
-ylab("Science_Score") +
+ylab("Average_Score") +
 ggtitle("Scatterplot of PISA Science score given Fertility Rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -405,7 +414,7 @@ There seem to be some form of negative linear relationship between
 fertility rate and PISA scores.
 
 ```{r first attempt with Fertility}
-mod_fer_sci <- lm(Science_Score ~ Fertility.Rate, data = Dataset)
+mod_fer_sci <- lm(Average_Score ~ Fertility.Rate, data = Dataset)
 lmfer <- Model_to_Table(mod_fer_sci)
 Table_Fer_Sci <- knitr::kable(lmfer)
 ```
@@ -424,7 +433,7 @@ metrics, such as gdp per capita to ensure that fertility rates truly
 play a role in providing better education.
 
 ```{r Controlling for GDP per capita}
-mod_fer_sci_GDPc <- lm(Science_Score ~ Fertility.Rate + GNI.per.capita, data=Dataset)
+mod_fer_sci_GDPc <- lm(Average_Score ~ Fertility.Rate + GNI.per.capita, data=Dataset)
 lmfer_GDPc <- Model_to_Table(mod_fer_sci_GDPc)
 Table_Fer_GDPc <- knitr::kable(lmfer_GDPc)
 ```
@@ -455,11 +464,11 @@ similarly, and worse than students enjoying more moderate population
 density.
 
 ```{r Dens_Sci}
-ggplot(Dataset, aes(x= Poulation.density, y=Science_Score))+
+ggplot(Dataset, aes(x= Poulation.density, y=Average_Score))+
 geom_point()+
 xlab("Population Density") +
-ylab("Science_Score") +
-ggtitle("Scatterplot of PISA Science score given Population Density") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA score given Population Density") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -479,14 +488,14 @@ advantages were small in magnitude and decreased in importance over
 time.
 
 ```{r}
-Entrance_PISA <- Dataset |> select(Science_Score, Entrance_Mandatory, GNI.per.capita)|> filter(!is.na(Entrance_Mandatory))
+Entrance_PISA <- Dataset |> select(Average_Score, Entrance_Mandatory, GNI.per.capita)|> filter(!is.na(Entrance_Mandatory))
 ```
 
 ```{r Entr_Sci}
-ggplot(Entrance_PISA, aes(x= as.factor(Entrance_Mandatory), y=Science_Score))+
+ggplot(Entrance_PISA, aes(x= as.factor(Entrance_Mandatory), y=Average_Score))+
 geom_boxplot()+
 xlab("Mandatory Entrance Age") +
-ylab("Science Score") +
+ylab("Average_Score") +
 ggtitle("Scatterplot of PISA Science score given national Entrance Age into school") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -509,7 +518,7 @@ problematic.
 
 ```{r}
 Entrance_PISA$Entr_M <- as.numeric(Entrance_PISA$Entrance_Mandatory)
-mod_Entr <- lm(Science_Score ~ Entr_M + GNI.per.capita, data=Entrance_PISA)
+mod_Entr <- lm(Average_Score ~ Entr_M + GNI.per.capita, data=Entrance_PISA)
 lmEntr <- Model_to_Table(mod_Entr)
 Table_Entrance <- knitr::kable(lmEntr)
 
@@ -563,12 +572,12 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r Mean_Schl_Math}
-ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Science_Score))+
+ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Average_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue")+
 xlab("Mean Years of Schooling") +
-ylab("Science Score") +
-ggtitle("Scatterplot of PISA Science score given Mean Years of schooling ") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA score given Mean Years of schooling ") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -578,7 +587,7 @@ of schooling. We now wonder whether this positive tendency is due only
 to higher GNI per capita.
 
 ```{r}
-mod_MYrs <- lm(Science_Score ~ Mean_Yrs_Schooling + GNI.per.capita + Fertility.Rate, data=Dataset)
+mod_MYrs <- lm(Average_Score ~ Mean_Yrs_Schooling + GNI.per.capita + Fertility.Rate, data=Dataset)
 lmMYrs <- Model_to_Table(mod_MYrs)
 Table_Myrs <- knitr::kable(lmMYrs)
 ```
@@ -604,7 +613,7 @@ relatively shorter and those where it is relatively longer. In doing so,
 we omit some outliers with very short (below 4 months) school years.
 
 ```{r}
-YrLength_PISA <- Dataset |> select( Science_Score, End_Month, Start_Month)
+YrLength_PISA <- Dataset |> select( Average_Score, End_Month, Start_Month)
 ```
 
 ```{r}
@@ -615,8 +624,8 @@ YrLength_PISA$Year_Length_binary <- ifelse(YrLength_PISA$Year_Length <=9 , "Shor
 
 ```{r Yr_Length_Sci}
 YrLength_PISA <- YrLength_PISA |> filter(!is.na(Year_Length))
-#ggplot(YrLength_PISA, aes(x= as.factor(Year_Length), y=Science_Score))+
-ggplot(YrLength_PISA, aes(x= Year_Length_binary, y=Science_Score))+
+#ggplot(YrLength_PISA, aes(x= as.factor(Year_Length), y=Average_Score))+
+ggplot(YrLength_PISA, aes(x= Year_Length_binary, y=Average_Score))+
   geom_boxplot()+
 xlab("Year_Length") +
 ylab("Science Score") +
@@ -630,7 +639,7 @@ short and long years.
 
 ```{r}
 
-Sum_Chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Science_Score)
+Sum_Chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Average_Score)
 
 # Extract relevant information
 chi_square_statistic <- Sum_Chi_Yr$statistic
@@ -661,12 +670,12 @@ western countries it is not the case in everyone of them especially in
 the developing ones, as some of them have high school abandonment rates.
 
 ```{r Mean_Surv_Math}
-ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Science_Score))+
+ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Average_Score))+
 geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
 xlab("Survival rate") +
-ylab("Science Score") +
-ggtitle("Scatterplot of PISA Science score given the Survival rate to the last grade of primary education") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA score given the Survival rate to the last grade of primary education") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -675,12 +684,12 @@ The graphical observation seems to show a correlation between the
 survival rate and the Pisa scores.
 
 ```{r first attempt  sur}
-mod_sur_sci <- lm(Science_Score ~ Survival_Rate_Primary, data = Dataset)
+mod_sur_sci <- lm(Average_Score ~ Survival_Rate_Primary, data = Dataset)
 lmsur <- Model_to_Table(mod_sur_sci)
-Table_Sur_Sci <- knitr::kable(lmsur)
+Table_Sur_Ave <- knitr::kable(lmsur)
 ```
 
-`r Table_Sur_Sci`
+`r Table_Sur_Ave`
 
 The model shows that there is a positive correlation between the
 variables and the the survival rates is a significant predictor of PISA
@@ -689,12 +698,12 @@ an increase in the survival rate of 1, the expected national PISA score
 increases of 6.09 in the score.
 
 ```{r}
-mod_surrs <- lm(Science_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
+mod_surrs <- lm(Average_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
 lmsurrs <- Model_to_Table(mod_surrs)
-Table_Sur_Sci1 <- knitr::kable(lmsurrs)
+Table_Sur_Ave1 <- knitr::kable(lmsurrs)
 ```
 
-`r Table_Sur_Sci1`
+`r Table_Sur_Ave1`
 
 However we tested as well for the GNI per capita, given that the
 survival rate is strictly dependent on the development of a country in
@@ -706,12 +715,12 @@ of primary education is beneficial to higher Pisa score
 ### Government Expenditure
 
 ```{r}
-ggplot(Dataset, aes(x=Gov_Expenditure, y=Science_Score))+
+ggplot(Dataset, aes(x=Gov_Expenditure, y=Average_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
 xlab("Governamenent Expenditure") +
-ylab("Science Score") +
-ggtitle("Scatterplot of PISA Science score given gvernament expenditure") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA score given gvernament expenditure") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -723,12 +732,12 @@ governament expenditure of 1% of the national budget.By increasing the
 expenditure there is no benefit to the score.
 
 ```{r first attempt gov }
-mod_gov_sci <- lm(Science_Score ~ Gov_Expenditure, data = Dataset)
+mod_gov_sci <- lm(Average_Score ~ Gov_Expenditure, data = Dataset)
 lmgov <- Model_to_Table(mod_gov_sci)
-Table_Gov_Sci <- knitr::kable(lmgov)
+Table_Gov_Ave <- knitr::kable(lmgov)
 ```
 
-`r Table_Gov_Sci`
+`r Table_Gov_Ave`
 
 However we wanted to tested the effect and controlling the effect on
 regression, which demonstrate that the results are not signifcant
@@ -743,12 +752,12 @@ varies greatly, and certain nations still struggle to have their
 children attending regularly classes (Gumus, S. and Kayhan, S. 2012).
 
 ```{r}
-ggplot(Dataset, aes(x=Enrolment_Rate, y=Science_Score))+
+ggplot(Dataset, aes(x=Enrolment_Rate, y=Average_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
 xlab("Enrolemnt Rate") +
-ylab("Science Score") +
-ggtitle("Scatterplot of PISA Science Score given Enrolment Rate") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA Score given Enrolment Rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -759,12 +768,12 @@ score, however we wanted to verify our intuition by proposing a simple
 model that explains the correlation between variables.
 
 ```{r first attempt ER }
-mod_er_sci <- lm(Science_Score ~ Enrolment_Rate, data = Dataset)
-lmer <- Model_to_Table(mod_er_sci)
-Table_Er_Sci <- knitr::kable(lmer)
+mod_er_ave <- lm(Average_Score ~ Enrolment_Rate, data = Dataset)
+lmer <- Model_to_Table(mod_er_ave)
+Table_Er_Ave <- knitr::kable(lmer)
 ```
 
-`r Table_Er_Sci`
+`r Table_Er_Ave`
 
 The model shows that there is a positive correlation between the
 variables and that the enrollment rate is a significant predictor of
@@ -776,12 +785,12 @@ a positive relationship between economic growth and enrollment rate
 disentangle the two effects we must control for the GNI per capita.
 
 ```{r}
-mod_ersr <- lm(Science_Score ~ Enrolment_Rate + GNI.per.capita, data=Dataset)
+mod_ersr <- lm(Average_Score ~ Enrolment_Rate + GNI.per.capita, data=Dataset)
 lmer1 <- Model_to_Table(mod_ersr)
-Table_Er_Sci1 <- knitr::kable(lmer1)
+Table_Er_Ave1 <- knitr::kable(lmer1)
 ```
 
-`r Table_Er_Sci1`
+`r Table_Er_Ave1`
 
 As we were expecting, when controlling for GNI per capita, we have
 significant results and even if the effect of the enrollment rate is
@@ -792,35 +801,35 @@ reduced, there is still a positive correlation between the two.
 Worldwide, educational levels vary greatly and in certain countries where public institutions do not excel, many pupils are enrolled in a private school. 
 In our analysis we focused, on the impact this kind of education has and studied the effects on Pisa score.
 ```{r}
-ggplot(Dataset, aes(x=Share_Private, y=Science_Score))+
+ggplot(Dataset, aes(x=Share_Private, y=Average_Score))+
 geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
 xlab("Share Private") +
-ylab("Science Score") +
-ggtitle("Scatterplot of PISA Science Score given Share Private") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA Score given Share Private") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
 
 ```{r first attempt sp }
-mod_sp_sci <- lm(Science_Score ~ Share_Private, data = Dataset)
-lmsp <- Model_to_Table(mod_sp_sci)
-Table_Sp_Sci <- knitr::kable(lmsp)
+mod_sp_ave <- lm(Average_Score ~ Share_Private, data = Dataset)
+lmsp <- Model_to_Table(mod_sp_ave)
+Table_Sp_Ave <- knitr::kable(lmsp)
 ```
 
-`r Table_Sp_Sci`
+`r Table_Sp_Ave`
 
 Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
 From the results we can conclude that students in private schools tend to score lower than students in public schools. Our claim, find a counter factual on OECD's report on the topic OECD(2018) stating that if accounting for socio-economic background of the students, which in our case could be represented by GNI per capita students in public schools score higher in every category. 
 
 ```{r}
-mod_sp <- lm(Science_Score ~ Share_Private + GNI.per.capita, data=Dataset)
+mod_sp <- lm(Average_Score ~ Share_Private + GNI.per.capita, data=Dataset)
 lmsp1 <- Model_to_Table(mod_sp)
-Table_Sp_Sci1 <- knitr::kable(lmsp1)
+Table_Sp_Ave1 <- knitr::kable(lmsp1)
 ```
 
-`r Table_Sp_Sci1`
+`r Table_Sp_Ave1`
 
 Now accounting for the GNI per capita, so adding more about the socio economic background of the students, we are able to confirm the trend of students in private schools usually perform more poorly than their counterparts in public schools.
 
@@ -830,17 +839,17 @@ We are now building up the final model to explain the highest possible level of 
 We will begin by incorporating every variable that showed a clear trend with PISA score and a significant coefficient in simple lm regression. Then we will evaluate the significance of the model and work towards increasing its performance by looking at coefficients, standard errors, R squared and the adjusted R squared.
 
 ```{r}
-lm1 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate + Share_Private, data=Dataset)
+lm1 <- lm(Average_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate + Share_Private, data=Dataset)
 lms1 <- Model_to_Table(lm1)
 FinalTable <- knitr::kable(lms1)
 ```
 
 `r FinalTable`
 
-drop share private 
+We eventually decided to drop share private, as the effect on model were negligeble and propose a ultimate correction on the model.
 
 ```{r}
-lm2 <- lm(Science_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate, data=Dataset)
+lm2 <- lm(Average_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate, data=Dataset)
 lms2 <- Model_to_Table(lm2)
 FinalTable_drop <- knitr::kable(lms2)
 ```
@@ -880,8 +889,7 @@ found that enrolment rates and survival rates were significantly and
 positively associated with PISA scores, even while controlling for GNI
 per capita. (MAYBE STILL SAY SMTH ABT COLINEARITY )On the other hand,the
 share of private school enrollment was significantly and negatively associated
-with PISA scores. (NEED MORE INSIGHTS) We found no link between
-government expenditure on education as a share of GDP and education
+with PISA scores. The literature have supported our results stating that on average students enrolled in private schools, tend to score lower than those in public schools. We found no link between government expenditure on education as a share of GDP and education
 outcomes.
 
 While a linear model built out of the studied variables allows to
@@ -945,4 +953,4 @@ Gumus, S. and Kayhan, S. (2012), **The Relationship between Economic
 Growth and School Enrollment Rates: Time SeriesEvidence from Turkey,**
 Educational Policy Analysis and Strategic Research, 2012
 
-OECD 2018, PISA 2018 Results (Volume V) : Effective Policies, Successful Schools
+OECD 2018, PISA 2018 Results (Volume V) : Effective Policies, Successful Schools, OECD publications, 2018
