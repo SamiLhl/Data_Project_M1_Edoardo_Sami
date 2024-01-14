@@ -1,360 +1,87 @@
 ---
-title: "Predictors_of_PISA_Scores"
-author: "Edoardo Ruvolo and Sami Louahlia"
+title: "PISA Predictors: Data Analysis"
+author: "Edoardo Ruvolo, Sami Louahlia"
 format: html
+    #wordcount-html:
+     #toc: true
+     #fig-align: center
+     #cap-location: margin
 execute:
   message: false
   warning: false
-code-fold: true
-
+echo: false
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r}
-#| message: false
-#| echo: false
 here::i_am("Data_Project_M1_Edoardo_Sami.Rproj")
 library(here)
 library(ggplot2)
 library(dplyr)
 library(vroom)
 library(tidyr)
+library(nlstools)
+library(gtsummary)
+library(corrr)
+library(maps)
+library(broom)
 ```
 
 ## Research Project : Exploratory analysis of potential predictors of PISA Scores
 
-[Link to the Github Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami) 
+[Link to the Github
+Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami)
+This is the same Repository as for the Data Treatment, we now proceed
+with the Dataset we produced in a new quarto document.
 
-### Research Question 
+## Part 1 : Research Question
 
-  The national level of education is an important element to account for in public policy. In economic terms, it represents how well the nation develops its human capital, offering greater economic outcomes to its inhabitants.  Universal access to education may also contribute to improving the equality of opportunity within a country’s population. Moreover, beyond resource production and distribution, people may value education as a good in itself. 
-The OECD’s PISA initiative is a remarkable opportunity for cross-country comparisons in terms of educational attainments at the lower secondary level, when students are aged around 15. It is also a major opportunity to use cross-country differences in other metrics to determine potential predictors for greater national PISA scores.
+The national level of education is an important element to account for
+in public policy. In economic terms, it represents how well the nation
+develops its human capital, offering greater economic outcomes to its
+inhabitants. Universal access to education may also contribute to
+improving the equality of opportunity within a country's population.
+Moreover, beyond resource production and distribution, people may value
+education as a good in itself. The OECD's PISA initiative is a
+remarkable opportunity for cross-country comparisons in terms of
+educational attainments at the lower secondary level, when students are
+aged around 15. It is also a major opportunity to use cross-country
+differences in other metrics to determine potential predictors for
+greater national PISA scores.
 
-  Using PISA datasets that reported national scores from 2009 to 2018, along with variables gathered across multiple international organizations, this project searches for potential variables, able to explain cross-country differences in performances at the PISA test. The variables used are different in nature. Some feature the current state of a nation’s economy, others observe their demographic condition, while others tackle the way education is provided in the different observed countries to a deeper extent. As such, we hope to acquire a wide array of possible predictors for higher or lower PISA scores.
+Using PISA datasets that reported national scores from 2009 to 2018,
+along with variables gathered across multiple international
+organizations, this project searches for potential variables, able to
+explain cross-country differences in performances at the PISA test. The
+variables used are different in nature. Some feature the current state
+of a nation's economy, others observe their demographic condition, while
+others tackle the way education is provided in the different observed
+countries to a deeper extent. As such, we hope to acquire a wide array
+of possible predictors for higher or lower PISA scores.
 
-  The completion of this research project may provide valuable insights. It may offer explanations as to why some countries perform better than others, orienting the agency of respective national governments. It may also leave room for some form of determinism, as some variables, such as geographic, demographic, or economic variables, may impact students’ performances while being more difficult or less desirable for governments to act upon in the short term.  
-Finally, this research project provides potential criticism as to what the PISA score truly reflects. Some variables have been selected to test potential flaws as to how the OECD can gather information about a nation's educational attainment, which could overlook important elements such as who can be evaluated by the OECD when devising the PISA scores and do they accurately represent the general student population of the studied country.   
+The completion of this research project may provide valuable insights.
+It may offer explanations as to why some countries perform better than
+others, orienting the agency of respective national governments. It may
+also leave room for some form of determinism, as some variables, such as
+geographic, demographic, or economic variables, may impact students'
+performances while being more difficult or less desirable for
+governments to act upon in the short term.\
+Finally, this research project provides potential criticism as to what
+the PISA score truly reflects. Some variables have been selected to test
+potential flaws as to how the OECD can gather information about a
+nation's educational attainment, which could overlook important elements
+such as who can be evaluated by the OECD when devising the PISA scores
+and do they accurately represent the general student population of the
+studied country.
 
-
-## Data Acquisition
-
-This section summarizes how the different data sets were acquired. We had to access open data from three major international organizations: the World Bank, the OECD and the UN under its UNESCO mandate. 
-
-### UNESCO:
-Data Source Description: UNESCO stands for the United Nations Educational, Scientific, and Cultural Organization. Its focus on education, sciences, culture, communication, and information contributes to global peace and security through fostering international collaboration. By advocating knowledge exchange, the organization provides open source data, collected in the different member's country.
-
-The [UNESCO Interface](http://data.uis.unesco.org/) allows one to select the variables needed. In our case we found all our data in the path: 
-Education -> Other policy relevant indicators. 
-
--	Enrolment rate: Number of students and enrolment/attendance by level of education  -> Enrolment ratios  ->  Total net enrolment rate by level of education 
-
--	Entrance age: Official entrance age and theoretical duration by level of education (years) -> Official entrance age 
-
--	Start_Yr + End_Yr: Start and end of academic school year (month, year)
-
--	Government Expenditure: Government expenditure on education as a percentage of GDP
-
--	Mean Schooling: Mean Years of Schooling 
-
--	Share Students Private: Percentage of enrolment in private institutions by level of education -> Distribution of enrolment by type of institution
-
--	Survival Rate: Survival rate by grade for primary education -> Survival rate in primary education
-
-After accessing each of the dataset it is necessary to customize the data, using the customize tool and selecting the time option, selecting only the 2009, 2012, 2015, 2018 observations. Finally we export in CSV format.
-
-### World Bank:
-Data source Description: The World Bank, owned by 187 countries, functions as an international development entity. Its primary aim involves alleviating poverty by providing loans to the governments of its less affluent members, facilitating economic improvements, and enhancing the quality of life for their citizens.
-
-The Bank serves as a significant global research hub for development. Within its specialized departments, it leverages this wealth of knowledge to provide guidance to countries across diverse sectors such as health, education, nutrition, finance, justice, law, and the environment. The Institute, is a reliable source of open data, within the different domains of their activities. 
-
-All we had to do was to download the CSV which was an option on the first page when accessing the data page.
-
-- [Population Density](https://data.worldbank.org/indicator/EN.POP.DNST)
-
-- [Fertility Rates](https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)
-
-- [GDP growth](https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG)
-
-- [GNI per capita](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=) 
-
-### OECD PISA:
-Data Source Description: The OECD, comprising 37 democratic nations with market-based economies, serves as platform for collaborative policy development to foster sustainable economic growth. It offers a space for governments to exchange experiences, tackle shared challenges, recognize best practices, and establish robust economic policy benchmarks.The organization, has remained a trusted provider of evidence-based policy analysis and comprehensive economic data, especially for open source data set. 
-
-All the variables were acquired in one go, using the [PISA Data Explorer](https://pisadataexplorer.oecd.org/ide/idepisa/) 
-
-- Step 1 Selecting Criteria: We selected the Reading, Mathematics and Science variable, selected the 4 time periods we are using 2018, 2015, 2012, 2009, selected the three ‘measures’: PISA Reading, Mathematics and Science Scale Overall. And took the OECD and partners groups.
-
-- Step 2 Select Variables : We selected the All students and Student (standardized) Gender variables.
-
-- Step 3 + 4 Edit and Build Reports: We did not change anything to the default options which gives 6 different reports. We got the data explorer to build the reports and we got to download them. 
-
-
-## Data Loading 
-
-### UNESCO
-Avalaible at the link [here](http://data.uis.unesco.org)
-```{r}
-Survival_Rate <- vroom(here("Data_UNESCO_28_11/Survival_Rate.csv"))
-Share_Studs_Priv <- vroom(here("Data_UNESCO_28_11/Share_Private.csv"))
-Enrolment <- vroom(here("Data_UNESCO_28_11/Enrolment_Rate.csv"))
-
-Start_End_Yr <- vroom(here("Data_UNESCO_28_11/Start_End_Yr.csv"))
-
-Gov_Exp <- vroom(here("Data_UNESCO_28_11/Gov_Exp.csv"))
-
-MeanSchooling <- vroom(here("Data_UNESCO_28_11/Mean_Yr_Schooling.csv"))
-EntranceAge <- vroom(here("Data_UNESCO_28_11/Entrance_Age.csv"))
-```
-
-
-### World Bank
-Fertility data available at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=EN.POP.DNST&country=), density [here](https://databank.worldbank.org/reports.aspx?source=2&series=SP.DYN.TFRT.IN&country=) the GNI per capita [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=) and values about GDP [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
-```{r}
-Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
-Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
-GNI_percapita <- vroom(here("HI_Data/data1.csv"))
-GDP_growth <- vroom(here("WB_Data/GDP_growth.csv"))
-```
-
-### PISA
-Avalaible at the link [here](https://www.oecd.org/pisa/data/2018database/#d.en.516012)
-```{r}
-Pisa_score_readingscale <- vroom(here("Pisa_Score/Readingscale.csv"))
-Pisa_score_readingscale_gender <- vroom(here("Pisa_Score/Readingscale_gender.csv"))
-Pisa_score_Mathscale <- vroom(here("Pisa_Score/Mathscale.csv"))
-Pisa_score_Mathscale_gender <- vroom(here("Pisa_Score/Mathscale_gender.csv"))
-Pisa_score_Sciencescale <- vroom(here("Pisa_Score/Sciencescale.csv"))
-Pisa_score_Sciencescale_gender <- vroom(here("Pisa_Score/Sciencescale_gender.csv"))
-```
-
-## Data treatment + variable description
-In this section, we format our datasets and proceed with some intermediate merging. We then describe the variables of these intermediate datasets.
-
-### UNESCO Data
-All the UNESCO data are structured the same way, as such we can create a function to treat them efficiently. We rid ourselves of the Flag, Flag ID and NATMON var as they are empty and/or uninformative. We also get rid of one of the Time variable to reduce redundancy. After treatment to only keep the data associated to our group of interest (generally students at the lower secondary level) and after assigning the "value" variables a more recognizable name we get rid of Value variables. We then join all the data sets into one big UNESCO data set using as common variable both time and country tags.
-
+## Part 2 : Data sets descriptions (size, production condition, main variables)\*
 
 ```{r}
-UNESCO_Treatment <- function(Data){
-  Data <- Data |> select(-`Flag Codes`, - Flags, - NATMON_IND, -TIME, -Country)
-}
+Dataset <- read.csv(here("Final_Data"))
+Dataset <- Dataset |> select(-Jurisdiction.x) |> rename(Country = Jurisdiction.y)
 ```
-
-```{r Treating the Data}
-Gov_Exp <- UNESCO_Treatment(Gov_Exp)
-Gov_Exp <- Gov_Exp |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)") |> mutate(Gov_Expenditure = Value) |> select(-Value, -Indicator)
-
-
-Enrolment <- UNESCO_Treatment(Enrolment)
-Enrolment <- Enrolment |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")|> mutate(Enrolment_Rate = Value) |> select(-Value, -Indicator)
-
-MeanSchooling <- UNESCO_Treatment(MeanSchooling)
-MeanSchooling <- MeanSchooling |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")|> mutate(Mean_Yrs_Schooling = Value) |> select(-Value, -Indicator)
-
-Share_Studs_Priv <- UNESCO_Treatment(Share_Studs_Priv)
-Share_Studs_Priv <- Share_Studs_Priv |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")|> mutate(Share_Private = Value) |> select(-Value, -Indicator)
-
-Survival_Rate <- UNESCO_Treatment(Survival_Rate)
-Survival_Rate <- Survival_Rate |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")|> mutate(Survival_Rate_Primary = Value) |> select(-Value, -Indicator)
-
-EntranceAge <- UNESCO_Treatment(EntranceAge)
-EntranceAgeEarly <- EntranceAge |> filter(Indicator == "Official entrance age to early childhood education (years)")|> mutate(EntranceEarly = Value) |> select(-Value, -Indicator)
-EntranceAgeManda <- EntranceAge |> filter(Indicator == "Official entrance age to compulsory education (years)")|> mutate(Entrance_Mandatory = Value) |> select(-Value, -Indicator)
-
-Start_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "Start month of the academic school year (pre-primary to post-secondary non-tertiary education)")|> mutate(Start_Month = Value) |> select(-Value, -Indicator)
-End_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "End month of the academic school year (pre-primary to post-secondary non-tertiary education)")|> mutate(End_Month = Value) |> select(-Value, -Indicator)
-
-```
-
-```{r Joining UNESCO}
-UNESCO <- Gov_Exp |>
-  left_join(Enrolment, by = c("LOCATION","Time")) |>
-  left_join(EntranceAgeEarly, by = c("LOCATION","Time")) |>
-  left_join(EntranceAgeManda, by = c("LOCATION","Time")) |>
-  left_join(End_Yr, by = c("LOCATION","Time")) |>
-  left_join(Start_Yr, by = c("LOCATION","Time")) |>
-  left_join(Share_Studs_Priv, by = c("LOCATION","Time")) |>
-  left_join(MeanSchooling, by = c("LOCATION","Time")) |>
-  left_join(Survival_Rate, by = c("LOCATION","Time")) 
-
-UNESCO <- UNESCO |> rename("Tag" = "LOCATION", "Year"="Time")
-```
-
-
-Government Expenditure: Government expenditure in lower secondary education as a share of GDP (%)
-
-Enrolment rate : Share of the population at the corresponding age effectively attending lower secondary education (%) 
-
-Entrance Age:
-
-- Early: Age at which it is possible to put children into schooling.
-
-- Mandatory: Age at which it is mandated to put children into schooling.
-
-Start and End year: Start and End month of the school year. Allows to measure length of the academic year.
-
-Share of Students in Private: Share of students attending a private institution.
-
-Mean Schooling: Mean number of years attended by the national adult population
-
-Survival Rate: Share of primary school pupils, within a cohort, who successfully pass to the next grade (a proxy for school retention)
-
-
-### World Bank Data
-The World Bank data sets, even if extracted from different measurement, were all treated in a similar way. Before uploading them on Rstudio, some small changes in the csv file were needed for the data set to make it properly readable. Mostly, it required getting rid of the first informations provided in the .csv that were telling that it was WB data and its date of change. We then adjusted the variables name, and removed superfluous observations. Finally we joined the WB into one dataset. 
-
-```{r}
-Fertility_Rate <- Fertility_Rate |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
-Pop_Density <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")|> rename( "Country Name" ="Country_Name", "Country Code"="Country_Code")
-GNI_percapita <- GNI_percapita |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
-GDP_growth <- GDP_growth |>
-  select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018") |> rename("GDP" ="Indicator Name")
-```
-
-```{r}
-GDP_growth_long <- GDP_growth %>%
-  pivot_longer(cols = starts_with("20"),  
-               names_to = "Year",
-               values_to = "Indicator Names")
-Fertility_Rate_long <- Fertility_Rate %>%
-  pivot_longer(cols = starts_with("20"),  
-               names_to = "Year",
-               values_to = "Indicator Names")
-Pop_Density_long <- Pop_Density %>%
-  pivot_longer(cols = starts_with("20"),  
-               names_to = "Year",
-               values_to = "Indicator Names")
-GNI_long <- GNI_percapita %>%
-  pivot_longer(cols = starts_with("20"),  
-               names_to = "Year",
-               values_to = "Indicator Names")
-
-```
-
-```{r}
-WB_long <- Fertility_Rate_long |>
-  left_join(Pop_Density_long, by = c("Country Name", "Country Code", "Year")) |>
-  left_join(GNI_long, by = c("Country Name", "Country Code", "Year")) |>
-  left_join(GDP_growth_long, by = c("Country Name", "Country Code", "Year"))
-WB_long <- WB_long |> rename("Tag" = "Country Code")
-```
-
-```{r}
-WB_long <- WB_long |>
-  rename("Fertility Rate"="Indicator Names.x", "Poulation density"="Indicator Names.y", "Fertility Rate"="Indicator Names.x", "GNI per capita"="Indicator Names.x.x", "GDP rate"="Indicator Names.y.y") |> select(-"Indicator Name.x", -"Indicator_Name", -"Indicator Name.y", -"GDP" )
-WB_long <- WB_long |> select(-`Country Name`)
-WB_long$Year <- as.numeric(WB_long$Year)
-```
-Population Density: Measure of countries’ population per square kilometers.
-
-Fertility Rate: Measure of the number of births per woman. A fertility rate of 2 indicates natural replacement of the population. 
-
-GDP: Measure of the total monetary value of all final goods and services produced within a country in a specific time period.
-
-GNI per capita: Measure of the total income earned by a country's residents, plus, the net inflow of primary income (comprising compensation received by employees and income from property) from abroad. The measurement is expressed at the PPP. 
-
-### OECD (PISA) Data
-The PISA score were formatted in similar ways, where possible, we used functions to modify the data, however, due to the different variables, in some cases we performed the operations at the dataset level. We started our data cleaning by simplifying the names in the different datasets, and removing the standard error column, as it is outside the scope of our analysis. 
-```{r}
-Pisa_score_Mathscale <- Pisa_score_Mathscale |> rename("Math_Score"="Average(all_students)") |> fill(`Year/Study`)|> select(-`Standard Error`)
-Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender |>  fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
-Pisa_score_readingscale <- Pisa_score_readingscale |> rename("Reading_Score"="Average(all_students)") |> fill(`Year/Study`) |>select(-`Standard Error`)
-Pisa_score_readingscale_gender <- Pisa_score_readingscale_gender |> fill(`Year/Study`) |>select(-`Standard Error M`, -`Standard Error F`)
-Pisa_score_Sciencescale <- Pisa_score_Sciencescale |> rename("Science_Score"="Average(all_students)") |> fill(`Year/Study`) |>select(-`Standard Error`)
-Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender |>  fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
-
-
-```
-
-Once solved the issues, we worked on cleaning the dataset that would make sure that the scores were numeric variable and, where this was not the case, to substitute it with NA. 
-
-```{r}
-
-Pisa_score_Mathscale$Math_Score <- iconv(Pisa_score_Mathscale$Math_Score, to="UTF-8", sub = NA)
-Pisa_score_Mathscale_gender$Math_Score_M <- iconv(Pisa_score_Mathscale_gender$Math_Score_M, to="UTF-8", sub = NA)
-Pisa_score_Mathscale_gender$Math_Score_F <- iconv(Pisa_score_Mathscale_gender$Math_Score_F, to="UTF-8", sub = NA)
-Pisa_score_readingscale$Reading_Score <- iconv(Pisa_score_readingscale$Reading_Score, to="UTF-8", sub = NA)
-Pisa_score_readingscale_gender$Reading_Score_M <- iconv(Pisa_score_readingscale_gender$Reading_Score_M, to="UTF-8", sub = NA)
-Pisa_score_readingscale_gender$Reading_Score_F <- iconv(Pisa_score_readingscale_gender$Reading_Score_F, to="UTF-8", sub = NA)
-Pisa_score_Sciencescale$Science_Score <- iconv(Pisa_score_Sciencescale$Science_Score, to="UTF-8", sub = NA)
-Pisa_score_Sciencescale_gender$Science_Score_M <- iconv(Pisa_score_Sciencescale_gender$Science_Score_M, to="UTF-8", sub = NA)
-Pisa_score_Sciencescale_gender$Science_Score_F <- iconv(Pisa_score_Sciencescale_gender$Science_Score_F, to="UTF-8", sub = NA)
-```
-
-Since all the data have a similar structure, we created a function that remove the last four observation which contained the source of the data set (OECD) and some notes about the aggregation of the data set. We used the same function to make the year as a numeric variable, to make aggregation easier.
-
-```{r}
-
-PISA_treatment <- function(data) {
-  if (nrow(data) <= 4) {
-    warning("Number of observations to remove exceeds the total number of observations.")
-    return(NULL)
-  }
-  modified_data <- head(data, -4)
-  
-  modified_data$`Year/Study` <- as.numeric(modified_data$`Year/Study`)
-  
-  return(modified_data)
-}
-```
-
-```{r}
-
-Pisa_score_Mathscale <- PISA_treatment(Pisa_score_Mathscale)
-Pisa_score_Mathscale_gender <-PISA_treatment(Pisa_score_Mathscale_gender)
-Pisa_score_readingscale <- PISA_treatment(Pisa_score_readingscale)
-Pisa_score_readingscale_gender <- PISA_treatment(Pisa_score_readingscale_gender)
-Pisa_score_Sciencescale <- PISA_treatment(Pisa_score_Sciencescale)
-Pisa_score_Sciencescale_gender <- PISA_treatment(Pisa_score_Sciencescale_gender)
-```
-
-Important note: Some countries, namely (Albania, Argentina, Kazakhstan and Malaysia), experience unusual scores in 2015 and, for this reason, were reported separately from the rest of the observation. Considering the situation, we decided to validate the score of 2015 and and so placing it back in its original position, we have done so by a modifications in the csv file. 
-
-For the aggregation of the data set, we opted for two differentiated one, the first one is PISA a comparison of the three categories (Science, Math and Reading) over the years where the data where aggregated by the year/study and Jurisdiction. While the second one PISA_gender, is the same comparison taking in consideration gender distribution. 
-
-```{r}
-J <- c("Czech Republic","Korea","Russia","Turkey","Baku (Azerbaijan)")
-Ta <- c("CZE",  "KOR","RUS","TUR","AZE")
-Add_Tag <- data.frame(Jurisdiction = J, Tagg = Ta)
-TAG_Name <- Pop_Density |> select("Country Name", "Country Code") |> rename ("Jurisdiction" = "Country Name")
-
-PISA <- Pisa_score_Mathscale |>
-  left_join(Pisa_score_readingscale, by = c("Jurisdiction", "Year/Study")) |>
-  left_join(Pisa_score_Sciencescale, by = c("Jurisdiction", "Year/Study"))
-PISA <- PISA |> left_join(TAG_Name, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
-PISA$Tag= coalesce(PISA$Tagg, PISA$"Country Code")
-PISA <- PISA |> select(-"Country Code", -"Tagg")
-PISA <- PISA |> na.omit(PISA)
-
-PISA_gender <- Pisa_score_Mathscale_gender |>
-  left_join(Pisa_score_readingscale_gender, by = c("Jurisdiction", "Year/Study")) |>
-  left_join(Pisa_score_Sciencescale_gender, by = c("Jurisdiction", "Year/Study"))
-PISA_gender <- PISA_gender |> left_join(TAG_Name, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
-PISA_gender$Tag= coalesce(PISA_gender$Tagg, PISA_gender$"Country Code")
-PISA_gender <- PISA_gender |> select(-"Country Code", -"Tagg")
-PISA_gender <- PISA_gender |> na.omit(PISA_gender)
-
-Tag_Country <- PISA|> select(Tag, Jurisdiction)
-PISA <- PISA |> rename("Year"="Year/Study")
-PISA_gender <- PISA_gender |> rename("Year"="Year/Study")
-```
-
-We integrate a tag variable to join PISA with the rest of the Datasets. From the tag and country variable we get a table to keep these information at hand.
-
-
-## Final Dataset Assembling 
-
-```{r}
-Final_Data <- PISA |>
-  left_join(PISA_gender, by = c("Tag","Year")) |>
-  left_join(WB_long, by =c("Tag","Year")) |>
-  left_join(UNESCO, by = c("Tag","Year")) 
-```
-
-This is the final dataset. It joins all the intermediary datasets by their common variables, namely (country) Tag and (observations') Year. This dataset will allow our exploratory analysis on potential predictors of PISA scores in the next sections.
-
-## Presentation of the dataset and variables
-
-Lastly, in order to have a clearer display of our datasets, we created a function that would return the name of the variables in the datasets, the number of rows and columns for each observation and a small comment. 
 
 ```{r}
 
@@ -369,92 +96,861 @@ get_dataset_info <- function(dataset) {
   )
   return(info_table)
 }
-```
+``` 
 
 ```{r}
-result <- get_dataset_info(PISA)
-names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Pisa Data Overview")
-```
-
-```{r}
-result <- get_dataset_info(PISA_gender)
-names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Pisa by Gender Data Overview")
-```
-
-```{r}
-result <- get_dataset_info(UNESCO)
-names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "Unesco Data Overview")
-```
-
-```{r}
-result <- get_dataset_info(WB_long)
-names(result) <- c("Rows", "Columns", "Variable Names")
-knitr::kable(result, caption = "World Bank Data Overview")
-```
-
-```{r}
-result <- get_dataset_info(Final_Data)
+result <- get_dataset_info(Dataset)
 names(result) <- c("Rows", "Columns", "Variable Names")
 knitr::kable(result, caption = "Final Data Overview")
 ```
+For our analysis we use the data set we created during the first phase of the project with the same variables and number of observations. 
 
-### Graphical representation of target variable 
+## Part 3 : Data analysis
+
+We proceed with a visual observation of the results to get a first understanding of the distribution of the data. 
+```{r}
+
+# Load world map data
+world_map <- map_data("world")
+
+filtered_MAP <- Dataset #|>
+  #filter(Country %in% world_map$region)|> filter(Year==2018)
+
+# Merge your data with the map data
+filtered_MAP <- filtered_MAP |>
+    mutate(Country = ifelse(Country == "United States", "USA", Country))|>
+    mutate(Country = ifelse(Country == "Viet Nam", "Vietnam", Country))|>
+    mutate(Country = ifelse(Country == "United Kingdom", "UK", Country))
+PISA_map <- left_join(world_map, filtered_MAP, by = c("region" = "Country"))
+
+
+# Create the ggplot world map with color-coded values
+ggplot(PISA_map, aes(x = long, y = lat, group= group, fill = Science_Score)) +
+  geom_polygon(color = "white") +
+  scale_fill_gradient(low = "yellow", high = "red", na.value = "grey",
+    guide = guide_colorbar(title = "Science Score")) +
+  labs(title = "Map of PISA Science Scores in 2018") +
+  theme_void()
+```
+
+Before starting analysis it is important to acknowledge some important
+limitations of the PISA data. As this map shows, important parts of the
+world do not participate to the PISA test. While Europe, North and South
+America as well as Oceania are almost fully represented in the PISA
+dataset, only few countries of the Arab world and South East Asia
+participated, and no Sub-Saharan nor south Asian countries were
+represented in the Dataset. As such, most of the developing world is not
+taken into account. Thus, the number of independent observations is
+limited, justifying our usage of up to four observations per countries,
+among those that participated to the PISA test. Additionally, the
+studied variables may lack the variability needed to fully observe
+variables effects on the PISA score. Insights that developing countries
+could have potentially offered.
 
 ```{r}
-PISA_WIDER <- PISA %>%
-  pivot_wider(names_from = "Year", values_from = c("Math_Score", "Reading_Score", "Science_Score"))
-PISAW_long <- PISA_WIDER %>%
-  pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
-  drop_na() %>%
-  mutate(Score = as.numeric(Score))  
-ggplot(PISAW_long, aes(x = Year_Study, y = Score)) +
-  geom_boxplot() +
-  xlab("Measurement in the different Years") +
+Dataset |> group_by(Year) |> summarise(Math_Score = mean(Math_Score), Science_Score=mean(Science_Score), Reading_Score = mean(Reading_Score)) |>
+ggplot (aes(x = Year)) +
+  geom_line(aes(y = Math_Score, color = "Math Score")) +
+  geom_line(aes(y = Science_Score, color = "Science Score")) +
+  geom_line(aes(y = Reading_Score, color = "Reading Score")) +
+  xlab("Year") +
   ylab("Score") +
-  ggtitle("Distribution of Scores Across Years of Studies") +
-  theme_minimal()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+  ggtitle("Scores Growth Over Years") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_manual(values = c("Math Score" = "blue", "Science Score" = "red", "Reading Score" = "green"))
+```
+
+We started our analysis by a general overview of the scores by plotting
+the mean of each over the years. We observed that the scores have
+similar trends over the years that can be summarized in three major
+moments. The three scores held fairly constant from to 2009 until 2012,
+after that year a major drop until 2015, that made the value of each
+score drop of around 20 points. After 2015 the scores are decreasing
+more gently towards the current mean score in each category.
+
+OECD and other researchers have proposed different explanations on the
+declining scores, such as the difficulty of the schooling systems in
+recruiting more teachers or a declining in the student's attention due
+to an increase use of technology. (Barshay, J. 2023)
+
+Since the three average scores have a similar unfolding, we decided to
+use the science score to analyse the gender score in our analysis. 
+
+```{r}
+table_sciencegender <- Dataset %>%
+  group_by(Year) %>%
+  summarise(Boys_Average = mean(Science_Score_M),
+            Girls_Average = mean(Science_Score_F))
+knitr::kable(table_sciencegender)
+```
+
+In order to dive deeper in the data, we compared the performances of
+girls and boys in science over the years. Systematically young girls
+have performed better than their counterparts by few points, however for
+our analysis, we will use the total score in science, as the difference
+is even out in the average. Similar results were observed for the other scores.
+
+In order to be able to proceed in our analysis and to facilitate the reading of the report we decided to use a meaned score between the three categories which is going to be added as a new variable in our analysis. 
+```{r}
+Dataset$Average_Score <- rowMeans(Dataset[, c('Math_Score', 'Reading_Score', 'Science_Score')])
+```
+
+
+```{r Function tabling stuff}
+
+Model_to_Table2 <- function(Model){
+
+# Get the summary table
+lm_summary <- summary(Model)
+
+# Extract coefficients table
+coefficients_table <- lm_summary$coefficients
+
+}
 ```
 
 ```{r}
-GenderPISA_widerF <- PISA_gender |> select(-Math_Score_M, -Reading_Score_M, -Science_Score_M)|>
-pivot_wider(names_from = "Year", values_from = c("Math_Score_F", "Reading_Score_F" ,"Science_Score_F"))
-GenderPISA_longF <- GenderPISA_widerF %>%
-pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
-drop_na() %>%
-mutate(Score = as.numeric(Score))
-ggplot(GenderPISA_longF, aes(x = Year_Study, y = Score)) +
-geom_boxplot() +
-xlab("Measurement in the different Years") +
-ylab("Score") +
-ggtitle("Distribution of Scores for Female Across Years of Studies") +
+# Function tabling stuff
+Model_to_Table <- function(Model){
+  
+  # Get the summary table
+  lm_summary <- summary(Model)
+  
+  # Extract coefficients table
+  coefficients_table <- tidy(lm_summary)
+  
+  # Extract R-squared value
+  r_squared <- lm_summary$r.squared
+  
+  # Create a data frame with coefficients and R-squared
+  result_table <- data.frame(
+    "Variable" = rownames(coefficients_table),
+    "Estimate" = coefficients_table[, "estimate"],
+    "Std. Error" = coefficients_table[, "std.error"],
+    "t value" = coefficients_table[, "statistic"],
+    "Pr(>|t|)" = coefficients_table[, "p.value"],
+    "R-squared" = r_squared
+  )}
+```
+
+## Financial Condition and PISA score
+
+Before diving into any regression model we also include a correlation matrix table to have an overlook and a counterfactual on the what to expect from our regressions models.
+```{r}
+Financial_matrix <- Dataset %>% select(Average_Score, GNI.per.capita, GDP.rate) %>% correlate()
+knitr::kable(Financial_matrix)
+```
+
+
+Rich countries may generally be expected to provide better education
+services, as they have greater means for doing so, and need a highly
+educated population to perform tasks with important added value.
+Economies with an ambition for reaching high income status may also
+strive towards educating its population to become as productive as in
+advanced economies. Thus, observing these indicators in their ability to
+predict PISA scores is of great relevance. Moreover, these
+characteristics, if powerful in predicting PISA scores, might be used as
+control variables to observe and isolate the impact of other
+socio-economic phenomena, later on , in our analysis. Therefore, we
+start our analysis by looking at these variables.
+
+### GNI per Capita
+
+```{r}
+ggplot(Dataset, aes(x= GNI.per.capita, y=Average_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+xlab("GNI per capita") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA Science score given GNI per capita") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+It appears that GNI per capita is powerfully correlated with PISA
+scores. However, it seems that it ceases to be, past a certain level of
+income. At first sight, this could perhaps be represented by a form of a
+log function, given we overlook the very high income outliers, which
+represent small populations, such as Qatar, Singapore or Luxembourg. For
+simplicity, we stick to a linear relationship in modelling GNI per
+capita predicting PISA score.
+
+```{r GNI and PISA}
+mod_GDP_sci <- lm(Average_Score ~ GNI.per.capita, data=Dataset)
+lmGNI <- Model_to_Table(mod_GDP_sci)
+Table_GNI <- knitr::kable(lmGNI)
+```
+
+`r Table_GNI` GNI per capita is indeed, significantly associated with
+higher Pisa Scores (p\<0.001). For every additional dollar, the
+Pisa score increases by 0.001, so that an additional 1000 dollar is
+associated with one additional point on the PISA score. NO RSQUARE AS OF
+NOW
+
+### GDP growth and PISA Scores
+
+Booming economies may have hopes to become an advanced economy in the
+span of a generation or two, in a similar fashion to the Asian tigers
+did in past. In a similar fashion that South Korea consolidated after
+its economic miracle, and joined the ranks of advanced economies,
+through notably human capital investment (Koen et al.,2021), countries
+experiencing high economic growth may put greater efforts in their
+education services, and thus, have greater PISA scores. In dealing with
+this variable we rid ourselves of the 2009 observations taking place at
+the same time as the Global Financial Crisis. We also get ourselves rid
+of an outlier in which GDP growth rate reaches 24%, in Ireland in 2015
+and is probably related to the fiscal changes that took place and led to
+massive momentary growth due to financial capital being moved to
+Ireland.
+
 ```{r}
-GenderPISA_widerM <- PISA_gender |> select(-Math_Score_F, -Reading_Score_F, -Science_Score_F) |>
-pivot_wider(names_from = "Year", values_from = c("Math_Score_M", "Reading_Score_M", "Science_Score_M"))
-GenderPISA_longM <- GenderPISA_widerM %>%
-pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
-drop_na() %>%
-mutate(Score = as.numeric(Score))
-ggplot(GenderPISA_longM, aes(x = Year_Study, y = Score)) +
-geom_boxplot() +
-xlab("Measurement in the different Years") +
-ylab("Score") +
-ggtitle("Distribution of Scores for Male Across Years of Studies") +
+NO2009 <- Dataset |> filter(Year != 2009)
+NO2009Outlier <- NO2009 |> filter (GDP.rate <= 15)
+ggplot(NO2009Outlier, aes(x= GDP.rate, y=Gov_Expenditure))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+xlab("GDP growth rate") +
+ylab("Government Expenditure on Education as share of GDP") +
+ggtitle("Scatterplot of PISA Science score given GDP growth rate") +
 theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-From these graphs we can observe that the world average PISA scores have been decreasing. It is interesting to observe that male started at higher level of Math performance and saw their average score decrease faster than their female counterpart. Invertly to the Reading scores where males students underperformed relatively to their female counterpart and saw their performance decrease to a slower extent. In science, both genders started off at similar levels of performance, but males saw their performances decrease faster than females.
-
-## Saving the final Data set
+Observations on how GDP growth rate negatively correlate with government
+expenditure on education seem to invalidate our hypothesis that growing
+economies invest further in their education. We advance further and try
+investigating the phenomenon through PISA outcomes, in case increased
+efforts in education are reflected differently than in greater
+spendings.
 
 ```{r}
-write.csv(Final_Data, file = here("Final_Data"), na = "NA", row.names = FALSE)
+ggplot(NO2009Outlier, aes(x= GDP.rate, y=Average_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+xlab("GDP growth rate") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA Science score given GDP growth rate") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+As can be seen, graphical representation of Science Score being only
+predicted by growth rate does not show much. By doing so, we confound
+high income countries, which have lower growth rate as they do not
+experience growth from convergence with some lower income countries that
+did not successfully entered economic convergence yet, also having low
+growth rate. Or as we said with the previous analysis, GNI per capita is
+associated with higher PISA scores. Thus, it is necessary to control for
+GNI per capita before assessing the relevance of the growth rate of the
+economy in predicting PISA scores.
+
+```{r gy controlling for GNI per cap}
+
+mod_gy_sci_GDPc <- lm(Average_Score ~ GDP.rate + GNI.per.capita , data=Dataset)
+lmgy_GNIc <- Model_to_Table(mod_gy_sci_GDPc)
+Table_gy_GNI_all <- knitr::kable(lmgy_GNIc)
+
+```
+
+`r Table_gy_GNI_all`
+
+At first sight, there seem to be a negative correlation between GDP
+growth rate and PISA scores, something we have no explanation for.
+Another strategy might be to try and isolate low and middle income
+countries. As of 2023, a nation is considered part of the High Income
+group once the GDP per capita reaches US\$13845.
+
+```{r gy controlling for only low_mid inc GNI per cap}
+NO2009Rich <- NO2009Outlier |> filter(GNI.per.capita <= 13845)
+mod_gy_sci_GDPc <- lm(Average_Score ~ GDP.rate + GNI.per.capita , data=NO2009Rich)
+lmgy_GNIc <- Model_to_Table(mod_gy_sci_GDPc)
+Table_gy_GNI <- knitr::kable(lmgy_GNIc)
+
+```
+
+`r Table_gy_GNI`Once controlling for GDP per capita, it appears that the
+growth rate of the economy is not significantly correlated with PISA
+scores. GDP per capita is not significant either in this model. However,
+it is important to acknowledge that only 29 observations had GNI per
+capita below US\$13845, making any statistical investigation hardly
+feasible.
+
+## Demographic indicators and PISA scores
+We propose a correlation matrix to find a correspondance between different modalities  of finding correlation.
+
+```{r}
+Demographic_matrix <- Dataset %>% select(Average_Score, Fertility.Rate, Poulation.density, Entrance_Mandatory, Mean_Yrs_Schooling, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) %>% correlate()
+knitr::kable(Demographic_matrix)
+```
+
+### Fertility Rates and PISA Scores
+
+The literature, generally supports a negative relationship between
+fertility rates and educational achievements. One possible explanation
+takes the form of a 'quality over quantity' reasoning. When the
+population rapidly expands in size, the quantity of workers, able to
+finance children's education, relative to the quantity of children, in
+need of education provision, diminishes (Hu, 2023; Sittisom, 2020). This
+is also notably channelled through women enjoying greater education than
+their parents, having less children. For instance, Osili and Long (2007)
+found that increasing female education by one year reduces early
+fertility by 0.26 in Nigeria. This implies that it might also be
+education that reduces fertility rate (Brand and Davis, 2012). As such,
+we expect countries with high fertility rates to have lower PISA scores.
+
+```{r Fert_Sci}
+ggplot(Dataset, aes(x= Fertility.Rate, y=Average_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+xlab("Fertility Rate") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA Science score given Fertility Rate") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+There seem to be some form of negative linear relationship between
+fertility rate and PISA scores.
+
+```{r first attempt with Fertility}
+mod_fer_sci <- lm(Average_Score ~ Fertility.Rate, data = Dataset)
+lmfer <- Model_to_Table(mod_fer_sci)
+Table_Fer_Sci <- knitr::kable(lmfer)
+```
+
+`r Table_Fer_Sci`
+
+The model shows that Fertility rate is a significant predictor of PISA
+scores (p\<.01). The best linear model provide sizeable coefficient. For
+an increase in fertility rate of 1, the expected national PISA score
+decreases 55.1 in science.
+
+It may be important to account for the fact that low fertility rates at
+a national level are generally associated with higher living standards
+and higher income. As such, it might be necessary to control for some
+metrics, such as gdp per capita to ensure that fertility rates truly
+play a role in providing better education.
+
+```{r Controlling for GDP per capita}
+mod_fer_sci_GDPc <- lm(Average_Score ~ Fertility.Rate + GNI.per.capita, data=Dataset)
+lmfer_GDPc <- Model_to_Table(mod_fer_sci_GDPc)
+Table_Fer_GDPc <- knitr::kable(lmfer_GDPc)
+```
+
+`r Table_Fer_GDPc`
+
+After controlling for GNI per capita, fertility is still significantly
+and negatively associated with PISA scores(p\<.001). An increase of 1 in
+fertility rate is associated with a 43.85 points decrease in Science
+score.
+
+It might be challenging, however, to disentangle how fertility affects
+education and education affects fertility, out of PISA data. The data
+lacks the ability to determine which of the two variables had precedence
+over the other.
+
+### Population Density
+
+Population density could potentially affect academic performance through
+multiple channels. For instance, low population density could lead to
+longer commuting time to school or the lack of teachers teaching each
+grade separately. However, high density areas may have multiple schools
+and reinforce social segregation between schools in turn potentially
+decreasing the means available to children of lower strata people.
+Borland and Howsen (1999) investigate this dynamic in Kentucky and
+notice that students from highly urban and highly rural areas perform
+similarly, and worse than students enjoying more moderate population
+density.
+
+```{r Dens_Sci}
+ggplot(Dataset, aes(x= Poulation.density, y=Average_Score))+
+geom_point()+
+xlab("Population Density") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA score given Population Density") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+There does not seem to be any form of linear correlation between
+population density and PISA scores. There seem to be little to support
+for any non-linear relationship either.
+
+### Entrance Age
+
+There are important debate on the impact of the entrance age of pupils
+into school and their academic performances. The NICHD Early Child Care
+Research Network (2007) argued that even though, kids entering school at
+an older age did perform better than their younger counterparts, these
+advantages were small in magnitude and decreased in importance over
+time.
+
+```{r}
+Entrance_PISA <- Dataset |> select(Average_Score, Entrance_Mandatory, GNI.per.capita)|> filter(!is.na(Entrance_Mandatory))
+```
+
+```{r Entr_Sci}
+ggplot(Entrance_PISA, aes(x= as.factor(Entrance_Mandatory), y=Average_Score))+
+geom_boxplot()+
+xlab("Mandatory Entrance Age") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA Science score given national Entrance Age into school") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+There seem to be a non-linear relationship between Mandatory Entrance
+Age and PISA scores. Which reflects quite well the tradeoffs often
+mentioned in the literature, according to which, children may need time
+to mature before entering school, even though waiting for too long might
+not be profitable as children would be ready for being schooled and were
+not schooled, meaning they might reach the age/year for taking the PISA
+with less competencies acquired at school than other pupils who started
+school earlier.(NICDH, 2007) For simplicity however, we only realize a
+linear model of Entrance Age and PISA scores, as the maximum mandatory
+entrance age observed was 7, which does not seem, at least visually, to
+negatively impact students too much, relative to 6 years mandatory
+entrance age. Were the data to contain countries with higher age of
+mandatory entrance, using a linear model could have been more
+problematic.
+
+```{r}
+Entrance_PISA$Entr_M <- as.numeric(Entrance_PISA$Entrance_Mandatory)
+mod_Entr <- lm(Average_Score ~ Entr_M + GNI.per.capita, data=Entrance_PISA)
+lmEntr <- Model_to_Table(mod_Entr)
+Table_Entrance <- knitr::kable(lmEntr)
+
+```
+
+`r Table_Entrance`
+
+Even while controlling for GDP per capita, mandatory entrance age is
+here significantly associated with PISA scores (p\<.001). Making entry
+to school mandatory one year later is associated with a 15.54 points
+increase in PISA score. It is important to point out that the data is a
+reflection of the policies carried out by governments about the age at
+which children are required to attend school. These do not necessarily
+reflect the actual entrance age in studied countries, only the approach
+of the government on the matter.
+
+## Mean Yrs of Schooling
+
+At first sight, the national mean years of schooling may seem as a
+curious variable to observe. As students are all tested at the same
+level namely end of middle school, normally aged 15. However, the fact
+that students are expected to complete many more years in schooling
+could lead programs to be less dense or differently constructed. As
+shown below, higher mean years of schooling are associated with higher
+GNI per capita, and PISA participants are predominantly countries with
+high mean years of schooling. Therefore, one could imagine the PISA test
+to be better tailored to school programs imagined for students expected
+to continue studying long after the PISA test, and not for programs in
+which students are expected to leave school soon after. As a result,
+developing economies where the population enjoy lower mean years of
+schooling would be disadvantaged in achieving higher PISA scores.
+
+```{r MeanSchl_GNI.per.Capita}
+ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=GNI.per.capita))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+xlab("Mean Years of Schooling") +
+ylab("GNI per capita") +
+ggtitle("Scatterplot of GNI per capita given Mean Years of schooling ") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+ggplot(Dataset, aes(x= Mean_Yrs_Schooling))+
+geom_density()+
+xlab("Mean Years of Schooling") +
+ggtitle("Number of observations at different level of Mean Years of Schooling ") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r Mean_Schl_Math}
+ggplot(Dataset, aes(x= Mean_Yrs_Schooling, y=Average_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+xlab("Mean Years of Schooling") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA score given Mean Years of schooling ") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+As expected, there seem to be a positive correlation between mean years
+of schooling. We now wonder whether this positive tendency is due only
+to higher GNI per capita.
+
+```{r}
+mod_MYrs <- lm(Average_Score ~ Mean_Yrs_Schooling + GNI.per.capita + Fertility.Rate, data=Dataset)
+lmMYrs <- Model_to_Table(mod_MYrs)
+Table_Myrs <- knitr::kable(lmMYrs)
+```
+
+`r Table_Myrs`
+
+When pooling GNI per capita and Mean years of schooling into a model,
+GNI per capita becomes insignificant. Their collinearity makes it
+difficult to disentangle another effect from more years of schooling,
+beyond higher GNI per capita, in turn improving education quality or
+even years of schooling itself. We favour keeping GNI per capita as it a
+more logical indicator when observing PISA scores of children who only
+reached end of middle school at the time of tests.
+
+## Academic Year Length
+
+Some of the skills acquired at school may be lost as a result of
+extended period without practising those skills. As such, part of the
+literature argues that long summer holidays may negatively affect
+student performances as mentioned by Finnie et al. (2019) Thus, we try
+looking for differences between countries where the academic year is
+relatively shorter and those where it is relatively longer. In doing so,
+we omit some outliers with very short (below 4 months) school years.
+
+```{r}
+YrLength_PISA <- Dataset |> select( Average_Score, End_Month, Start_Month)
+```
+
+```{r}
+YrLength_PISA$Year_Length <- (YrLength_PISA$End_Month - YrLength_PISA$Start_Month + 12) %% 12
+YrLength_PISA$Year_Length <- ifelse(YrLength_PISA$Year_Length < 4, NA, YrLength_PISA$Year_Length)
+YrLength_PISA$Year_Length_binary <- ifelse(YrLength_PISA$Year_Length <=9 , "Short", "Long")
+```
+
+```{r Yr_Length_Sci}
+YrLength_PISA <- YrLength_PISA |> filter(!is.na(Year_Length))
+#ggplot(YrLength_PISA, aes(x= as.factor(Year_Length), y=Average_Score))+
+ggplot(YrLength_PISA, aes(x= Year_Length_binary, y=Average_Score))+
+  geom_boxplot()+
+xlab("Year_Length") +
+ylab("Science Score") +
+ggtitle("Scatterplot of PISA Science score given the Year Length") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+At first sight, there does not seem to be a notable difference between
+short and long years.
+
+```{r}
+
+Sum_Chi_Yr <- chisq.test(YrLength_PISA$Year_Length_binary, YrLength_PISA$Average_Score)
+
+# Extract relevant information
+chi_square_statistic <- Sum_Chi_Yr$statistic
+p_value <- Sum_Chi_Yr$p.value
+
+# Create a table with Chi-square test results
+Chi_Yr_Results<- data.frame(
+  "Chi-Square Statistic" = chi_square_statistic,
+  "P-Value" = p_value)
+  
+Table_Chi_Yr <- knitr::kable(Chi_Yr_Results)  
+
+```
+
+`r Table_Chi_Yr` A Chi-Squarred test confirms that year length is not
+significant in predicting the value of the PISA score. Having a longer
+or a shorter break in between two grades does not appear to affect
+students' performances.
+
+### Survival Rate to the Last Grade of Primary Education
+
+As experience could suggest, a continuous enrolment in an educational
+program allows pupils to demonstrate improved performance in the PISA
+score. The more the students are able to receive a continuous and
+homogeneous educational level the higher their chances of scoring a
+better result in the Pisa Test. Given that this could be obvious in many
+western countries it is not the case in everyone of them especially in
+the developing ones, as some of them have high school abandonment rates.
+
+```{r Mean_Surv_Math}
+ggplot(Dataset, aes(x=Survival_Rate_Primary, y=Average_Score))+
+geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+xlab("Survival rate") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA score given the Survival rate to the last grade of primary education") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The graphical observation seems to show a correlation between the
+survival rate and the Pisa scores.
+
+```{r first attempt  sur}
+mod_sur_sci <- lm(Average_Score ~ Survival_Rate_Primary, data = Dataset)
+lmsur <- Model_to_Table(mod_sur_sci)
+Table_Sur_Ave <- knitr::kable(lmsur)
+```
+
+`r Table_Sur_Ave`
+
+The model shows that there is a positive correlation between the
+variables and the the survival rates is a significant predictor of PISA
+scores (p\<.01). The best linear model provide sizeable coefficient. For
+an increase in the survival rate of 1, the expected national PISA score
+increases of 6.09 in the score.
+
+```{r}
+mod_surrs <- lm(Average_Score ~ Survival_Rate_Primary + GNI.per.capita, data=Dataset)
+lmsurrs <- Model_to_Table(mod_surrs)
+Table_Sur_Ave1 <- knitr::kable(lmsurrs)
+```
+
+`r Table_Sur_Ave1`
+
+However we tested as well for the GNI per capita, given that the
+survival rate is strictly dependent on the development of a country in
+order to measure the true effect of the survival rate in the model.
+After controlling for GNI per capita the estimate still has a positive
+effect, therefore we can conclude that survival rate to the last grade
+of primary education is beneficial to higher Pisa score
+
+### Government Expenditure
+
+```{r}
+ggplot(Dataset, aes(x=Gov_Expenditure, y=Average_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+xlab("Governamenent Expenditure") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA score given gvernament expenditure") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+A first graphical observation confirms the fact that Pisa Scores are
+independent of government expenditure, however it is reasonable to say
+that the majority of the observations reached a score of 490 with a
+governament expenditure of 1% of the national budget.By increasing the
+expenditure there is no benefit to the score.
+
+```{r first attempt gov }
+mod_gov_sci <- lm(Average_Score ~ Gov_Expenditure, data = Dataset)
+lmgov <- Model_to_Table(mod_gov_sci)
+Table_Gov_Ave <- knitr::kable(lmgov)
+```
+
+`r Table_Gov_Ave`
+
+However we wanted to tested the effect and controlling the effect on
+regression, which demonstrate that the results are not signifcant
+because the p\>0.1 a comment is to be added about the results (not
+significant because p\>0.1)
+
+### Enrollment rate
+
+The enrollment rate is a variable that measure the percentage of pupils
+enrolled in any educational program. In the world the enrollment rate
+varies greatly, and certain nations still struggle to have their
+children attending regularly classes (Gumus, S. and Kayhan, S. 2012).
+
+```{r}
+ggplot(Dataset, aes(x=Enrolment_Rate, y=Average_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+xlab("Enrolemnt Rate") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA Score given Enrolment Rate") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+A first graphical observation confirms what stated in the correlation
+matrix therefore a higher enrollment rate correspond to higher Pisa
+score, however we wanted to verify our intuition by proposing a simple
+model that explains the correlation between variables.
+
+```{r first attempt ER }
+mod_er_ave <- lm(Average_Score ~ Enrolment_Rate, data = Dataset)
+lmer <- Model_to_Table(mod_er_ave)
+Table_Er_Ave <- knitr::kable(lmer)
+```
+
+`r Table_Er_Ave`
+
+The model shows that there is a positive correlation between the
+variables and that the enrollment rate is a significant predictor of
+PISA scores (p\<.01). The best linear model provide sizable coefficient.
+For an increase in the enrollment rate of 1, the expected national PISA
+score increases of 5.09 in the score. However, it has been demonstrated
+a positive relationship between economic growth and enrollment rate
+(Gumus, S. and Kayhan, S. 2012) therefore in order to be able to
+disentangle the two effects we must control for the GNI per capita.
+
+```{r}
+mod_ersr <- lm(Average_Score ~ Enrolment_Rate + GNI.per.capita, data=Dataset)
+lmer1 <- Model_to_Table(mod_ersr)
+Table_Er_Ave1 <- knitr::kable(lmer1)
+```
+
+`r Table_Er_Ave1`
+
+As we were expecting, when controlling for GNI per capita, we have
+significant results and even if the effect of the enrollment rate is
+reduced, there is still a positive correlation between the two.
+
+### Share of Students Enrolled in Private Education
+
+Worldwide, educational levels vary greatly and in certain countries where public institutions do not excel, many pupils are enrolled in a private school. 
+In our analysis we focused, on the impact this kind of education has and studied the effects on Pisa score.
+```{r}
+ggplot(Dataset, aes(x=Share_Private, y=Average_Score))+
+geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+xlab("Share Private") +
+ylab("Average_Score") +
+ggtitle("Scatterplot of PISA Score given Share Private") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
+
+```{r first attempt sp }
+mod_sp_ave <- lm(Average_Score ~ Share_Private, data = Dataset)
+lmsp <- Model_to_Table(mod_sp_ave)
+Table_Sp_Ave <- knitr::kable(lmsp)
+```
+
+`r Table_Sp_Ave`
+
+Most of countries over the years kept their share value under 20 percent, that is associated with an average score of 475. By increasing the share, the trend seems to be negative. The p-value of 0.04 is enough for us to include this variable in the model, where further analysis can lead us to remove it or not.
+From the results we can conclude that students in private schools tend to score lower than students in public schools. Our claim, find a counter factual on OECD's report on the topic OECD(2018) stating that if accounting for socio-economic background of the students, which in our case could be represented by GNI per capita students in public schools score higher in every category. 
+
+```{r}
+mod_sp <- lm(Average_Score ~ Share_Private + GNI.per.capita, data=Dataset)
+lmsp1 <- Model_to_Table(mod_sp)
+Table_Sp_Ave1 <- knitr::kable(lmsp1)
+```
+
+`r Table_Sp_Ave1`
+
+Now accounting for the GNI per capita, so adding more about the socio economic background of the students, we are able to confirm the trend of students in private schools usually perform more poorly than their counterparts in public schools.
+
+### Trial on the regression
+
+We are now building up the final model to explain the highest possible level of PISA score of countries over the years.
+We will begin by incorporating every variable that showed a clear trend with PISA score and a significant coefficient in simple lm regression. Then we will evaluate the significance of the model and work towards increasing its performance by looking at coefficients, standard errors, R squared and the adjusted R squared.
+
+```{r}
+lm1 <- lm(Average_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate + Share_Private, data=Dataset)
+lms1 <- Model_to_Table(lm1)
+FinalTable <- knitr::kable(lms1)
+```
+
+`r FinalTable`
+
+We eventually decided to drop share private, as the effect on model were negligeble and propose a ultimate correction on the model.
+
+```{r}
+lm2 <- lm(Average_Score ~ GNI.per.capita + Fertility.Rate + Entrance_Mandatory + Survival_Rate_Primary + Enrolment_Rate, data=Dataset)
+lms2 <- Model_to_Table(lm2)
+FinalTable_drop <- knitr::kable(lms2)
+```
+
+`r FinalTable_drop`
+
+## Conclusion and Limitations
+
+Throughout our analysis, we have tried finding important predictors of
+educational attainment, proxied by PISA scores. We found that GNI per
+capita was an important predictor, while GDP growth does not appear
+relevant or negatively impact educational attainments. While the
+foremost observation is well known and recognized, the latter seem
+counter-intuitive, even though it goes along well with our observation
+that at higher GNI per capita, government expenditure on education were
+lower and that government expenditures on education were not
+significantly associated with PISA scores. These results could possibly
+be related to the time of observation and the observed countries.
+Depending on the level of economic advancement of a country it may
+prioritize low skill jobs rather than targeting high value added
+sectors, while the contrary would occur past some level of economic
+advancement. ADD OTHER STUFF ON OECD COUNTRIES NOT BEING BEST FIT FOR
+OBSERVATION.
+
+We tried looking at the impact of some demographical factors in
+predicting PISA scores. While fertility rate was significantly
+associated with lower PISA scores, we were not able to find any
+association between population density and PISA scores. This may be due
+to population density being more important when looking at regions,
+provinces or states within one country. Low population density could
+hide very dense population hubs accounting for most of the national PISA
+score while the rest of the nation is empty of people and barely has
+students participating to the PISA test.
+
+Finally, we looked at how education policy affect PISA scores. We have
+found that enrolment rates and survival rates were significantly and
+positively associated with PISA scores, even while controlling for GNI
+per capita. (MAYBE STILL SAY SMTH ABT COLINEARITY )On the other hand,the
+share of private school enrollment was significantly and negatively associated
+with PISA scores. The literature have supported our results stating that on average students enrolled in private schools, tend to score lower than those in public schools. We found no link between government expenditure on education as a share of GDP and education
+outcomes.
+
+While a linear model built out of the studied variables allows to
+explain 70% of the variance in PISA scores, it is important to
+acknowledge that some of the variables such as GNI per capita or
+Entrance age were not in fact behaving linearly. Moreover, most of the
+developing world did not participate into PISA, meaning we lack
+important observations to assess best what impacts education outcomes.
+Rather than having to use four observations of the same country at
+different times, it would make study like this one more relevant, were
+developing economies to join the ranks PISA participants.
+
+## Annex + Sources
+
+### Sources
+
+NICHD Early Child Care Research Network (2007) Age of Entry to
+Kindergarten and Children's Academic Achievement and Socioemotional
+Development, Early Education and Development, 18:2, 337-368, DOI:
+10.1080/10409280701283460
+
+Borland, M. V., & Howsen, R. M. (1999). A Note on Student Academic
+Performance: In Rural versus Urban Areas. The American Journal of
+Economics and Sociology, 58(3), 537--546.
+http://www.jstor.org/stable/3487782
+
+Hu, H. The Consequences of Fertility Decline on Educational Attainment
+in China. Popul Res Policy Rev 42, 94 (2023).
+https://doi-org.proxy.bu.dauphine.fr/10.1007/s11113-023-09834-7
+
+Sittisom,W. (2020). Barriers in way towards quality education: poverty,
+fertility rate and increasing population, Journal of Security and
+Sustainability Issues, 9(January), 215-227.
+http://doi.org/10.9770/jssi.2020.9.J(16)
+
+Brand, J. E., & Davis, D. (2011). The Impact of College Education on
+Fertility: Evidence for Heterogeneous Effects. Demography, 48(3), 863.
+https://doi.org/10.1007/s13524-011-0034-3
+
+Osili, U. and Long, B. T. (2007). Does female schooling reduce
+fertility? evidence from nigeria.. https://doi.org/10.3386/w13070
+
+Finnie, R. K. C., Peng, Y., Hahn, R. A., Johnson, R. L., Fielding, J.
+E., Truman, B. I., Muntaner, C., Fullilove, M. T., Zhang, X., &
+Community Preventive Services Task Force (2019). Examining the
+Effectiveness of Year-Round School Calendars on Improving Educational
+Attainment Outcomes Within the Context of Advancement of Health Equity:
+A Community Guide Systematic Review. Journal of public health management
+and practice : JPHMP, 25(6), 590--594.
+https://doi.org/10.1097/PHH.0000000000000860
+
+Koen, V. André, C. Beom, J. Purwin A. Byungjun K.,(2021) Better Policies
+to Prolong the Miracle on the Han River, OECD, 82-95.
+
+Barshay, J. (2023),
+Proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic.
+The Hechinger Report.\
+https://hechingerreport.org/proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic/
+
+Gumus, S. and Kayhan, S. (2012), **The Relationship between Economic
+Growth and School Enrollment Rates: Time SeriesEvidence from Turkey,**
+Educational Policy Analysis and Strategic Research, 2012
+
+OECD 2018, PISA 2018 Results (Volume V) : Effective Policies, Successful Schools, OECD publications, 2018
