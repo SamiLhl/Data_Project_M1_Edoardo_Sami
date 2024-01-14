@@ -481,8 +481,13 @@ for any non-linear relationship either.
 ## Government policy and other education indicators
 
 ```{r}
-Policy_matrix <- Dataset |> select(Average_Score, Entrance_Mandatory, Mean_Yrs_Schooling, Survival_Rate_Primary, Gov_Expenditure, Enrolment_Rate, Share_Private) |> correlate()
-knitr::kable(Policy_matrix)
+Dataset_Gov <- Dataset |> rename (Survival_Rate = Survival_Rate_Primary, Entrance_Mand = Entrance_Mandatory, Mean_Yrs_Schl = Mean_Yrs_Schooling )
+Policy_matrix_I <- Dataset_Gov |> select(Average_Score, Entrance_Mand, Mean_Yrs_Schl, Survival_Rate) |> correlate()
+knitr::kable(Policy_matrix_I, rotate.names = TRUE, angle = 45)
+```
+```{r}
+Policy_matrix_II <- Dataset |> select(Average_Score, Gov_Expenditure, Enrolment_Rate, Share_Private) |> correlate()
+knitr::kable(Policy_matrix_II, rotate.names = TRUE, angle = 45)
 ```
 
 ### Entrance Age
@@ -871,8 +876,9 @@ Further studies would benefit from developing economies joining the ranks PISA p
 
 ## Part 5 : Annex + Sources
 
+
 [Link to the report's Github
-Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami).
+Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami). 
 
 ### Annex 
 
@@ -896,7 +902,7 @@ Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami).
   
 ### Sources
 
-Barshay, J. (2023), Proof points there is a worldwide problem in math and it’s not just about the pandemic. The Hechinger Report. \https://hechingerreport.org/proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic/
+Barshay, J. (2023), Proof points there is a worldwide problem in math and it’s not just about the pandemic. The Hechinger Report.
 
 Borland, M. V., & Howsen, R. M. (1999). A Note on Student Academic Performance: In Rural versus Urban Areas. The American Journal of Economics and Sociology, 58(3), 537--546. http://www.jstor.org/stable/3487782
 
