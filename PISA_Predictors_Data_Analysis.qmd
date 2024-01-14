@@ -212,18 +212,6 @@ Dataset$Average_Score <- rowMeans(Dataset[, c('Math_Score', 'Reading_Score', 'Sc
 ```
 
 
-```{r Function tabling stuff}
-
-Model_to_Table2 <- function(Model){
-
-# Get the summary table
-lm_summary <- summary(Model)
-
-# Extract coefficients table
-coefficients_table <- lm_summary$coefficients
-
-}
-```
 
 ```{r}
 # Function tabling stuff
@@ -238,9 +226,12 @@ Model_to_Table <- function(Model){
   # Extract R-squared value
   r_squared <- lm_summary$r.squared
   
+   # Extract variable names
+  variables <- coefficients_table$term
+  
   # Create a data frame with coefficients and R-squared
   result_table <- data.frame(
-    "Variable" = rownames(coefficients_table),
+    "Variable" = variables,
     "Estimate" = coefficients_table[, "estimate"],
     "Std. Error" = coefficients_table[, "std.error"],
     "t value" = coefficients_table[, "statistic"],
