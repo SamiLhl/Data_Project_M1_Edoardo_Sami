@@ -926,6 +926,12 @@ developing economies to join the ranks PISA participants.
 
 ## Part 5 : Annex + Sources
 
+### Annex 
+
+  Throughout this report, we made extensive use of a dataset previously constructed out of smaller UNESCO, World Bank and OECD datasets. After formatting them into similar formats, with comprehensible and common variable names, we joined all the data together and got rid of redundant and unusable data. Among the actions necessary for the completion of this task, we had to rename variables and set the year associated to each data points, rid ourselves of the standard error of PISA scores, deemed irrelevant to our research.
+  For further details, the Data treatment .qmd file is accessible in the same[Github
+Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami).
+  
 ### Sources
 
 NICHD Early Child Care Research Network (2007) Age of Entry to
