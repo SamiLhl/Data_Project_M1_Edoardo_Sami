@@ -1,0 +1,459 @@
+---
+title: "Part 1 PISA Data Treatment"
+author: "Edoardo Ruvolo and Sami Louahlia"
+format: html
+execute:
+  message: false
+  warning: false
+code-fold: true
+
+---
+
+```{r}
+#| message: false
+#| echo: false
+here::i_am("Data_Project_M1_Edoardo_Sami.Rproj")
+library(here)
+library(ggplot2)
+library(dplyr)
+library(vroom)
+library(tidyr)
+```
+
+## Research Project : Exploratory analysis of potential predictors of PISA Scores
+
+[Link to the Github Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami) 
+
+### Research Question 
+
+  The national level of education is an important element to account for in public policy. In economic terms, it represents how well the nation develops its human capital, offering greater economic outcomes to its inhabitants.  Universal access to education may also contribute to improving the equality of opportunity within a country’s population. Moreover, beyond resource production and distribution, people may value education as a good in itself. 
+The OECD’s PISA initiative is a remarkable opportunity for cross-country comparisons in terms of educational attainments at the lower secondary level, when students are aged around 15. It is also a major opportunity to use cross-country differences in other metrics to determine potential predictors for greater national PISA scores.
+
+  Using PISA datasets that reported national scores from 2009 to 2018, along with variables gathered across multiple international organizations, this project searches for potential variables, able to explain cross-country differences in performances at the PISA test. The variables used are different in nature. Some feature the current state of a nation’s economy, others observe their demographic condition, while others tackle the way education is provided in the different observed countries to a deeper extent. As such, we hope to acquire a wide array of possible predictors for higher or lower PISA scores.
+
+  The completion of this research project may provide valuable insights. It may offer explanations as to why some countries perform better than others, orienting the agency of respective national governments. It may also leave room for some form of determinism, as some variables, such as geographic, demographic, or economic variables, may impact students’ performances while being more difficult or less desirable for governments to act upon in the short term.  
+Finally, this research project provides potential criticism as to what the PISA score truly reflects. Some variables have been selected to test potential flaws as to how the OECD can gather information about a nation's educational attainment, which could overlook important elements such as who can be evaluated by the OECD when devising the PISA scores and do they accurately represent the general student population of the studied country.   
+
+
+## Data Acquisition
+
+This section summarizes how the different data sets were acquired. We had to access open data from three major international organizations: the World Bank, the OECD and the UN under its UNESCO mandate. 
+
+### UNESCO:
+Data Source Description: UNESCO stands for the United Nations Educational, Scientific, and Cultural Organization. Its focus on education, sciences, culture, communication, and information contributes to global peace and security through fostering international collaboration. By advocating knowledge exchange, the organization provides open source data, collected in the different member's country.
+
+The [UNESCO Interface](http://data.uis.unesco.org/) allows one to select the variables needed. In our case we found all our data in the path: 
+Education -> Other policy relevant indicators. 
+
+-	Enrolment rate: Number of students and enrolment/attendance by level of education  -> Enrolment ratios  ->  Total net enrolment rate by level of education 
+
+-	Entrance age: Official entrance age and theoretical duration by level of education (years) -> Official entrance age 
+
+-	Start_Yr + End_Yr: Start and end of academic school year (month, year)
+
+-	Government Expenditure: Government expenditure on education as a percentage of GDP
+
+-	Mean Schooling: Mean Years of Schooling 
+
+-	Share Students Private: Percentage of enrolment in private institutions by level of education -> Distribution of enrolment by type of institution
+
+-	Survival Rate: Survival rate by grade for primary education -> Survival rate in primary education
+
+After accessing each of the dataset it is necessary to customize the data, using the customize tool and selecting the time option, selecting only the 2009, 2012, 2015, 2018 observations. Finally we export in CSV format.
+
+### World Bank:
+Data source Description: The World Bank, owned by 187 countries, functions as an international development entity. Its primary aim involves alleviating poverty by providing loans to the governments of its less affluent members, facilitating economic improvements, and enhancing the quality of life for their citizens.
+
+The Bank serves as a significant global research hub for development. Within its specialized departments, it leverages this wealth of knowledge to provide guidance to countries across diverse sectors such as health, education, nutrition, finance, justice, law, and the environment. The Institute, is a reliable source of open data, within the different domains of their activities. 
+
+All we had to do was to download the CSV which was an option on the first page when accessing the data page.
+
+- [Population Density](https://data.worldbank.org/indicator/EN.POP.DNST)
+
+- [Fertility Rates](https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)
+
+- [GDP growth](https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG)
+
+- [GNI per capita](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=) 
+
+### OECD PISA:
+Data Source Description: The OECD, comprising 37 democratic nations with market-based economies, serves as platform for collaborative policy development to foster sustainable economic growth. It offers a space for governments to exchange experiences, tackle shared challenges, recognize best practices, and establish robust economic policy benchmarks.The organization, has remained a trusted provider of evidence-based policy analysis and comprehensive economic data, especially for open source data set. 
+
+All the variables were acquired in one go, using the [PISA Data Explorer](https://pisadataexplorer.oecd.org/ide/idepisa/) 
+
+- Step 1 Selecting Criteria: We selected the Reading, Mathematics and Science variable, selected the 4 time periods we are using 2018, 2015, 2012, 2009, selected the three ‘measures’: PISA Reading, Mathematics and Science Scale Overall. And took the OECD and partners groups.
+
+- Step 2 Select Variables : We selected the All students and Student (standardized) Gender variables.
+
+- Step 3 + 4 Edit and Build Reports: We did not change anything to the default options which gives 6 different reports. We got the data explorer to build the reports and we got to download them. 
+
+
+## Data Loading 
+
+### UNESCO
+Avalaible at the link [here](http://data.uis.unesco.org)
+```{r}
+Survival_Rate <- vroom(here("Data_UNESCO_28_11/Survival_Rate.csv"))
+Share_Studs_Priv <- vroom(here("Data_UNESCO_28_11/Share_Private.csv"))
+Enrolment <- vroom(here("Data_UNESCO_28_11/Enrolment_Rate.csv"))
+
+Start_End_Yr <- vroom(here("Data_UNESCO_28_11/Start_End_Yr.csv"))
+
+Gov_Exp <- vroom(here("Data_UNESCO_28_11/Gov_Exp.csv"))
+
+MeanSchooling <- vroom(here("Data_UNESCO_28_11/Mean_Yr_Schooling.csv"))
+EntranceAge <- vroom(here("Data_UNESCO_28_11/Entrance_Age.csv"))
+```
+
+
+### World Bank
+Fertility data available at the link [here](https://databank.worldbank.org/reports.aspx?source=2&series=EN.POP.DNST&country=), density [here](https://databank.worldbank.org/reports.aspx?source=2&series=SP.DYN.TFRT.IN&country=) the GNI per capita [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GNP.PCAP.PP.CD&country=) and values about GDP [here](https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=)
+```{r}
+Pop_Density <- vroom(here("WB_Data/Reworked_Density.csv"))
+Fertility_Rate <- vroom(here("WB_Data/Population Fertility.csv"))
+GNI_percapita <- vroom(here("HI_Data/data1.csv"))
+GDP_growth <- vroom(here("WB_Data/GDP_growth.csv"))
+```
+
+### PISA
+Avalaible at the link [here](https://www.oecd.org/pisa/data/2018database/#d.en.516012)
+```{r}
+Pisa_score_readingscale <- vroom(here("Pisa_Score/Readingscale.csv"))
+Pisa_score_readingscale_gender <- vroom(here("Pisa_Score/Readingscale_gender.csv"))
+Pisa_score_Mathscale <- vroom(here("Pisa_Score/Mathscale.csv"))
+Pisa_score_Mathscale_gender <- vroom(here("Pisa_Score/Mathscale_gender.csv"))
+Pisa_score_Sciencescale <- vroom(here("Pisa_Score/Sciencescale.csv"))
+Pisa_score_Sciencescale_gender <- vroom(here("Pisa_Score/Sciencescale_gender.csv"))
+```
+
+## Data treatment + variable description
+In this section, we format our datasets and proceed with some intermediate merging. We then describe the variables of these intermediate datasets.
+
+### UNESCO Data
+All the UNESCO data are structured the same way, as such we can create a function to treat them efficiently. We rid ourselves of the Flag, Flag ID and NATMON var as they are empty and/or uninformative. We also get rid of one of the Time variable to reduce redundancy. After treatment to only keep the data associated to our group of interest (generally students at the lower secondary level) and after assigning the "value" variables a more recognizable name we get rid of Value variables. We then join all the data sets into one big UNESCO data set using as common variable both time and country tags.
+
+
+```{r}
+UNESCO_Treatment <- function(Data){
+  Data <- Data |> select(-`Flag Codes`, - Flags, - NATMON_IND, -TIME, -Country)
+}
+```
+
+```{r Treating the Data}
+Gov_Exp <- UNESCO_Treatment(Gov_Exp)
+Gov_Exp <- Gov_Exp |> filter(Indicator == "Government expenditure on lower secondary education as a percentage of GDP (%)") |> mutate(Gov_Expenditure = Value) |> select(-Value, -Indicator)
+
+
+Enrolment <- UNESCO_Treatment(Enrolment)
+Enrolment <- Enrolment |> filter(Indicator == "Total net enrolment rate, lower secondary, both sexes (%)")|> mutate(Enrolment_Rate = Value) |> select(-Value, -Indicator)
+
+MeanSchooling <- UNESCO_Treatment(MeanSchooling)
+MeanSchooling <- MeanSchooling |> filter(Indicator == "Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes")|> mutate(Mean_Yrs_Schooling = Value) |> select(-Value, -Indicator)
+
+Share_Studs_Priv <- UNESCO_Treatment(Share_Studs_Priv)
+Share_Studs_Priv <- Share_Studs_Priv |> filter(Indicator =="Percentage of enrolment in lower secondary education in private institutions (%)")|> mutate(Share_Private = Value) |> select(-Value, -Indicator)
+
+Survival_Rate <- UNESCO_Treatment(Survival_Rate)
+Survival_Rate <- Survival_Rate |> filter(Indicator == "Survival rate to the last grade of primary education, both sexes (%)")|> mutate(Survival_Rate_Primary = Value) |> select(-Value, -Indicator)
+
+EntranceAge <- UNESCO_Treatment(EntranceAge)
+EntranceAgeEarly <- EntranceAge |> filter(Indicator == "Official entrance age to early childhood education (years)")|> mutate(EntranceEarly = Value) |> select(-Value, -Indicator)
+EntranceAgeManda <- EntranceAge |> filter(Indicator == "Official entrance age to compulsory education (years)")|> mutate(Entrance_Mandatory = Value) |> select(-Value, -Indicator)
+
+Start_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "Start month of the academic school year (pre-primary to post-secondary non-tertiary education)")|> mutate(Start_Month = Value) |> select(-Value, -Indicator)
+End_Yr <- UNESCO_Treatment(Start_End_Yr) |> filter(Indicator == "End month of the academic school year (pre-primary to post-secondary non-tertiary education)")|> mutate(End_Month = Value) |> select(-Value, -Indicator)
+
+```
+
+```{r Joining UNESCO}
+UNESCO <- Gov_Exp |>
+  left_join(Enrolment, by = c("LOCATION","Time")) |>
+  left_join(EntranceAgeEarly, by = c("LOCATION","Time")) |>
+  left_join(EntranceAgeManda, by = c("LOCATION","Time")) |>
+  left_join(End_Yr, by = c("LOCATION","Time")) |>
+  left_join(Start_Yr, by = c("LOCATION","Time")) |>
+  left_join(Share_Studs_Priv, by = c("LOCATION","Time")) |>
+  left_join(MeanSchooling, by = c("LOCATION","Time")) |>
+  left_join(Survival_Rate, by = c("LOCATION","Time")) 
+
+UNESCO <- UNESCO |> rename("Tag" = "LOCATION", "Year"="Time")
+```
+
+
+Government Expenditure: Government expenditure in lower secondary education as a share of GDP (%)
+
+Enrolment rate : Share of the population at the corresponding age effectively attending lower secondary education (%) 
+
+Entrance Age:
+
+- Early: Age at which it is possible to put children into schooling.
+
+- Mandatory: Age at which it is mandated to put children into schooling.
+
+Start and End year: Start and End month of the school year. Allows to measure length of the academic year.
+
+Share of Students in Private: Share of students attending a private institution.
+
+Mean Schooling: Mean number of years attended by the national adult population
+
+Survival Rate: Share of primary school pupils, within a cohort, who successfully pass to the next grade (a proxy for school retention)
+
+
+### World Bank Data
+The World Bank data sets, even if extracted from different measurement, were all treated in a similar way. Before uploading them on Rstudio, some small changes in the csv file were needed for the data set to make it properly readable. Mostly, it required getting rid of the first informations provided in the .csv that were telling that it was WB data and its date of change. We then adjusted the variables name, and removed superfluous observations. Finally we joined the WB into one dataset. 
+
+```{r}
+Fertility_Rate <- Fertility_Rate |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
+Pop_Density <- Pop_Density |> select(Country_Name, Country_Code, Indicator_Name, Y2009, Y2012, Y2015, Y2018) |> rename( "2009" ="Y2009", "2012"="Y2012", "2015"="Y2015", "2018"="Y2018")|> rename( "Country Name" ="Country_Name", "Country Code"="Country_Code")
+GNI_percapita <- GNI_percapita |> select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018")
+GDP_growth <- GDP_growth |>
+  select("Country Name", "Country Code", "Indicator Name", "2009", "2012", "2015", "2018") |> rename("GDP" ="Indicator Name")
+```
+
+```{r}
+GDP_growth_long <- GDP_growth %>%
+  pivot_longer(cols = starts_with("20"),  
+               names_to = "Year",
+               values_to = "Indicator Names")
+Fertility_Rate_long <- Fertility_Rate %>%
+  pivot_longer(cols = starts_with("20"),  
+               names_to = "Year",
+               values_to = "Indicator Names")
+Pop_Density_long <- Pop_Density %>%
+  pivot_longer(cols = starts_with("20"),  
+               names_to = "Year",
+               values_to = "Indicator Names")
+GNI_long <- GNI_percapita %>%
+  pivot_longer(cols = starts_with("20"),  
+               names_to = "Year",
+               values_to = "Indicator Names")
+
+```
+
+```{r}
+WB_long <- Fertility_Rate_long |>
+  left_join(Pop_Density_long, by = c("Country Name", "Country Code", "Year")) |>
+  left_join(GNI_long, by = c("Country Name", "Country Code", "Year")) |>
+  left_join(GDP_growth_long, by = c("Country Name", "Country Code", "Year"))
+WB_long <- WB_long |> rename("Tag" = "Country Code")
+```
+
+```{r}
+WB_long <- WB_long |>
+  rename("Fertility Rate"="Indicator Names.x", "Poulation density"="Indicator Names.y", "Fertility Rate"="Indicator Names.x", "GNI per capita"="Indicator Names.x.x", "GDP rate"="Indicator Names.y.y") |> select(-"Indicator Name.x", -"Indicator_Name", -"Indicator Name.y", -"GDP" )
+WB_long <- WB_long |> select(-`Country Name`)
+WB_long$Year <- as.numeric(WB_long$Year)
+```
+Population Density: Measure of countries’ population per square kilometers.
+
+Fertility Rate: Measure of the number of births per woman. A fertility rate of 2 indicates natural replacement of the population. 
+
+GDP: Measure of the total monetary value of all final goods and services produced within a country in a specific time period.
+
+GNI per capita: Measure of the total income earned by a country's residents, plus, the net inflow of primary income (comprising compensation received by employees and income from property) from abroad. The measurement is expressed at the PPP. 
+
+### OECD (PISA) Data
+The PISA score were formatted in similar ways, where possible, we used functions to modify the data, however, due to the different variables, in some cases we performed the operations at the dataset level. We started our data cleaning by simplifying the names in the different datasets, and removing the standard error column, as it is outside the scope of our analysis. 
+```{r}
+Pisa_score_Mathscale <- Pisa_score_Mathscale |> rename("Math_Score"="Average(all_students)") |> fill(`Year/Study`)|> select(-`Standard Error`)
+Pisa_score_Mathscale_gender <- Pisa_score_Mathscale_gender |>  fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
+Pisa_score_readingscale <- Pisa_score_readingscale |> rename("Reading_Score"="Average(all_students)") |> fill(`Year/Study`) |>select(-`Standard Error`)
+Pisa_score_readingscale_gender <- Pisa_score_readingscale_gender |> fill(`Year/Study`) |>select(-`Standard Error M`, -`Standard Error F`)
+Pisa_score_Sciencescale <- Pisa_score_Sciencescale |> rename("Science_Score"="Average(all_students)") |> fill(`Year/Study`) |>select(-`Standard Error`)
+Pisa_score_Sciencescale_gender <- Pisa_score_Sciencescale_gender |>  fill(`Year/Study`)|>select(-`Standard Error M`, -`Standard Error F`)
+
+
+```
+
+Once solved the issues, we worked on cleaning the dataset that would make sure that the scores were numeric variable and, where this was not the case, to substitute it with NA. 
+
+```{r}
+
+Pisa_score_Mathscale$Math_Score <- iconv(Pisa_score_Mathscale$Math_Score, to="UTF-8", sub = NA)
+Pisa_score_Mathscale_gender$Math_Score_M <- iconv(Pisa_score_Mathscale_gender$Math_Score_M, to="UTF-8", sub = NA)
+Pisa_score_Mathscale_gender$Math_Score_F <- iconv(Pisa_score_Mathscale_gender$Math_Score_F, to="UTF-8", sub = NA)
+Pisa_score_readingscale$Reading_Score <- iconv(Pisa_score_readingscale$Reading_Score, to="UTF-8", sub = NA)
+Pisa_score_readingscale_gender$Reading_Score_M <- iconv(Pisa_score_readingscale_gender$Reading_Score_M, to="UTF-8", sub = NA)
+Pisa_score_readingscale_gender$Reading_Score_F <- iconv(Pisa_score_readingscale_gender$Reading_Score_F, to="UTF-8", sub = NA)
+Pisa_score_Sciencescale$Science_Score <- iconv(Pisa_score_Sciencescale$Science_Score, to="UTF-8", sub = NA)
+Pisa_score_Sciencescale_gender$Science_Score_M <- iconv(Pisa_score_Sciencescale_gender$Science_Score_M, to="UTF-8", sub = NA)
+Pisa_score_Sciencescale_gender$Science_Score_F <- iconv(Pisa_score_Sciencescale_gender$Science_Score_F, to="UTF-8", sub = NA)
+```
+
+Since all the data have a similar structure, we created a function that remove the last four observation which contained the source of the data set (OECD) and some notes about the aggregation of the data set. We used the same function to make the year as a numeric variable, to make aggregation easier.
+
+```{r}
+
+PISA_treatment <- function(data) {
+  if (nrow(data) <= 4) {
+    warning("Number of observations to remove exceeds the total number of observations.")
+    return(NULL)
+  }
+  modified_data <- head(data, -4)
+  
+  modified_data$`Year/Study` <- as.numeric(modified_data$`Year/Study`)
+  
+  return(modified_data)
+}
+```
+
+```{r}
+
+Pisa_score_Mathscale <- PISA_treatment(Pisa_score_Mathscale)
+Pisa_score_Mathscale_gender <-PISA_treatment(Pisa_score_Mathscale_gender)
+Pisa_score_readingscale <- PISA_treatment(Pisa_score_readingscale)
+Pisa_score_readingscale_gender <- PISA_treatment(Pisa_score_readingscale_gender)
+Pisa_score_Sciencescale <- PISA_treatment(Pisa_score_Sciencescale)
+Pisa_score_Sciencescale_gender <- PISA_treatment(Pisa_score_Sciencescale_gender)
+```
+
+Important note: Some countries, namely (Albania, Argentina, Kazakhstan and Malaysia), experience unusual scores in 2015 and, for this reason, were reported separately from the rest of the observation. Considering the situation, we decided to validate the score of 2015 and and so placing it back in its original position, we have done so by a modifications in the csv file. 
+
+For the aggregation of the data set, we opted for two differentiated one, the first one is PISA a comparison of the three categories (Science, Math and Reading) over the years where the data where aggregated by the year/study and Jurisdiction. While the second one PISA_gender, is the same comparison taking in consideration gender distribution. 
+
+```{r}
+J <- c("Czech Republic","Korea","Russia","Turkey","Baku (Azerbaijan)")
+Ta <- c("CZE",  "KOR","RUS","TUR","AZE")
+Add_Tag <- data.frame(Jurisdiction = J, Tagg = Ta)
+TAG_Name <- Pop_Density |> select("Country Name", "Country Code") |> rename ("Jurisdiction" = "Country Name")
+
+PISA <- Pisa_score_Mathscale |>
+  left_join(Pisa_score_readingscale, by = c("Jurisdiction", "Year/Study")) |>
+  left_join(Pisa_score_Sciencescale, by = c("Jurisdiction", "Year/Study"))
+PISA <- PISA |> left_join(TAG_Name, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
+PISA$Tag= coalesce(PISA$Tagg, PISA$"Country Code")
+PISA <- PISA |> select(-"Country Code", -"Tagg")
+PISA <- PISA |> na.omit(PISA)
+
+PISA_gender <- Pisa_score_Mathscale_gender |>
+  left_join(Pisa_score_readingscale_gender, by = c("Jurisdiction", "Year/Study")) |>
+  left_join(Pisa_score_Sciencescale_gender, by = c("Jurisdiction", "Year/Study"))
+PISA_gender <- PISA_gender |> left_join(TAG_Name, by = "Jurisdiction") |> left_join(Add_Tag, by = "Jurisdiction") 
+PISA_gender$Tag= coalesce(PISA_gender$Tagg, PISA_gender$"Country Code")
+PISA_gender <- PISA_gender |> select(-"Country Code", -"Tagg")
+PISA_gender <- PISA_gender |> na.omit(PISA_gender)
+
+Tag_Country <- PISA|> select(Tag, Jurisdiction)
+PISA <- PISA |> rename("Year"="Year/Study")
+PISA_gender <- PISA_gender |> rename("Year"="Year/Study")
+```
+
+We integrate a tag variable to join PISA with the rest of the Datasets. From the tag and country variable we get a table to keep these information at hand.
+
+
+## Final Dataset Assembling 
+
+```{r}
+Final_Data <- PISA |>
+  left_join(PISA_gender, by = c("Tag","Year")) |>
+  left_join(WB_long, by =c("Tag","Year")) |>
+  left_join(UNESCO, by = c("Tag","Year")) 
+```
+
+This is the final dataset. It joins all the intermediary datasets by their common variables, namely (country) Tag and (observations') Year. This dataset will allow our exploratory analysis on potential predictors of PISA scores in the next sections.
+
+## Presentation of the dataset and variables
+
+Lastly, in order to have a clearer display of our datasets, we created a function that would return the name of the variables in the datasets, the number of rows and columns for each observation and a small comment. 
+
+```{r}
+
+get_dataset_info <- function(dataset) {
+  num_rows <- nrow(dataset)
+  num_cols <- ncol(dataset)
+  variable_names <- names(dataset)
+  info_table <- data.frame(
+    "Number of Rows" = num_rows,
+    "Number of Columns" = num_cols,
+    "Variable Names" = paste(variable_names, collapse = ", ")
+  )
+  return(info_table)
+}
+```
+
+```{r}
+result <- get_dataset_info(PISA)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Pisa Data Overview")
+```
+
+```{r}
+result <- get_dataset_info(PISA_gender)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Pisa by Gender Data Overview")
+```
+
+```{r}
+result <- get_dataset_info(UNESCO)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Unesco Data Overview")
+```
+
+```{r}
+result <- get_dataset_info(WB_long)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "World Bank Data Overview")
+```
+
+```{r}
+result <- get_dataset_info(Final_Data)
+names(result) <- c("Rows", "Columns", "Variable Names")
+knitr::kable(result, caption = "Final Data Overview")
+```
+
+### Graphical representation of target variable 
+
+```{r}
+PISA_WIDER <- PISA %>%
+  pivot_wider(names_from = "Year", values_from = c("Math_Score", "Reading_Score", "Science_Score"))
+PISAW_long <- PISA_WIDER %>%
+  pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
+  drop_na() %>%
+  mutate(Score = as.numeric(Score))  
+ggplot(PISAW_long, aes(x = Year_Study, y = Score)) +
+  geom_boxplot() +
+  xlab("Measurement in the different Years") +
+  ylab("Score") +
+  ggtitle("Distribution of Scores Across Years of Studies") +
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+```
+
+```{r}
+GenderPISA_widerF <- PISA_gender |> select(-Math_Score_M, -Reading_Score_M, -Science_Score_M)|>
+pivot_wider(names_from = "Year", values_from = c("Math_Score_F", "Reading_Score_F" ,"Science_Score_F"))
+GenderPISA_longF <- GenderPISA_widerF %>%
+pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
+drop_na() %>%
+mutate(Score = as.numeric(Score))
+ggplot(GenderPISA_longF, aes(x = Year_Study, y = Score)) +
+geom_boxplot() +
+xlab("Measurement in the different Years") +
+ylab("Score") +
+ggtitle("Distribution of Scores for Female Across Years of Studies") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r}
+GenderPISA_widerM <- PISA_gender |> select(-Math_Score_F, -Reading_Score_F, -Science_Score_F) |>
+pivot_wider(names_from = "Year", values_from = c("Math_Score_M", "Reading_Score_M", "Science_Score_M"))
+GenderPISA_longM <- GenderPISA_widerM %>%
+pivot_longer(cols = -1, names_to = "Year_Study", values_to = "Score") %>%
+drop_na() %>%
+mutate(Score = as.numeric(Score))
+ggplot(GenderPISA_longM, aes(x = Year_Study, y = Score)) +
+geom_boxplot() +
+xlab("Measurement in the different Years") +
+ylab("Score") +
+ggtitle("Distribution of Scores for Male Across Years of Studies") +
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+From these graphs we can observe that the world average PISA scores have been decreasing. It is interesting to observe that male started at higher level of Math performance and saw their average score decrease faster than their female counterpart. Invertly to the Reading scores where males students underperformed relatively to their female counterpart and saw their performance decrease to a slower extent. In science, both genders started off at similar levels of performance, but males saw their performances decrease faster than females.
+
+## Saving the final Data set
+
+```{r}
+write.csv(Final_Data, file = here("Final_Data"), na = "NA", row.names = FALSE)
+```
