@@ -1,5 +1,5 @@
 ---
-title: "PISA Predictors: Data Analysis"
+title: "Research Project : Exploratory analysis of potential predictors of PISA Scores"
 author: "Edoardo Ruvolo, Sami Louahlia"
 format: 
    wordcount-html:
@@ -29,12 +29,9 @@ library(maps)
 library(broom)
 ```
 
-## Research Project : Exploratory analysis of potential predictors of PISA Scores
-
 [Link to the Github
 Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami)
-This is the same Repository as for the Data Treatment, we now proceed
-with the Dataset we produced in a new quarto document.
+This is the same repository as for the data treatment, we now proceed with the dataset we produced in a new quarto document.
 
 ## Part 1 : Research Question
 
@@ -57,7 +54,7 @@ organizations, this project searches for potential variables, able to
 explain cross-country differences in performances at the PISA test. The
 variables used are different in nature. Some feature the current state
 of a nation's economy, others observe their demographic condition, while
-others tackle the way education is provided in the different observed
+others tackle the way education is provided in the observed
 countries to a deeper extent. As such, we hope to acquire a wide array
 of possible predictors for higher or lower PISA scores.
 
@@ -67,10 +64,8 @@ others, orienting the agency of respective national governments. It may
 also leave room for some form of determinism, as some variables, such as
 geographic, demographic, or economic variables, may impact students'
 performances while being more difficult or less desirable for
-governments to act upon in the short term.\
-
-Finally, this research project provides potential criticism as to what
-the PISA score truly reflects. Some variables have been selected to test
+governments to act upon in the short term. Finally, this research project provides potential criticism as to what
+the PISA score truly reflects. Some variables have been selected to look at
 potential flaws as to how the OECD can gather information about a
 nation's educational attainment, which could overlook important elements
 such as who can be evaluated by the OECD when devising the PISA scores
@@ -80,21 +75,22 @@ studied country.
 ## Part 2 : Data sets descriptions
 
 
-The data exploited throughout this research project comes from prominent international organizations, recognized for providing comprehensive data on many countries around the world. We here quickly describe these organizations and the variables we acquired thanks to them. For further details on how we acquired the data, please consult our Data Treatment document, available in the same github repository.
+The data exploited throughout this research project comes from prominent international organizations, recognized for providing comprehensive data on many countries around the world. We here quickly describe these organizations and the variables we acquired thanks to them. For further details on how we acquired the data, please consult our Data Treatment document, available in the same [Github
+Repository](https://github.com/SamiLhl/Data_Project_M1_Edoardo_Sami).
 
 ### UNESCO
-UNESCO stands for the United Nations Educational, Scientific, and Cultural Organization. Its focus on education, sciences, culture, communication, and information contributes to global peace and security through fostering international collaboration. By advocating knowledge exchange, the organization provides open source data, collected in the different member's country./
+UNESCO stands for the United Nations Educational, Scientific, and Cultural Organization. Its focus on education, sciences, culture, communication, and information contributes to global peace and security through fostering international collaboration. By advocating knowledge exchange, the organization provides open source data, collected in the different member countries.
 
-The UNESCO provided the data for our Government Expenditure, Enrolment Rate, Age of entry into school, survival rate at the end of primary school, and our term-length variable.
+The UNESCO provided the data for our Government Expenditure, Enrolment Rate, Age of entry into school, Survival rate at the end of primary school, and our Term-length variable.
 
 ### World Bank
 The World Bank, owned by 187 countries, functions as an international development entity. Its primary aim involves alleviating poverty by providing loans to the governments of its less affluent members, facilitating economic improvements, and enhancing the quality of life for their citizens.
-The Bank serves as a significant global research hub for development. Within its specialized departments, it leverages this wealth of knowledge to provide guidance to countries across diverse sectors such as health, education, nutrition, finance, justice, law, and the environment. The Institute, is a reliable source of open data, within the different domains of their activities. /
+The Bank serves as a significant global research hub for development. Within its specialized departments, it leverages this wealth of knowledge to provide guidance to countries across diverse sectors such as health, education, nutrition, finance, justice, law, and the environment. The Institute, is a reliable source of open data, within the different domains of their activities. 
 
 We acquired our data on the GNI per capita, GDP growth, Fertility rate and Population Density using publicly available resources offered by the World Bank.
 
 ### OECD PISA
-The OECD, comprising 37 democratic nations with market-based economies, serves as platform for collaborative policy development to foster sustainable economic growth. It offers a space for governments to exchange experiences, tackle shared challenges, recognize best practices, and establish robust economic policy benchmarks.The organization, has remained a trusted provider of evidence-based policy analysis and comprehensive economic data, especially for open source data set. /
+The OECD, comprising 37 democratic nations with market-based economies, serves as platform for collaborative policy development to foster sustainable economic growth. It offers a space for governments to exchange experiences, tackle shared challenges, recognize best practices, and establish robust economic policy benchmarks.The organization, has remained a trusted provider of evidence-based policy analysis and comprehensive economic data, especially for open source data set. 
 
 All the PISA scores at the four different times of observation, namely 2009, 2012, 2015 and 2018, were acquired using the data explorer of the OECD on PISA data.
 
@@ -170,6 +166,8 @@ studied variables may lack the variability needed to fully observe
 variables effects on the PISA score. Insights that developing countries
 could have potentially offered.
 
+A final remark on the coverage of PISA data relates to China's particular situation. PISA data only cover some regions of China, mostly the coastal, economically growing ones. Unable to acquire information about the average PISA score of the general chinese population, we chose not to include China in our analysis.  
+
 ```{r}
 Dataset |> group_by(Year) |> summarise(Math_Score = mean(Math_Score), Science_Score=mean(Science_Score), Reading_Score = mean(Reading_Score)) |>
 ggplot (aes(x = Year)) +
@@ -187,8 +185,7 @@ ggplot (aes(x = Year)) +
 We started our analysis by a general overview of the scores by plotting
 the mean of each over the years. We observed that the scores have
 similar trends over the years that can be summarized in three major
-moments. The three scores held fairly constant from to 2009 until 2012,
-after which a major drop took place in 2015. It made the value of each
+moments. The three scores held fairly constant from to 2009 until 2012, after which a major drop took place, observed in 2015. It made the value of each
 score drop of around 20 points. In the 2018 observations, the scores decreased more gently giving us our last studied observations, before COVID-19.
 
 The OECD and other researchers have proposed different explanations on the
@@ -209,7 +206,7 @@ girls and boys in science over the years. Systematically young girls
 have performed better than their counterparts by few points, however for
 our analysis, we will use the average score, disregarding gender differences, as they even out.
 
-In order to be able to proceed in our analysis and to facilitate the reading of the report we decided to use a meaned score between the three categories which is going to be added as a new variable in our analysis. 
+In order to be able to proceed in our analysis and to facilitate the reading of the report we decided to use a mean score between the three categories, which is going to be added as a new variable in our analysis. 
 ```{r}
 Dataset$Average_Score <- rowMeans(Dataset[, c('Math_Score', 'Reading_Score', 'Science_Score')])
 ```
@@ -252,7 +249,7 @@ Model_to_Table <- function(Model){
   )}
 ```
 
-Before diving into any regression model we also include a correlation matrix table to have an overlook and a counterfactual on the what to expect from our regressions models.
+Before diving into any regression model we also include a correlation matrix table to have an overlook and a counterfactual on what to expect from our regressions models.
 
 ## Financial Condition and PISA score
 
@@ -260,12 +257,12 @@ Rich countries may generally be expected to provide better education
 services, as they have greater means for doing so, and need a highly
 educated population to perform tasks with important added value.
 Economies with an ambition for reaching high income status may also
-strive towards educating its population to become as productive as in
+strive towards educating their population to become as productive as in
 advanced economies. Thus, observing these indicators in their ability to
 predict PISA scores is of great relevance. Moreover, these
-characteristics, if powerful in predicting PISA scores, might be used as
+characteristics, if powerful in predicting PISA scores, could be used as
 control variables to observe and isolate the impact of other
-socio-economic phenomena, later on , in our analysis. Therefore, we
+socio-economic phenomena later on in our analysis. Therefore, we
 start our analysis by looking at these variables.
 
 
@@ -304,16 +301,14 @@ Table_GNI <- knitr::kable(lmGNI)
 `r Table_GNI` GNI per capita is indeed, significantly associated with
 higher Pisa Scores (p\<0.001). For every additional dollar, the
 Pisa score increases by 0.001, so that an additional 1000 dollar is
-associated with one additional point on the PISA score. NO RSQUARE AS OF
-NOW
+associated with one additional point on the PISA score. On its own, GNI per capita explains 20.6% of the variations in PISA scores.
 
 ### GDP growth and PISA Scores
 
 Booming economies may have hopes to become an advanced economy in the
-span of a generation or two, in a similar fashion to the Asian tigers
-did in past. In a similar fashion that South Korea consolidated after
+span of a generation or two, in a similar fashion that South Korea consolidated after
 its economic miracle, and joined the ranks of advanced economies,
-through notably human capital investment (Koen et al.,2021), countries
+through notably human capital investment (Koen et al.,2021). Countries
 experiencing high economic growth may put greater efforts in their
 education services, and thus, have greater PISA scores. In dealing with
 this variable we rid ourselves of the 2009 observations taking place at
@@ -354,7 +349,7 @@ theme_minimal()+
 theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-As can be seen, graphical representation of Science Score being only
+As can be seen, graphical representation of PISA Scores being only
 predicted by growth rate does not show much. By doing so, we confound
 high income countries, which have lower growth rate as they do not
 experience growth from convergence with some lower income countries that
@@ -374,7 +369,7 @@ Table_gy_GNI_all <- knitr::kable(lmgy_GNIc)
 
 `r Table_gy_GNI_all`
 
-At first sight, there seem to be a negative correlation between GDP
+At first sight, there seem to be a negative relationship between GDP
 growth rate and PISA scores, something we have no explanation for.
 Another strategy might be to try and isolate low and middle income
 countries. As of 2023, a nation is considered part of the High Income
@@ -443,12 +438,12 @@ Table_Fer_Sci <- knitr::kable(lmfer)
 The model shows that Fertility rate is a significant predictor of PISA
 scores (p\<.01). The best linear model provide sizeable coefficient. For
 an increase in fertility rate of 1, the expected national PISA score
-decreases 55.1 in science.
+decreases by 56.5 points.
 
 It may be important to account for the fact that low fertility rates at
 a national level are generally associated with higher living standards
 and higher income. As such, it might be necessary to control for some
-metrics, such as gdp per capita to ensure that fertility rates truly
+metrics, such as GNI per capita to ensure that fertility rates truly
 play a role in providing better education.
 
 ```{r Controlling for GDP per capita}
@@ -461,8 +456,7 @@ Table_Fer_GDPc <- knitr::kable(lmfer_GDPc)
 
 After controlling for GNI per capita, fertility is still significantly
 and negatively associated with PISA scores(p\<.001). An increase of 1 in
-fertility rate is associated with a 43.85 points decrease in Science
-score.
+fertility rate is associated with a 44.28 points decrease in PISA score.
 
 It might be challenging, however, to disentangle how fertility affects
 education and education affects fertility, out of PISA data. The data
@@ -547,9 +541,9 @@ Table_Entrance <- knitr::kable(lmEntr)
 
 `r Table_Entrance`
 
-Even while controlling for GDP per capita, mandatory entrance age is
+Even while controlling for GNI per capita, mandatory entrance age is
 here significantly associated with PISA scores (p\<.001). Making entry
-to school mandatory one year later is associated with a 15.54 points
+to school mandatory one year later is associated with a 14.91 points
 increase in PISA score. It is important to point out that the data is a
 reflection of the policies carried out by governments about the age at
 which children are required to attend school. These do not necessarily
@@ -563,11 +557,13 @@ At first sight, the national mean years of schooling may seem as a
 curious variable to observe. As students are all tested at the same
 level namely end of middle school, normally aged 15. However, the fact
 that students are expected to complete many more years in schooling
-could lead programs to be less dense or differently constructed. As
-shown below, higher mean years of schooling are associated with higher
+could lead programs to be differently constructed.
+
+As shown below, higher mean years of schooling are associated with higher
 GNI per capita, and PISA participants are predominantly countries with
-high mean years of schooling. Therefore, one could imagine the PISA test
-to be better tailored to school programs imagined for students expected
+high mean years of schooling. 
+
+A possible explanation could be that PISA test are better tailored to school programs imagined for students expected
 to continue studying long after the PISA test, and not for programs in
 which students are expected to leave school soon after. As a result,
 developing economies where the population enjoy lower mean years of
@@ -605,7 +601,7 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 As expected, there seem to be a positive correlation between mean years
-of schooling. We now wonder whether this positive tendency is due only
+of schooling and average PISA scores. We now wonder whether this positive tendency is due only
 to higher GNI per capita.
 
 ```{r}
@@ -620,7 +616,7 @@ When pooling GNI per capita and Mean years of schooling into a model,
 GNI per capita becomes insignificant. Their collinearity makes it
 difficult to disentangle another effect from more years of schooling,
 beyond higher GNI per capita, in turn improving education quality or
-even years of schooling itself. We favour keeping GNI per capita as it a
+even the number of years of schooling itself. We favor keeping GNI per capita as a
 more logical indicator when observing PISA scores of children who only
 reached end of middle school at the time of tests.
 
