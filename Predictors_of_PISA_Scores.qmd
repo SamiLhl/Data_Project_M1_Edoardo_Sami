@@ -1,11 +1,11 @@
 ---
 title: "PISA Predictors: Data Analysis"
 author: "Edoardo Ruvolo, Sami Louahlia"
-format: html
-    #wordcount-html:
-     #toc: true
-     #fig-align: center
-     #cap-location: margin
+format: 
+   wordcount-html:
+     toc: true
+     fig-align: center
+     cap-location: margin
 execute:
   message: false
   warning: false
@@ -68,6 +68,7 @@ also leave room for some form of determinism, as some variables, such as
 geographic, demographic, or economic variables, may impact students'
 performances while being more difficult or less desirable for
 governments to act upon in the short term.\
+
 Finally, this research project provides potential criticism as to what
 the PISA score truly reflects. Some variables have been selected to test
 potential flaws as to how the OECD can gather information about a
@@ -76,22 +77,25 @@ such as who can be evaluated by the OECD when devising the PISA scores
 and do they accurately represent the general student population of the
 studied country.
 
-## Part 2 : Data sets descriptions (size, production condition, main variables)\*
+## Part 2 : Data sets descriptions
 
 
-The data exploited throughout this research project comes from prominent international organizations, recognized for providing comprehensive data on many countries around the world. We here quickly describe these organizations and the variables each provided us with. For further details on how we acquired the data, please consult our Data Treatment document, available in the same github repository.
+The data exploited throughout this research project comes from prominent international organizations, recognized for providing comprehensive data on many countries around the world. We here quickly describe these organizations and the variables we acquired thanks to them. For further details on how we acquired the data, please consult our Data Treatment document, available in the same github repository.
 
-### UNESCO:
-UNESCO stands for the United Nations Educational, Scientific, and Cultural Organization. Its focus on education, sciences, culture, communication, and information contributes to global peace and security through fostering international collaboration. By advocating knowledge exchange, the organization provides open source data, collected in the different member's country. 
+### UNESCO
+UNESCO stands for the United Nations Educational, Scientific, and Cultural Organization. Its focus on education, sciences, culture, communication, and information contributes to global peace and security through fostering international collaboration. By advocating knowledge exchange, the organization provides open source data, collected in the different member's country./
+
 The UNESCO provided the data for our Government Expenditure, Enrolment Rate, Age of entry into school, survival rate at the end of primary school, and our term-length variable.
 
-### World Bank:
+### World Bank
 The World Bank, owned by 187 countries, functions as an international development entity. Its primary aim involves alleviating poverty by providing loans to the governments of its less affluent members, facilitating economic improvements, and enhancing the quality of life for their citizens.
-The Bank serves as a significant global research hub for development. Within its specialized departments, it leverages this wealth of knowledge to provide guidance to countries across diverse sectors such as health, education, nutrition, finance, justice, law, and the environment. The Institute, is a reliable source of open data, within the different domains of their activities. 
+The Bank serves as a significant global research hub for development. Within its specialized departments, it leverages this wealth of knowledge to provide guidance to countries across diverse sectors such as health, education, nutrition, finance, justice, law, and the environment. The Institute, is a reliable source of open data, within the different domains of their activities. /
+
 We acquired our data on the GNI per capita, GDP growth, Fertility rate and Population Density using publicly available resources offered by the World Bank.
 
-### OECD PISA:
-The OECD, comprising 37 democratic nations with market-based economies, serves as platform for collaborative policy development to foster sustainable economic growth. It offers a space for governments to exchange experiences, tackle shared challenges, recognize best practices, and establish robust economic policy benchmarks.The organization, has remained a trusted provider of evidence-based policy analysis and comprehensive economic data, especially for open source data set. 
+### OECD PISA
+The OECD, comprising 37 democratic nations with market-based economies, serves as platform for collaborative policy development to foster sustainable economic growth. It offers a space for governments to exchange experiences, tackle shared challenges, recognize best practices, and establish robust economic policy benchmarks.The organization, has remained a trusted provider of evidence-based policy analysis and comprehensive economic data, especially for open source data set. /
+
 All the PISA scores at the four different times of observation, namely 2009, 2012, 2015 and 2018, were acquired using the data explorer of the OECD on PISA data.
 
 
@@ -114,6 +118,8 @@ get_dataset_info <- function(dataset) {
   return(info_table)
 }
 ``` 
+
+### Treated + Joined Data 
 
 ```{r}
 result <- get_dataset_info(Dataset)
@@ -552,7 +558,9 @@ which children are required to attend school. These do not necessarily
 reflect the actual entrance age in studied countries, only the approach
 of the government on the matter.
 
-## Mean Yrs of Schooling
+## Government policy and other education indicators
+
+### Mean Yrs of Schooling
 
 At first sight, the national mean years of schooling may seem as a
 curious variable to observe. As students are all tested at the same
@@ -619,7 +627,7 @@ even years of schooling itself. We favour keeping GNI per capita as it a
 more logical indicator when observing PISA scores of children who only
 reached end of middle school at the time of tests.
 
-## Academic Year Length
+### Academic Year Length
 
 Some of the skills acquired at school may be lost as a result of
 extended period without practising those skills. As such, part of the
@@ -850,7 +858,7 @@ Table_Sp_Ave1 <- knitr::kable(lmsp1)
 
 Now accounting for the GNI per capita, so adding more about the socio economic background of the students, we are able to confirm the trend of students in private schools usually perform more poorly than their counterparts in public schools.
 
-### Trial on the regression
+## Final regression
 
 We are now building up the final model to explain the highest possible level of PISA score of countries over the years.
 We will begin by incorporating every variable that showed a clear trend with PISA score and a significant coefficient in simple lm regression. Then we will evaluate the significance of the model and work towards increasing its performance by looking at coefficients, standard errors, R squared and the adjusted R squared.
@@ -966,8 +974,8 @@ Proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pan
 The Hechinger Report.\
 https://hechingerreport.org/proof-points-there-is-a-worldwide-problem-in-math-and-its-not-just-about-the-pandemic/
 
-Gumus, S. and Kayhan, S. (2012), **The Relationship between Economic
-Growth and School Enrollment Rates: Time SeriesEvidence from Turkey,**
+Gumus, S. and Kayhan, S. (2012), The Relationship between Economic
+Growth and School Enrollment Rates: Time SeriesEvidence from Turkey,
 Educational Policy Analysis and Strategic Research, 2012
 
 OECD 2018, PISA 2018 Results (Volume V) : Effective Policies, Successful Schools, OECD publications, 2018
